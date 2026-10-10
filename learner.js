@@ -91,6 +91,50 @@
           resources: []
         },
         {
+          missionId: "sateliti-pamant",
+          pill: "Sateliți și Pământul",
+          miniLabel: "Observații · imagini",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Explorezi planeta și interpretezi imaginile satelitare.",
+          bullets: ["Descoperă.", "Experimentează.", "Explică."],
+          creative: "Provocare: formulează o întrebare de cercetare.",
+          pageHref: "/resources/sateliti-pamant.html",
+          resources: []
+        },
+        {
+          missionId: "jurnal-meteo",
+          pill: "Vremea și observațiile",
+          miniLabel: "Meteo · măsurători",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Observi fenomenele meteo și interpretezi date.",
+          bullets: ["Descoperă.", "Experimentează.", "Explică."],
+          creative: "Provocare: formulează o întrebare de cercetare.",
+          pageHref: "/resources/jurnal-meteo.html",
+          resources: []
+        },
+        {
+          missionId: "ecosisteme",
+          pill: "Ecosisteme și biodiversitate",
+          miniLabel: "Plante · viețuitoare",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Investighezi organismele și habitatele.",
+          bullets: ["Descoperă.", "Experimentează.", "Explică."],
+          creative: "Provocare: formulează o întrebare de cercetare.",
+          pageHref: "/resources/ecosisteme.html",
+          resources: []
+        },
+        {
+          missionId: "reciclare-materiale",
+          pill: "Reciclare și materiale",
+          miniLabel: "Resurse · deșeuri",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Investighezi materialele și reducerea deșeurilor.",
+          bullets: ["Descoperă.", "Experimentează.", "Explică."],
+          creative: "Provocare: formulează o întrebare de cercetare.",
+          pageHref: "/resources/reciclare-materiale.html",
+          resources: []
+        },
+        {
           missionId: "module-report",
           pill: "Module Report",
           miniLabel: "Raport progres",
