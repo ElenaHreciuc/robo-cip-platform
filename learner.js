@@ -288,11 +288,11 @@
         },
         {
           missionId: "scratchjr-steam",
-          pill: "ScratchJr – Animații STEAM",
+          pill: "Scratch online – Animații STEAM",
           miniLabel: "Blocuri · animație · viața reală",
           image: "/assets/img/robo_programare.png",
-          tagline: "Construiești animații simple în ScratchJr pornind de la algoritmi-model.",
-          bullets: ["Urmezi un algoritm ilustrat.", "Testezi pașii în Robo-Cip.", "Recreezi animația în ScratchJr."],
+          tagline: "Construiești animații în Scratch online, fără instalare, urmând algoritmi-model.",
+          bullets: ["Urmezi un algoritm ilustrat.", "Testezi pașii în Robo-Cip.", "Recreezi animația în Scratch online."],
           creative: "Provocare: o poveste animată despre siguranță, vreme sau economisirea apei.",
           pageHref: "/resources/scratchjr-steam.html",
           resources: []
