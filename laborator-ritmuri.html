@@ -1,184 +1,27 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8" />
-<title>Laboratorul de Ritmuri – Robo-Cip</title>
-
-<style>
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    padding: 16px;
-    background: radial-gradient(circle at top, #fff9e6, #ffffff);
-  }
-
-  .page {
-    max-width: 920px;
-    margin: 0 auto;
-  }
-
-  h1 { 
-    margin-top: 0; 
-  }
-
-  .intro {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 12px 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    font-size: 14px;
-  }
-
-  .grid {
-    margin-top: 14px;
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    display: grid;
-    grid-template-columns: repeat(16, 1fr);
-    gap: 6px;
-  }
-
-  .cell {
-    height: 28px;
-    border-radius: 8px;
-    background: #faf6d2;
-    border: 1px solid #f1c40f;
-    cursor: pointer;
-    transition: 0.12s;
-  }
-
-  .cell.active {
-    background: #f7d33a;
-    box-shadow: inset 0 0 0 2px #c59a00;
-  }
-
-  .controls {
-    margin-top: 12px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  button {
-    border-radius: 999px;
-    border: none;
-    padding: 6px 12px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  .play { 
-    background: #27ae60; 
-    color: white; 
-  }
-
-  .clear { 
-    background: #bdc3c7; 
-    color: white; 
-  }
-
-  .hint {
-    margin-top: 10px;
-    font-size: 12px;
-    opacity: 0.8;
-  }
-</style>
-</head>
-
-<body>
-<div class="page">
-
-  <h1>🎵 Laboratorul de Ritmuri – Robo-Cip</h1>
-
-  <div class="intro">
-    Activează pătrățelele și apoi apasă „Redă ritmul”.
-    <br />
-    <span class="hint">
-      Profesorul poate provoca elevii să găsească: repetiții, secvențe, pattern-uri.
-    </span>
-  </div>
-
-  <div class="grid" id="grid"></div>
-
-  <div class="controls">
-    <button class="play" id="playBtn">Redă ritmul</button>
-    <button class="clear" id="clearBtn">Curăță grila</button>
-  </div>
-
-  <div class="hint">
-    Elevul explică: „Ce regulă am folosit pentru ritmul meu?”
-  </div>
-
-</div>
-
-<script>
-  const grid = document.getElementById("grid");
-  const cells = [];
-  const cols = 16;
-
-  // Construim grila de 16 pătrățele
-  for (let i = 0; i < cols; i++) {
-    const cell = document.createElement("div");
-    cell.className = "cell";
-
-    cell.addEventListener("click", () => {
-      cell.classList.toggle("active");
-    });
-
-    cells.push(cell);
-    grid.appendChild(cell);
-  }
-
-  // Redarea unui ton simplu
-  function playTone(freq, duration = 180) {
-    const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = "sine";
-    osc.frequency.value = freq;
-    gain.gain.value = 0.2;
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    setTimeout(() => osc.stop(), duration);
-  }
-
-  // Redarea ritmului de la stânga la dreapta
-  document.getElementById("playBtn").addEventListener("click", async () => {
-    for (let i = 0; i < cols; i++) {
-      if (cells[i].classList.contains("active")) {
-        playTone(300 + i * 8); // ușoară variație de înălțime
-      }
-      await new Promise(r => setTimeout(r, 150));
-    }
-  });
-
-  // Reset grilă
-  document.getElementById("clearBtn").addEventListener("click", () => {
-    cells.forEach(c => c.classList.remove("active"));
-  });
-</script>
-
-<!-- Butonul global de meniu (script-ul tău deja creat) -->
-<script src="/js/robo-menu-button.js"></script>
-<!-- Buton meniu global -->
-<script src="/js/robo-menu-button.js"></script>
-
-<!-- Log activitate -->
-<script src="/js/activity-log.js"></script>
-
-<script>
-roboLogActivity({
-  title: "Laboratorul de ritmuri",
-  module: "Pattern, secvențiere și repetiție",
-  type: "Explorare auditivă"
-});
-</script>
-</body>
-</html>
-
+<!DOCTYPE html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laboratorul ritmurilor – Robo-Cip</title><style>
+*{box-sizing:border-box}body{margin:0;padding:15px;font:16px system-ui,sans-serif;background:linear-gradient(135deg,#fff8df,#eef8ff);color:#293b4b}.page{max-width:1030px;margin:auto}h1{font-size:clamp(25px,4vw,34px);margin:0 0 8px}h2{font-size:21px;margin:0 0 12px}.card{background:white;border-radius:18px;padding:17px;margin:13px 0;box-shadow:0 4px 16px #51471f16}.row{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:9px 0}button,select{font:inherit;border:1px solid #e3ce9a;border-radius:12px;padding:10px;background:#fff2c1;color:#543e11;cursor:pointer}button[aria-pressed=true],.primary{background:#20856c;border-color:#20856c;color:white}button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #247bb7;outline-offset:2px}.muted{color:#6a6870}.lab{display:grid;grid-template-columns:1fr 1fr;gap:13px}.seq{border:1px solid #ecdcb0;padding:13px;border-radius:13px;background:#fffdf5}.steps{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin:9px 0}.step{height:49px;min-width:0;border-radius:9px;padding:2px;background:#faf2d8;border:2px solid #e2ca91;font-size:14px}.step[aria-pressed=true]{background:#f7bb38;border-color:#ca8b12;color:#332600}.step.now{outline:3px solid #237cae;outline-offset:1px}.status{padding:13px;border-radius:12px;background:#edf6f0;line-height:1.5}.status.warn{background:#fff0dc}.status.good{background:#dcf5e4}textarea{width:100%;min-height:82px;border:1px solid #d8c9a8;border-radius:12px;padding:11px;font:inherit}.stats{display:flex;gap:9px;flex-wrap:wrap}.stats span{background:#fff0c9;padding:6px 10px;border-radius:9px;font-weight:600}@media(max-width:720px){.lab{grid-template-columns:1fr}.step{height:44px}.card{padding:13px}}</style></head><body><main class="page">
+<section class="card"><h1>🥁 Laboratorul ritmurilor – Robo-Cip</h1><p>Creează și ascultă tipare sonore. Un pătrat colorat înseamnă <b>sunet</b>; un pătrat liber înseamnă <b>pauză</b>. Fiecare rând are 16 pași.</p><div class="row"><button data-age="7-8">7–8 ani · Descopăr</button><button data-age="8-9">8–9 ani · Construiesc</button><button data-age="9-10">9–10 ani · Investighez</button></div><h2 id="mission"></h2><p id="goal"></p></section>
+<section class="card"><h2>🎶 Atelierul de secvențe</h2><div class="row"><label for="tempo">Viteză:</label><select id="tempo"><option value="80">Lent – 80 BPM</option><option value="110" selected>Potrivit – 110 BPM</option><option value="140">Rapid – 140 BPM</option></select><label for="preset">Exemplu:</label><select id="preset"><option value="alternating">Sunet–pauză</option><option value="pairs">Două sunete–două pauze</option><option value="four">Patru pași repetați</option><option value="free">Tipar liber</option></select><button id="load" class="primary">Încarcă exemplul în A</button></div><div class="lab"><div class="seq"><h2>Tiparul A</h2><div class="steps" id="stepsA" aria-label="Secvența A cu 16 pași"></div><div class="row"><button id="playA" class="primary">▶ Ascultă A</button><button id="copy">Copiază A în B</button><button id="clearA">Șterge A</button></div></div><div class="seq"><h2>Tiparul B</h2><div class="steps" id="stepsB" aria-label="Secvența B cu 16 pași"></div><div class="row"><button id="playB" class="primary">▶ Ascultă B</button><button id="clearB">Șterge B</button></div></div></div><div class="row"><button id="both" class="primary">▶ Ascultă A, apoi B</button><button id="stop">■ Oprește</button><button id="compare">🔎 Compară cele două tipare</button></div><div class="stats"><span id="countA">A: 0 sunete</span><span id="countB">B: 0 sunete</span><span id="difference">Diferențe: 0</span></div><p id="status" class="status" role="status" aria-live="polite">Alege un exemplu sau apasă pe pătrățele ca să creezi un ritm.</p></section>
+<section class="card"><h2>🔢 Matematică și algoritmi</h2><p id="math"></p><p id="algorithm"></p><button id="check" class="primary">✓ Verifică misiunea</button><h2>🎨 Produs final – Ritmul meu</h2><p id="creative"></p><textarea id="notes" placeholder="Numele ritmului și regula după care l-am construit..."></textarea><p><button id="save" class="primary">Salvează în portofoliul local</button></p><p class="muted">Sunetul pornește după apăsarea butonului. Poți regla volumul dispozitivului înainte de ascultare.</p></section><p><a href="/modules.html">← Înapoi la module</a></p>
+</main><script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script><script>
+(()=>{'use strict';const $=id=>document.getElementById(id),n=16;let A=Array(n).fill(false),B=Array(n).fill(false),age='7-8',running=false,playToken=0,audio=null;
+const ages={'7-8':{title:'Descopăr sunetele și pauzele',goal:'Construiește în A un tipar cu exact 8 sunete, alternând sunet–pauză.',math:'Numără sunetele și pauzele: câte sunt din fiecare?',algorithm:'Regula: sunet → pauză → repetă.',creative:'Dă un nume ritmului și descrie ce se repetă.',check:()=>A.every((v,i)=>v=== (i%2===0))||A.every((v,i)=>v===(i%2===1))},
+'8-9':{title:'Construiesc o secvență repetitivă',goal:'Construiește în A un model de 4 pași, repetat de patru ori. Folosește atât sunete, cât și pauze.',math:'Câte sunete sunt în 4 repetări ale aceluiași grup?',algorithm:'REPETĂ (REPEAT) grupul de 4 pași de 4 ori.',creative:'Descrie grupul repetat și schimbă un pas în B.',check:()=>A.slice(0,4).some(Boolean)&&A.slice(0,4).some(v=>!v)&&A.every((v,i)=>v===A[i%4])},
+'9-10':{title:'Compar două programe sonore',goal:'Creează A dintr-un grup de 4 pași repetat, apoi schimbă exact 2 pași în B.',math:'Calculează câte sunete au A și B și în câte poziții sunt diferite.',algorithm:'DACĂ (IF) două poziții sunt diferite, ATUNCI (THEN) compară efectul sonor; ALTFEL (ELSE) mai schimbă un pas.',creative:'Explică dacă schimbarea celor două poziții a făcut ritmul mai energic sau mai calm.',check:()=>A.slice(0,4).some(Boolean)&&A.slice(0,4).some(v=>!v)&&A.every((v,i)=>v===A[i%4])&&differences()===2}};
+function count(arr){return arr.filter(Boolean).length}function differences(){return A.filter((x,i)=>x!==B[i]).length}
+function draw(){for(const [arr,id] of [[A,'stepsA'],[B,'stepsB']]){const host=$(id);host.replaceChildren();arr.forEach((on,i)=>{const b=document.createElement('button');b.type='button';b.className='step';b.textContent=on?'●':'–';b.setAttribute('aria-label','Pasul '+(i+1)+': '+(on?'sunet':'pauză'));b.setAttribute('aria-pressed',String(on));b.onclick=()=>{arr[i]=!arr[i];draw()};host.appendChild(b)})}$('countA').textContent='A: '+count(A)+' sunete';$('countB').textContent='B: '+count(B)+' sunete';$('difference').textContent='Diferențe: '+differences()}
+function message(t,kind){$('status').className='status '+(kind||'');$('status').textContent=t}
+function setAge(a){age=ages[a]?a:'7-8';document.querySelectorAll('[data-age]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.age===age)));try{localStorage.setItem('roboCip:ageTrack',age)}catch(e){}const v=ages[age];$('mission').textContent=v.title;$('goal').textContent=v.goal;$('math').textContent='Matematică: '+v.math;$('algorithm').textContent='Gândire algoritmică: '+v.algorithm;$('creative').textContent=v.creative}
+document.querySelectorAll('[data-age]').forEach(b=>b.onclick=()=>setAge(b.dataset.age));
+$('load').onclick=()=>{const key=$('preset').value;if(key==='free'){A=Array(n).fill(false)}else A=Array.from({length:n},(_,i)=>key==='alternating'?i%2===0:key==='pairs'?i%4<2:i%4===0||i%4===2);draw();message('Exemplul a fost încărcat în A. Apasă Ascultă A.')};
+$('copy').onclick=()=>{B=A.slice();draw();message('Tiparul A a fost copiat în B. Modifică apoi câteva poziții.')};$('clearA').onclick=()=>{A.fill(false);draw()};$('clearB').onclick=()=>{B.fill(false);draw()};
+function stop(){playToken++;running=false;document.querySelectorAll('.step.now').forEach(b=>b.classList.remove('now'))}
+function beep(ctx,time){const osc=ctx.createOscillator(),g=ctx.createGain();osc.type='sine';osc.frequency.value=440;g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(.11,time+.012);g.gain.exponentialRampToValueAtTime(.0001,time+.13);osc.connect(g);g.connect(ctx.destination);osc.start(time);osc.stop(time+.14)}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));async function play(arr,id,token){const bpm=Number($('tempo').value),duration=60000/bpm/2;for(let i=0;i<n;i++){if(token!==playToken)return;const el=$(id).children[i];el.classList.add('now');if(arr[i])beep(audio,audio.currentTime+.012);await sleep(duration);el.classList.remove('now')}}
+async function start(mode){stop();const token=playToken;try{if(!audio)audio=new (window.AudioContext||window.webkitAudioContext)();await audio.resume();if(token!==playToken)return;running=true;if(mode==='AB'){await play(A,'stepsA',token);if(token===playToken)await play(B,'stepsB',token)}else await play(mode==='A'?A:B,mode==='A'?'stepsA':'stepsB',token);if(token===playToken){running=false;message('Redarea s-a încheiat. Compară cele două tipare.')}}catch(e){message('Redarea audio nu este disponibilă în acest browser.','warn')}}
+$('playA').onclick=()=>start('A');$('playB').onclick=()=>start('B');$('both').onclick=()=>start('AB');$('stop').onclick=()=>{stop();message('Redarea a fost oprită.')};
+$('compare').onclick=()=>{const d=differences(),ca=count(A),cb=count(B);message('A are '+ca+' sunete, B are '+cb+' sunete; '+d+' poziții diferă.'+(d?' Ascultă-le pentru a observa diferența.':' Tiparele sunt identice.'))};
+$('check').onclick=()=>{const ok=ages[age].check();message(ok?'Misiune realizată! Explică regula în jurnal.':'Mai ai de lucru. Recitește obiectivul și verifică secvențele.',ok?'good':'warn')};
+$('save').onclick=()=>{if(!$('notes').value.trim()){message('Scrie mai întâi numele și explicația ritmului.','warn');return}try{const key='roboCip:rhythmPortfolio',prev=JSON.parse(localStorage.getItem(key)||'[]');if(!Array.isArray(prev))throw Error('format');prev.push({date:new Date().toISOString(),age,A:A.slice(),B:B.slice(),tempo:Number($('tempo').value),description:$('notes').value.trim()});localStorage.setItem(key,JSON.stringify(prev));message('Ritmul tău a fost salvat în portofoliul local.','good')}catch(e){message('Nu s-a putut salva în acest browser.','warn')}};
+let stored='';try{stored=localStorage.getItem('roboCip:ageTrack')||''}catch(e){}setAge(new URLSearchParams(location.search).get('age')||stored);A=Array.from({length:n},(_,i)=>i%2===0);B=A.slice();draw();if(typeof roboLogActivity==='function')roboLogActivity({title:'Laboratorul ritmurilor',module:'Sunete și Animații',type:'Tipare sonore și gândire algoritmică'});
+})();</script></body></html>
