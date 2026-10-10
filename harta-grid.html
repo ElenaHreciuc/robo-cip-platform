@@ -1,292 +1,37 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8" />
-<title>Robo-Explorer – Hartă Grid</title>
-
-<style>
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    padding: 16px;
-    background: radial-gradient(circle at top, #e8f8ff, #ffffff);
-  }
-
-  .page {
-    max-width: 960px;
-    margin: 0 auto;
-  }
-
-  h1 { 
-    margin-top: 0; 
-  }
-
-  .intro {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 12px 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    font-size: 14px;
-  }
-
-  .layout {
-    margin-top: 14px;
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 14px;
-  }
-
-  .grid-wrap {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-  }
-
-  .cell {
-    width: 64px;
-    height: 64px;
-    border-radius: 12px;
-    background: #f4fbff;
-    border: 1px solid #bbdefb;
-    position: relative;
-  }
-
-  .target {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    opacity: 0.7;
-  }
-
-  .robot {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-  }
-
-  .panel {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 12px 14px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    font-size: 14px;
-  }
-
-  .steps {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 6px;
-    min-height: 30px;
-  }
-
-  .step {
-    padding: 6px 10px;
-    border-radius: 12px;
-    background: #e8f4ff;
-    border: 1px solid #64b5f6;
-    font-size: 13px;
-  }
-
-  .controls {
-    margin-top: 10px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  button {
-    border-radius: 999px;
-    border: none;
-    padding: 6px 12px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  .run { 
-    background: #27ae60; 
-    color: white; 
-  }
-
-  .clear { 
-    background: #bdc3c7; 
-    color: white; 
-  }
-
-  .cmds {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-    margin-top: 8px;
-  }
-
-  .cmd-btn {
-    background: #3498db;
-    color: white;
-  }
-
-  .hint {
-    margin-top: 8px;
-    font-size: 12px;
-    opacity: 0.8;
-  }
-</style>
-</head>
-
-<body>
-<div class="page">
-
-<h1>🧭 Robo-Explorer – Hartă Grid</h1>
-
-<div class="intro">
-  Adaugă pași în planul de mișcare și apoi rulează traseul.
-  <br />
-  <span class="hint">
-    Profesorul poate provoca elevul: „Cum știi că Robo-Cip ajunge la destinație?”
-  </span>
-</div>
-
-<div class="layout">
-  <div class="grid-wrap">
-    <div class="grid" id="grid"></div>
-  </div>
-
-  <div class="panel">
-    <b>Plan de mișcare</b>
-
-    <div class="steps" id="steps"></div>
-
-    <div class="cmds">
-      <button class="cmd-btn" data-cmd="UP">↑ Sus</button>
-      <button class="cmd-btn" data-cmd="DOWN">↓ Jos</button>
-      <button class="cmd-btn" data-cmd="LEFT">← Stânga</button>
-      <button class="cmd-btn" data-cmd="RIGHT">→ Dreapta</button>
-    </div>
-
-    <div class="controls">
-      <button class="run" id="runBtn">Rulează traseul</button>
-      <button class="clear" id="clearBtn">Șterge pașii</button>
-    </div>
-
-    <div class="hint">
-      Elevul explică: „Ce strategie am folosit pentru traseu?”
-    </div>
-  </div>
-</div>
-
-</div>
-
-<script>
-  const gridSize = 6;
-  const grid = document.getElementById("grid");
-  const stepsBox = document.getElementById("steps");
-
-  let robot = { x: 0, y: 0 };
-  const target = { x: 5, y: 5 };
-  const steps = [];
-
-  function drawGrid() {
-    grid.innerHTML = "";
-
-    for (let y = 0; y < gridSize; y++) {
-      for (let x = 0; x < gridSize; x++) {
-        const cell = document.createElement("div");
-        cell.className = "cell";
-
-        if (x === target.x && y === target.y) {
-          const t = document.createElement("div");
-          t.className = "target";
-          t.textContent = "⭐";
-          cell.appendChild(t);
-        }
-
-        if (x === robot.x && y === robot.y) {
-          const r = document.createElement("div");
-          r.className = "robot";
-          r.textContent = "🤖";
-          cell.appendChild(r);
-        }
-
-        grid.appendChild(cell);
-      }
-    }
-  }
-
-  function renderSteps() {
-    stepsBox.innerHTML = "";
-    steps.forEach(s => {
-      const el = document.createElement("div");
-      el.className = "step";
-      el.textContent = s;
-      stepsBox.appendChild(el);
-    });
-  }
-
-  function move(cmd) {
-    if (cmd === "UP" && robot.y > 0) robot.y--;
-    if (cmd === "DOWN" && robot.y < gridSize - 1) robot.y++;
-    if (cmd === "LEFT" && robot.x > 0) robot.x--;
-    if (cmd === "RIGHT" && robot.x < gridSize - 1) robot.x++;
-  }
-
-  document.querySelectorAll(".cmd-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const cmd = btn.dataset.cmd;
-      steps.push(cmd);
-      renderSteps();
-    });
-  });
-
-  document.getElementById("runBtn").addEventListener("click", async () => {
-    robot = { x: 0, y: 0 };
-    drawGrid();
-
-    for (const cmd of steps) {
-      await new Promise(r => setTimeout(r, 350));
-      move(cmd);
-      drawGrid();
-    }
-  });
-
-  document.getElementById("clearBtn").addEventListener("click", () => {
-    steps.length = 0;
-    renderSteps();
-    robot = { x: 0, y: 0 };
-    drawGrid();
-  });
-
-  renderSteps();
-  drawGrid();
-</script>
-
-<!-- Buton global Meniu Robo-Cip -->
-<script src="/js/robo-menu-button.js"></script>
-<!-- Buton meniu global -->
-<script src="/js/robo-menu-button.js"></script>
-
-<!-- Log activitate -->
-<script src="/js/activity-log.js"></script>
-
-<script>
-roboLogActivity({
-  title: "Robo-Explorer – Hartă Grid",
-  module: "Gândire algoritmică și planificare",
-  type: "Traseu secvențial"
-});
-</script>
-</body>
-</html>
-
+<!DOCTYPE html><html lang="ro"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Harta Grid 5×5 – Robo-Cip</title>
+<style>*{box-sizing:border-box}body{margin:0;padding:17px;font:16px system-ui,Arial,sans-serif;background:linear-gradient(140deg,#e5f5ff,#f9fcff);color:#1b3b55}main{max-width:990px;margin:auto}.card{background:white;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 5px 18px #1345681c}h1{font-size:clamp(25px,4vw,34px);margin:0 0 8px}h2{font-size:21px;margin:0 0 10px}.muted{color:#4e6780}.row{display:flex;flex-wrap:wrap;align-items:center;gap:9px}button{cursor:pointer;border:0;border-radius:12px;font:inherit;padding:11px 13px}button:focus-visible,textarea:focus-visible{outline:3px solid #ffa339;outline-offset:2px}.age{background:#e9f5ff;border:2px solid #abcee8;color:#155c93;font-weight:700}.age[aria-pressed=true]{background:#176da9;color:white}.layout{display:grid;grid-template-columns:1.1fr 1fr;gap:13px}.map{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;max-width:425px;margin:10px auto}.cell{aspect-ratio:1;border:1px solid #b0d5ee;background:#f2faff;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:clamp(18px,4vw,29px);position:relative}.cell small{font-size:10px;color:#687f97;position:absolute;top:2px;left:4px}.cell.wall{background:#dce6ee}.cell.visited{background:#daf6dd}.cell.goal{border:2px solid #daa42d}.btn{background:#2479b5;color:white;font-weight:650}.secondary{background:#e6f2fa;color:#1d5d84}.cmds{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:8px}.steps{display:flex;gap:6px;flex-wrap:wrap;min-height:42px;margin:9px 0}.step{background:#e9f3ff;padding:6px 10px;border-radius:9px;border:1px solid #a8c9e5}.feedback{background:#edf5fc;border-radius:13px;min-height:62px;padding:13px;line-height:1.5;margin-top:12px}.feedback.good{background:#e2f6e7;color:#1b5a36}.feedback.bad{background:#fff0db;color:#744718}textarea{font:inherit;display:block;width:100%;min-height:95px;padding:12px;border:1px solid #a8c9e2;border-radius:11px;margin:8px 0}@media(max-width:720px){.layout{grid-template-columns:1fr}.card{padding:14px}}</style></head><body><main>
+<section class="card"><h1>🧭 Robo-Explorer – Harta Grid 5×5</h1><p class="muted">Planifică, testează și corectează traseul robotului pe o hartă cu 5 rânduri și 5 coloane.</p><div class="row"><button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button><button class="age" data-age="8-9" aria-pressed="false">8–9 ani · Construiesc</button><button class="age" data-age="9-10" aria-pressed="false">9–10 ani · Investighez</button></div></section>
+<section class="card"><h2 id="title"></h2><p id="instruction"></p><label for="challenge"><b>Provocarea:</b></label> <select id="challenge" style="font:inherit;padding:9px;border-radius:10px;max-width:100%"></select><p id="legend" class="muted"></p><div class="layout"><div><div class="map" id="map" role="img" aria-label="Hartă interactivă cu 5 rânduri și 5 coloane"></div><p class="muted" id="position"></p></div><div><h2>Planul robotului</h2><p>Alege comenzile în ordinea deplasării. Fiecare comandă mută robotul cu o celulă.</p><div class="cmds"><button class="btn cmd" data-dir="U">↑ Sus</button><button class="btn cmd" data-dir="D">↓ Jos</button><button class="btn cmd" data-dir="L">← Stânga</button><button class="btn cmd" data-dir="R">→ Dreapta</button></div><p><b>Comenzile mele:</b></p><div class="steps" id="steps" aria-live="polite"></div><div class="row"><button class="secondary" id="undo">↶ Anulează ultimul</button><button class="secondary" id="clear">Șterge planul</button><button class="btn" id="run">▶ Rulează</button></div><div class="feedback" id="feedback" role="status" aria-live="polite">Pregătește planul și apasă „Rulează”.</div></div></div></section>
+<section class="card"><h2>🎨 Provocarea creativă</h2><p id="creative"></p><textarea id="reflection" placeholder="Explică traseul și ce ai descoperit."></textarea><button class="secondary" id="save">Salvează reflecția în acest browser</button><span id="saveState" role="status"></span><p class="muted">Nu toate traseele corecte sunt identice. Activitatea verifică destinația, obstacolele și regulile provocării.</p></section><p><a href="/modules.html">← Înapoi la module</a></p></main>
+<script>(()=>{'use strict';
+const $=id=>document.getElementById(id);const DELTA={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]};const NAMES={U:'↑',D:'↓',L:'←',R:'→'};
+const tracks={
+'7-8':{title:'Descopăr direcțiile și traseele',instruction:'Construiește un traseu simplu de la 🤖 la ⭐. Numără pașii și observă schimbarea direcției.',creative:'Desenează un alt traseu pe hârtie și explică unde ai mers la dreapta sau la stânga.',challenges:[
+{name:'Primii pași',start:[0,0],goal:[2,2],walls:[],max:null},
+{name:'Schimb direcția',start:[1,4],goal:[4,2],walls:[],max:null},
+{name:'Ajung la stea',start:[4,4],goal:[0,1],walls:[],max:null}]},
+'8-9':{title:'Construiesc și corectez algoritmi',instruction:'Evită obstacolele ⛰️. Dacă planul nu reușește, analizează pasul greșit și modifică secvența.',creative:'Scrie un traseu cu cel puțin două schimbări de direcție. Explică ce ai corectat după testare.',challenges:[
+{name:'Ocolesc muntele',start:[0,0],goal:[4,0],walls:[[2,0],[2,1]],max:null},
+{name:'Drumul dintre obstacole',start:[0,4],goal:[4,1],walls:[[1,4],[1,3],[3,2]],max:null},
+{name:'Găsesc o cale sigură',start:[4,4],goal:[0,0],walls:[[3,4],[3,3],[2,2],[1,2]],max:null}]},
+'9-10':{title:'Investighez rute eficiente',instruction:'Planifică un drum fără ciocniri. Încearcă să ajungi la destinație folosind cel mult numărul de pași indicat.',creative:'Compară două trasee valide. Care are mai puțini pași? Explică cum ai putea verifica dacă ruta este optimă.',challenges:[
+{name:'Ruta cea mai scurtă',start:[0,0],goal:[4,4],walls:[[2,0],[2,1],[2,2]],max:8},
+{name:'Labirint cu limită',start:[0,2],goal:[4,2],walls:[[1,2],[2,2],[3,2]],max:6},
+{name:'Evit și optimizez',start:[4,4],goal:[0,0],walls:[[3,4],[3,3],[1,2],[1,1]],max:8}]}};
+let age='7-8',idx=0,steps=[],robot=[0,0],visited=[],busy=false,runNumber=0;
+const equal=(a,b)=>a[0]===b[0]&&a[1]===b[1];const task=()=>tracks[age].challenges[idx];const wall=(x,y)=>task().walls.some(c=>equal(c,[x,y]));const inBounds=(x,y)=>x>=0&&x<5&&y>=0&&y<5;
+function say(msg,kind=''){$('feedback').textContent=msg;$('feedback').className='feedback'+(kind?' '+kind:'')}
+function draw(){const g=$('map');g.replaceChildren();const t=task();for(let y=0;y<5;y++)for(let x=0;x<5;x++){let c=document.createElement('div');c.className='cell'+(wall(x,y)?' wall':'')+(equal([x,y],t.goal)?' goal':'')+(visited.some(p=>equal(p,[x,y]))?' visited':'');const xy=document.createElement('small');xy.textContent=(x+1)+','+(y+1);c.appendChild(xy);const s=document.createElement('span');s.textContent=equal([x,y],robot)?'🤖':equal([x,y],t.goal)?'⭐':wall(x,y)?'⛰️':'';c.appendChild(s);g.appendChild(c)}$('position').textContent='Robot: coloana '+(robot[0]+1)+', rândul '+(robot[1]+1)+'. Stea: coloana '+(t.goal[0]+1)+', rândul '+(t.goal[1]+1)+'.'}
+function renderSteps(){const box=$('steps');box.replaceChildren();if(!steps.length){box.textContent='Nicio comandă introdusă.';return}steps.forEach((x,i)=>{const s=document.createElement('span');s.className='step';s.textContent=(i+1)+'. '+NAMES[x];box.appendChild(s)})}
+function resetPlan(){runNumber++;busy=false;steps=[];robot=[...task().start];visited=[];renderSteps();draw();say('Pregătește planul și apasă „Rulează”.')}
+function choose(a){if(!tracks[a])a='7-8';age=a;try{localStorage.setItem('roboCip:ageTrack',a)}catch(e){}document.querySelectorAll('[data-age]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.age===a)));$('title').textContent=tracks[a].title;$('instruction').textContent=tracks[a].instruction;$('creative').textContent=tracks[a].creative;const list=$('challenge');list.replaceChildren();tracks[a].challenges.forEach((t,i)=>{let o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+t.name;list.appendChild(o)});idx=0;load()}
+function load(){const t=task();$('challenge').value=idx;$('legend').textContent='🤖 Start · ⭐ Destinație'+(t.walls.length?' · ⛰️ Obstacol':'')+(t.max?' · Maximum '+t.max+' pași.':' · Fără limită de pași.');try{$('reflection').value=localStorage.getItem('roboCip:grid:'+age+':'+idx)||''}catch(e){$('reflection').value=''}$('saveState').textContent='';resetPlan()}
+document.querySelectorAll('.age').forEach(b=>b.onclick=()=>choose(b.dataset.age));$('challenge').onchange=e=>{idx=Number(e.target.value);load()};
+document.querySelectorAll('.cmd').forEach(b=>b.onclick=()=>{if(busy)return;if(steps.length>=50){say('Planul nu poate depăși 50 de comenzi. Simplifică traseul.','bad');return}steps.push(b.dataset.dir);renderSteps()});
+$('undo').onclick=()=>{if(busy)return;steps.pop();renderSteps()};
+$('clear').onclick=()=>resetPlan();
+$('run').onclick=async()=>{if(busy)return;if(!steps.length){say('Adaugă mai întâi cel puțin o comandă.','bad');return}busy=true;const token=++runNumber;const t=task();robot=[...t.start];visited=[[...robot]];draw();let fault=null;
+for(let i=0;i<steps.length;i++){await new Promise(resolve=>setTimeout(resolve,230));if(token!==runNumber)return;const [dx,dy]=DELTA[steps[i]],x=robot[0]+dx,y=robot[1]+dy;if(!inBounds(x,y)){fault='Pasul '+(i+1)+' ar ieși din hartă. Corectează comanda '+NAMES[steps[i]]+'.';break}if(wall(x,y)){fault='La pasul '+(i+1)+' Robo ar lovi un obstacol. Găsește altă rută.';break}robot=[x,y];visited.push([...robot]);draw()}busy=false;if(fault){say(fault,'bad');return}if(!equal(robot,t.goal)){say('Robo nu a ajuns la stea. Verifică destinația și completează planul.','bad');return}if(t.max&&steps.length>t.max){say('Ai ajuns la stea în '+steps.length+' pași, dar limita este '+t.max+'. Caută un traseu mai scurt.','bad');return}say('Bravo! Robo a ajuns la stea în '+steps.length+' pași fără să iasă din hartă sau să atingă obstacolele. Poți încerca un alt traseu.','good')};
+$('save').onclick=()=>{const v=$('reflection').value.trim();if(!v){$('saveState').textContent='Scrie mai întâi reflecția.';return}try{localStorage.setItem('roboCip:grid:'+age+':'+idx,v);$('saveState').textContent=' Reflecția a fost salvată în acest browser.'}catch(e){$('saveState').textContent=' Salvarea nu este disponibilă.'}};
+let stored='';try{stored=localStorage.getItem('roboCip:ageTrack')||''}catch(e){}choose(new URLSearchParams(location.search).get('age')||stored);
+})();</script><script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script><script>if(typeof roboLogActivity==='function')roboLogActivity({title:'Harta Grid 5×5',module:'Cartografie digitală și mediu',type:'Navigare algoritmică pe grilă'});</script></body></html>
