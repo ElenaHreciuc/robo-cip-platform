@@ -113,17 +113,6 @@
           resources: []
         },
         {
-          missionId: "ecosisteme",
-          pill: "Ecosisteme și biodiversitate",
-          miniLabel: "Plante · viețuitoare",
-          image: "/assets/img/robo_cartografie.png",
-          tagline: "Recunoaște pădurile și câmpurile din imagini.",
-          bullets: ["Găsește o pădure și un câmp.","Compară culorile.","Spune ce este diferit."],
-          creative: "Spune ce ai descoperit în activitate.",
-          pageHref: "/resources/ecosisteme.html",
-          resources: []
-        },
-        {
           missionId: "reciclare-materiale",
           pill: "Reciclare și materiale",
           miniLabel: "Resurse · deșeuri",
@@ -133,7 +122,19 @@
           creative: "Spune ce ai descoperit în activitate.",
           pageHref: "/resources/reciclare-materiale.html",
           resources: []
+        },
+        {
+          missionId: "ecosisteme",
+          pill: "Ecosisteme și biodiversitate",
+          miniLabel: "Plante · viețuitoare",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Recunoaște pădurile și câmpurile din imagini.",
+          bullets: ["Găsește o pădure și un câmp.","Compară culorile.","Spune ce este diferit."],
+          creative: "Spune ce ai descoperit în activitate.",
+          pageHref: "/resources/ecosisteme.html",
+          resources: []
         }
+
       ]
     },
 
