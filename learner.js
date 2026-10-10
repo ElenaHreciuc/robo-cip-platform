@@ -373,7 +373,7 @@
       const a0 = document.createElement("a");
       a0.className = "resource-btn";
       a0.href = buildOpenLink(item, moduleId);
-      a0.target = "_blank";
+      a0.target = item.missionId === "masina-transformari" ? "_self" : "_blank";
       a0.rel = "noopener";
       a0.textContent = "Deschide activitatea";
       resButtons.appendChild(a0);
@@ -434,6 +434,7 @@
 
       const bulletsHtml = (item.bullets || []).map((b) => `<li>${escapeHtml(b)}</li>`).join("");
       const openHref = buildOpenLink(item, moduleId);
+      const openTarget = item.missionId === "masina-transformari" ? "_self" : "_blank";
 
       const card = document.createElement("article");
       card.className = `module-card ${moduleDef.cardClass || ""}`;
@@ -455,7 +456,7 @@
         <div class="module-footer-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;">
           <span class="mission-chip">${doneText} · ${starsText}</span>
           <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
-            <a class="module-link" href="${escapeHtml(openHref)}" target="_blank" rel="noopener">Intră în activitate</a>
+            <a class="module-link" href="${escapeHtml(openHref)}" target="${openTarget}" rel="noopener">Intră în activitate</a>
             <button type="button" class="module-link" data-action="open">Deschide detalii</button>
             <button type="button" class="mission-done-btn" data-action="toggleDone">
               ${ms.done ? "Marchează ca neterminat" : "Am terminat"}
