@@ -68,17 +68,6 @@
           creative: "Provocare: explică în 30 secunde ce e o excepție.",
           pageHref: "/resources/reflection-talk.html",
           resources: []
-        },
-        {
-          missionId: "teacher-notes",
-          pill: "Teacher Notes",
-          miniLabel: "Ghid profesor",
-          image: "/assets/img/robo_algoritmi.png",
-          tagline: "Note pentru profesor: facilitare, întrebări, ritm.",
-          bullets: ["Deschide ghidul.", "Urmează pașii.", "Adaptează la clasă."],
-          creative: "",
-          pageHref: "/resources/teacher-notes.html",
-          resources: []
         }
       ]
     },
