@@ -12,6 +12,10 @@ h1{margin:0 0 8px;font-size:clamp(25px,4vw,34px)}h2{font-size:21px;margin:0 0 12
 textarea{width:100%;min-height:100px;border:1px solid #b2cbe0;border-radius:12px;padding:12px;font:inherit}
 .check{display:block;margin:9px 0}input[type=checkbox]{width:20px;height:20px;vertical-align:middle}
 button:focus-visible,textarea:focus-visible{outline:3px solid orange;outline-offset:2px}
+.keyboard{margin:12px 0;padding:13px;border:1px solid #bad6ee;background:#f2f8ff;border-radius:15px}
+.keyboard .key{min-width:42px;min-height:44px;border:1px solid #8fbfe1;background:white;color:#164f7c;border-radius:10px;font-size:21px;font-weight:700;cursor:pointer}
+.keyboard .key:hover{background:#e3f2ff}.keyboard .row{margin:9px 0}
+.assist{background:#e8f4fa;border-left:4px solid #2984bd;padding:10px 12px;border-radius:9px;line-height:1.6}
 </style></head><body><main>
 <section class="panel"><h1>💬 Clinica de mesaje</h1><p class="muted">Repară mesajele lui Robo-Cip: corect, clar și respectuos.</p><div class="row" id="ages">
 <button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button>
@@ -22,6 +26,18 @@ button:focus-visible,textarea:focus-visible{outline:3px solid orange;outline-off
 <div id="result" class="result" role="status" aria-live="polite">Alege varianta cea mai potrivită.</div><small id="progress"></small></section>
 <section class="panel"><h2>✍️ Atelier de creație</h2><p id="creative"></p>
 <label for="answer"><b>Mesajul meu:</b></label><textarea id="answer" placeholder="Scrie mesajul tău aici."></textarea>
+<div class="keyboard" aria-label="Tastatură pentru limba română">
+  <b>⌨️ Tastatura cu diacritice</b>
+  <p class="muted" style="margin:6px 0">Atinge o literă pentru a o introduce în mesaj, la poziția cursorului.</p>
+  <div class="row" id="diacriticKeys">
+    <button type="button" class="key" data-letter="ă">ă</button><button type="button" class="key" data-letter="â">â</button>
+    <button type="button" class="key" data-letter="î">î</button><button type="button" class="key" data-letter="ș">ș</button><button type="button" class="key" data-letter="ț">ț</button>
+    <button type="button" class="btn alt" id="caseToggle" aria-pressed="false">MAJUSCULE</button>
+  </div>
+  <div class="row"><button type="button" class="btn alt" id="roboExplain">🔊 Robo-Cip explică</button><button type="button" class="btn alt" id="roboStop">Oprește vocea</button></div>
+  <p class="assist" id="roboWritten">🤖 Robo-Cip: În română folosim cinci litere cu semne speciale: ă, â, î, ș și ț. Apasă pe literă când vrei să o scrii. Verifică și majuscula de la începutul propoziției și semnul de punctuație de la final.</p>
+  <small id="voiceStatus" role="status" aria-live="polite"></small>
+</div>
 <p><b>Verifică înainte de a salva:</b></p>
 <label class="check"><input type="checkbox" id="spelling"> Am verificat majusculele, diacriticele și semnele de punctuație.</label>
 <label class="check"><input type="checkbox" id="clarity"> Mesajul meu este clar și are sens.</label>
@@ -53,5 +69,42 @@ $("next").onclick=()=>{if(complete&&idx<LEVELS[age].tasks.length-1){idx++;load()
 $("save").onclick=()=>{if(!$("answer").value.trim()){$("saved").textContent="Scrie mai întâi mesajul tău.";return}if(!["spelling","clarity","kindness"].every(id=>$(id).checked)){$("saved").textContent="Bifează cele trei verificări înainte de salvare.";return}try{localStorage.setItem("roboCip:clinica:"+age,$("answer").value);$("saved").textContent="Mesajul a fost salvat în acest browser."}catch(e){$("saved").textContent="Salvarea nu este disponibilă. Copiază mesajul."}};
 document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>selectAge(b.dataset.age));let stored=null;try{stored=localStorage.getItem("roboCip:ageTrack")}catch(e){}const requested=new URLSearchParams(location.search).get("age");selectAge(LEVELS[requested]?requested:stored);
 })();
-</script><script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script><script>if(typeof roboLogActivity==="function")roboLogActivity({title:"Clinica de mesaje",module:"Algoritmi lingvistici",type:"Empatie, ortografie și claritate"});</script>
+</script><script>
+(function(){
+"use strict";
+const field=document.getElementById("answer"),keyArea=document.getElementById("diacriticKeys");
+const voiceStatus=document.getElementById("voiceStatus");
+const explanations={
+"7-8":"Bună! Sunt Robo-Cip. În limba română folosim literele ă, â, î, ș și ț. Atinge litera potrivită ca să o scrii. O propoziție începe cu literă mare și se încheie cu un semn de punctuație.",
+"8-9":"Salut! Robo-Cip te ajută să scrii corect. Literele ă, â, î, ș și ț nu se înlocuiesc la întâmplare. De exemplu, țară se scrie cu ț, iar școală se scrie cu ș. Verifică și cratima, diacriticele și punctuația.",
+"9-10":"Salut! Sunt Robo-Cip. Scrie cu diacritice corecte, verifică acordul și semnele de punctuație. Atenție: â și î reprezintă același sunet, dar au reguli ortografice diferite. De obicei, î se folosește la începutul și sfârșitul cuvintelor, iar â în interior, cu excepțiile prevăzute de normele ortografice."
+};
+let upper=false;
+document.getElementById("caseToggle").addEventListener("click",function(){
+upper=!upper;this.setAttribute("aria-pressed",String(upper));this.textContent=upper?"minuscule":"MAJUSCULE";
+keyArea.querySelectorAll("[data-letter]").forEach(b=>b.textContent=upper?b.dataset.letter.toUpperCase():b.dataset.letter);
+});
+keyArea.addEventListener("pointerdown",e=>{if(e.target.closest("[data-letter]"))e.preventDefault()});
+keyArea.addEventListener("click",e=>{
+const b=e.target.closest("[data-letter]");if(!b)return;
+const letter=upper?b.dataset.letter.toUpperCase():b.dataset.letter;
+const a=field.selectionStart??field.value.length,c=field.selectionEnd??a;
+field.setRangeText(letter,a,c,"end");field.focus();field.dispatchEvent(new Event("input",{bubbles:true}));
+});
+document.getElementById("roboExplain").addEventListener("click",()=>{
+const age=new URLSearchParams(location.search).get("age")||localStorage.getItem("roboCip:ageTrack")||"7-8";
+const message=explanations[age]||explanations["7-8"];
+document.getElementById("roboWritten").textContent="🤖 Robo-Cip: "+message;
+if(!("speechSynthesis" in window)){voiceStatus.textContent="Vocea nu este disponibilă în acest browser; explicația rămâne afișată.";return}
+const voices=speechSynthesis.getVoices();
+const ro=voices.find(v=>v.lang.toLowerCase()==="ro-ro")||voices.find(v=>v.lang.toLowerCase().startsWith("ro"));
+if(!ro){voiceStatus.textContent="Nu este instalată o voce românească. Citește explicația afișată.";return}
+speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(message);u.lang="ro-RO";u.voice=ro;u.rate=.85;u.pitch=1.04;
+u.onerror=()=>{voiceStatus.textContent="Redarea audio nu a reușit. Explicația poate fi citită mai sus."};
+voiceStatus.textContent="Robo-Cip explică în limba română.";speechSynthesis.speak(u);
+});
+document.getElementById("roboStop").addEventListener("click",()=>{if("speechSynthesis" in window)speechSynthesis.cancel();voiceStatus.textContent="Vocea a fost oprită."});
+})();
+</script>
+<script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script><script>if(typeof roboLogActivity==="function")roboLogActivity({title:"Clinica de mesaje",module:"Algoritmi lingvistici",type:"Empatie, ortografie și claritate"});</script>
 </body></html>
