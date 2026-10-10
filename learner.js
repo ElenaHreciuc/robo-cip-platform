@@ -226,8 +226,8 @@
 
     "programare-vizuala": {
       title: "Sunete și Animații",
-      subtitle: "Tipare sonore, laborator de ritmuri și exerciții audio-vizuale.",
-      heroTag: "Tipare · muzică · vizual",
+      subtitle: "Sunete, animații și misiuni STEAM inspirate din viața reală.",
+      heroTag: "Tipare · STEAM · animații",
       heroImage: "/assets/img/robo_programare.png",
       cardClass: "module-programare-card",
       items: [
@@ -251,6 +251,39 @@
           bullets: ["Alegi personaje.", "Setezi scene.", "Generezi structură."],
           creative: "",
           pageHref: "/resources/constructor-povesti.html",
+          resources: []
+        },
+        {
+          missionId: "semafor-sonor",
+          pill: "Semaforul sonor",
+          miniLabel: "Siguranță · algoritmi",
+          image: "/assets/img/robo_programare.png",
+          tagline: "Programezi timpii unui semafor într-o situație de educație rutieră.",
+          bullets: ["Modifici valorile.", "Observi și calculezi.", "Construiești un mesaj STEAM."],
+          creative: "Provocare: explică regula și rezultatul colegilor.",
+          pageHref: "/resources/semafor-sonor.html",
+          resources: []
+        },
+        {
+          missionId: "alerta-meteo-steam",
+          pill: "Alerta meteo",
+          miniLabel: "Științe · date",
+          image: "/assets/img/robo_programare.png",
+          tagline: "Analizezi temperatura, ploaia și vântul într-o stație meteo virtuală.",
+          bullets: ["Modifici valorile.", "Observi și calculezi.", "Construiești un mesaj STEAM."],
+          creative: "Provocare: explică regula și rezultatul colegilor.",
+          pageHref: "/resources/alerta-meteo-steam.html",
+          resources: []
+        },
+        {
+          missionId: "economisim-apa",
+          pill: "Economisim apa",
+          miniLabel: "Mediu · matematică",
+          image: "/assets/img/robo_programare.png",
+          tagline: "Calculezi apa economisită și creezi un mesaj pentru comunitate.",
+          bullets: ["Modifici valorile.", "Observi și calculezi.", "Construiești un mesaj STEAM."],
+          creative: "Provocare: explică regula și rezultatul colegilor.",
+          pageHref: "/resources/economisim-apa.html",
           resources: []
         },
         {
