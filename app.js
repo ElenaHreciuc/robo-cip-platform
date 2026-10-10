@@ -28,7 +28,7 @@ app.get("/api/learner/missions", (req,res) => {
 // Serve only public assets; keep source, metadata and teaching data off static URLs.
 app.get("/favicon.ico", (_,res) => res.sendFile(path.join(ROOT,"robo_hero.png")));
 app.get("/portfolio.html", (_,res) => res.redirect(302,"/portofolio.html"));
-app.get(/^\\/(?:[a-z0-9_-]+\\.(?:html|js|css|png|jpg|jpeg|webp|gif|glb|mp4))$/i, (req,res,next) => {
+app.get(new RegExp("^/[a-z0-9_-]+[.](html|js|css|png|jpg|jpeg|webp|gif|glb|mp4)$","i"), (req,res,next) => {
   const name = req.path.slice(1);
   if (["app.js","learnerController.js","learnerRoutes.js"].includes(name)) return res.sendStatus(404);
   res.sendFile(path.join(ROOT,name), err => { if(err && !res.headersSent) next(); });
