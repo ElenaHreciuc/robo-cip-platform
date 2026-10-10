@@ -167,6 +167,50 @@
           resources: []
         },
         {
+          missionId: "pod-inteligent",
+          pill: "Podul Inteligent",
+          miniLabel: "Inginerie · structuri",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Proiectezi un pod, reglezi susținerile și compari solicitări într-un model educațional.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/pod-inteligent.html",
+          resources: []
+        },
+        {
+          missionId: "parghii-echilibru",
+          pill: "Pârghii și echilibru",
+          miniLabel: "Fizică · mecanică",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Experimentezi cu forțe, brațe și echilibru folosind un model de pârghie.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/parghii-echilibru.html",
+          resources: []
+        },
+        {
+          missionId: "lumina-umbre",
+          pill: "Lumina și umbrele",
+          miniLabel: "Optică · geometrie",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Modifici sursa și obiectul, apoi estimezi matematic lungimea umbrei.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/lumina-umbre.html",
+          resources: []
+        },
+        {
+          missionId: "corpuri-geometrice",
+          pill: "Atelierul corpurilor",
+          miniLabel: "Volum · arii",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Construiești corpuri geometrice și calculezi volumul și aria totală.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/corpuri-geometrice.html",
+          resources: []
+        },
+        {
           missionId: "masina-transformari",
           pill: "Mașina transformări",
           miniLabel: "2D → 3D · forme",
