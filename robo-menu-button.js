@@ -1,49 +1,25 @@
 (function () {
-  // Evităm inserarea dublă
+  "use strict";
+  const teacherPages = new Set(["/teacher-dashboard.html", "/teacher-notes.html", "/teacher-guide.html", "/menu-robo.html"]);
+  if (!teacherPages.has(window.location.pathname)) return;
   if (document.getElementById("roboMenuBtn")) return;
-
-  // Stilul butonului
   const style = document.createElement("style");
-  style.textContent = `
-    .robo-menu-btn {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      z-index: 9999;
-      background: #2e86de;
-      color: #ffffff;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 14px;
-      text-decoration: none;
-      font-family: system-ui, sans-serif;
-      box-shadow: 0 2px 10px rgba(0,0,0,.35);
-      transition: transform .12s ease, box-shadow .12s ease;
-    }
-    .robo-menu-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,.4);
-    }
-  `;
+  style.textContent = ".robo-menu-center{display:flex;justify-content:center;margin:18px auto 22px;padding:0 12px}.robo-menu-btn{display:inline-block;background:#2e86de;color:white;border-radius:999px;padding:13px 25px;font:600 16px system-ui,sans-serif;text-decoration:none;box-shadow:0 3px 11px #163a5d35}.robo-menu-btn:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}.robo-menu-btn:hover{background:#176fbc}";
   document.head.appendChild(style);
-
-  // Creăm butonul
-  const btn = document.createElement("a");
-  btn.id = "roboMenuBtn";
-  btn.href = "/menu-robo.html";
-  btn.className = "robo-menu-btn";
-  btn.textContent = "Meniu Robo-Cip";
-
-  // Funcție de atașare în body
-  function attachButton() {
+  function attach() {
     if (!document.body) return;
-    document.body.appendChild(btn);
+    const wrap = document.createElement("nav");
+    wrap.className = "robo-menu-center";
+    wrap.setAttribute("aria-label","Acces meniu profesor");
+    const btn = document.createElement("a");
+    btn.id = "roboMenuBtn";
+    btn.href = "/menu-robo.html";
+    btn.className = "robo-menu-btn";
+    btn.textContent = "Meniu Robo-Cip · Profesor";
+    wrap.appendChild(btn);
+    const content = document.querySelector("main, .page") || document.body;
+    content.insertBefore(wrap,content.firstChild);
   }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", attachButton);
-  } else {
-    attachButton();
-  }
-
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded",attach,{once:true});
+  else attach();
 })();
