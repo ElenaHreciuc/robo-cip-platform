@@ -1,531 +1,71 @@
 <!DOCTYPE html>
-
-<html lang="ro">
-
-<head>
-
-  <meta charset="UTF-8" />
-
-  <title>Etichetează Lumea – Robo-Cip</title>
-
-
-
-  <style>
-
-    body {
-
-      font-family: system-ui, sans-serif;
-
-      margin: 0;
-
-      padding: 16px;
-
-      background: radial-gradient(circle at top, #e3f2fd, #ffffff);
-
-    }
-
-
-
-    .page {
-
-      max-width: 920px;
-
-      margin: 0 auto;
-
-    }
-
-
-
-    h1 {
-
-      margin-top: 0;
-
-    }
-
-
-
-    .intro {
-
-      background: #ffffff;
-
-      border-radius: 16px;
-
-      padding: 12px 14px;
-
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-
-      font-size: 14px;
-
-    }
-
-
-
-    .board {
-
-      margin-top: 14px;
-
-      display: grid;
-
-      grid-template-columns: 1fr 1fr;
-
-      gap: 14px;
-
-    }
-
-
-
-    .zone {
-
-      background: #ffffff;
-
-      border-radius: 18px;
-
-      padding: 12px;
-
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-
-      min-height: 200px;
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 8px;
-
-    }
-
-
-
-    .zone h3 {
-
-      margin: 0 0 6px;
-
-      font-size: 15px;
-
-    }
-
-
-
-    .drop-area {
-
-      flex: 1;
-
-      border-radius: 14px;
-
-      border: 2px dashed #bbdefb;
-
-      background: #f7fbff;
-
-      padding: 8px;
-
-      display: flex;
-
-      flex-wrap: wrap;
-
-      gap: 8px;
-
-      align-content: flex-start;
-
-      transition: 0.15s;
-
-    }
-
-
-
-    .drop-area.drag-over {
-
-      background: #e3f2fd;
-
-      border-color: #64b5f6;
-
-    }
-
-
-
-    .item-pool {
-
-      margin-top: 14px;
-
-      background: #ffffff;
-
-      border-radius: 18px;
-
-      padding: 10px;
-
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-
-    }
-
-
-
-    .item-pool h3 {
-
-      margin-top: 0;
-
-      font-size: 15px;
-
-    }
-
-
-
-    .item-list {
-
-      display: flex;
-
-      flex-wrap: wrap;
-
-      gap: 8px;
-
-    }
-
-
-
-    .card {
-
-      padding: 8px 10px;
-
-      border-radius: 12px;
-
-      background: #fffbe6;
-
-      border: 1px solid #f4d03f;
-
-      cursor: grab;
-
-      font-size: 13px;
-
-      user-select: none;
-
-    }
-
-
-
-    .result-box {
-
-      margin-top: 10px;
-
-      font-size: 13px;
-
-      background: #ffffff;
-
-      border-radius: 12px;
-
-      padding: 8px;
-
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-
-    }
-
-
-
-    .actions {
-
-      margin-top: 10px;
-
-      display: flex;
-
-      gap: 10px;
-
-      flex-wrap: wrap;
-
-    }
-
-
-
-    button {
-
-      border-radius: 999px;
-
-      border: none;
-
-      padding: 6px 12px;
-
-      font-size: 13px;
-
-      cursor: pointer;
-
-      background: #3498db;
-
-      color: #ffffff;
-
-    }
-
-
-
-    .hint {
-
-      font-size: 12px;
-
-      opacity: 0.8;
-
-    }
-
-  </style>
-
-</head>
-
-
-
-<body>
-
-  <div class="page">
-
-    <h1>🧩 Etichetează Lumea – Mini-laborator Robo-Cip</h1>
-
-
-
-    <div class="intro">
-
-      Trage obiectele în <b>Cutia A</b> sau <b>Cutia B</b> și spune ce regulă ai folosit.
-
-      <br />
-
-      <span class="hint">
-
-        Profesorul poate schimba criteriul: culoare, formă, viu / neviu, jucărie / aliment etc.
-
-      </span>
-
-    </div>
-
-
-
-    <div class="board">
-
-      <div class="zone">
-
-        <h3>Cutia A</h3>
-
-        <div class="drop-area" id="zoneA"></div>
-
-      </div>
-
-
-
-      <div class="zone">
-
-        <h3>Cutia B</h3>
-
-        <div class="drop-area" id="zoneB"></div>
-
-      </div>
-
-    </div>
-
-
-
-    <div class="item-pool">
-
-      <h3>Obiecte</h3>
-
-      <div class="item-list" id="itemPool"></div>
-
-    </div>
-
-
-
-    <div class="actions">
-
-      <button id="resetBtn">Resetează</button>
-
-      <button id="explainBtn">Explică regula</button>
-
-    </div>
-
-
-
-    <div class="result-box" id="resultBox">
-
-      Regulă aleasă: (completează elevul prin explicație)
-
-    </div>
-
-  </div>
-
-
-
-  <script>
-
-    const items = [
-
-      "🍎 măr",
-
-      "🧸 ursuleț",
-
-      "🚗 mașină",
-
-      "🌿 frunză",
-
-      "⚽ minge",
-
-      "🐟 pește",
-
-      "📦 cutie",
-
-      "🍌 banană",
-
-      "🧩 piesă",
-
-      "🐦 pasăre"
-
-    ];
-
-
-
-    const pool = document.getElementById("itemPool");
-
-    const zoneA = document.getElementById("zoneA");
-
-    const zoneB = document.getElementById("zoneB");
-
-    const result = document.getElementById("resultBox");
-
-
-
-    function createCard(label) {
-
-      const el = document.createElement("div");
-
-      el.className = "card";
-
-      el.textContent = label;
-
-      el.draggable = true;
-
-
-
-      el.addEventListener("dragstart", e => {
-
-        e.dataTransfer.setData("text/plain", label);
-
-        el.classList.add("dragging");
-
-      });
-
-
-
-      el.addEventListener("dragend", () => {
-
-        el.classList.remove("dragging");
-
-      });
-
-
-
-      return el;
-
-    }
-
-
-
-    function renderPool() {
-
-      pool.innerHTML = "";
-
-      items.forEach(txt => pool.appendChild(createCard(txt)));
-
-    }
-
-
-
-    function makeDropArea(area) {
-
-      area.addEventListener("dragover", e => {
-
-        e.preventDefault();
-
-        area.classList.add("drag-over");
-
-      });
-
-
-
-      area.addEventListener("dragleave", () => {
-
-        area.classList.remove("drag-over");
-
-      });
-
-
-
-      area.addEventListener("drop", e => {
-
-        e.preventDefault();
-
-        area.classList.remove("drag-over");
-
-
-
-        const label = e.dataTransfer.getData("text/plain");
-
-        const card = createCard(label);
-
-        area.appendChild(card);
-
-      });
-
-    }
-
-
-
-    makeDropArea(zoneA);
-
-    makeDropArea(zoneB);
-
-    renderPool();
-
-
-
-    document.getElementById("resetBtn").addEventListener("click", () => {
-
-      zoneA.innerHTML = "";
-
-      zoneB.innerHTML = "";
-
-      renderPool();
-
-      result.textContent = "Regulă aleasă: (repornește activitatea)";
-
-    });
-
-
-
-    document.getElementById("explainBtn").addEventListener("click", () => {
-
-      result.textContent =
-
-        "Profesorul întreabă: „Ce regulă ai folosit pentru a sorta obiectele?”";
-
-    });
-
-  </script>
-
-
-
-  <!-- Buton meniu global -->
-
-  <script src="/js/robo-menu-button.js"></script>
-
-
-
-  <!-- Log activitate -->
-
-  <script src="/js/activity-log.js"></script>
-
-  <script>
-
-    roboLogActivity({
-
-      title: "Etichetează lumea",
-
-      module: "Gândire semantică & ML conceptual",
-
-      type: "Clasificare și criterii"
-
-    });
-
-  </script>
-
-</body>
-
-</html>
+<html lang="ro"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etichetează lumea – Robo-Cip</title>
+<style>
+*{box-sizing:border-box}body{font-family:system-ui,Arial,sans-serif;background:linear-gradient(145deg,#e8f4ff,#f9fbff);color:#19344e;margin:0;padding:18px}
+main{max-width:960px;margin:auto}.panel{background:#fff;padding:20px;margin:12px 0;border-radius:20px;box-shadow:0 6px 20px #0d42651a}
+h1{font-size:clamp(25px,4vw,34px);margin:0 0 8px}h2{font-size:21px;margin:4px 0 10px}.muted{color:#48627b}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.age{border:2px solid #a6d0ee;border-radius:999px;padding:11px 15px;background:#eaf5ff;color:#14578b;font-weight:700;cursor:pointer}
+.age[aria-pressed=true]{background:#176cad;color:white;border-color:#176cad}.primary,.secondary{font-size:15px;cursor:pointer;border:0;border-radius:12px;padding:12px 16px;font-weight:700}.primary{background:#176cad;color:white}.secondary{background:#e9f3fa;color:#15527e}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:11px}.bucket{background:#f6faff;border:2px solid #bfdaf0;border-radius:15px;padding:12px;min-height:130px}.bucket h3{margin:0 0 8px;font-size:17px}
+.chip{display:inline-block;border:1px solid #e2ba58;border-radius:11px;padding:10px;background:#fff5d8;color:#242d39;margin:3px;font-size:15px;cursor:pointer}
+.chip.selected{outline:3px solid #1680d4}.chip:disabled{opacity:.55;cursor:default}.bucket .chip{background:#e4f2ff;border-color:#9dc9e9}
+.status{padding:14px;background:#edf6fc;border-radius:13px;margin-top:14px;min-height:55px}.status.good{background:#def4e5;color:#165636}.status.warn{background:#fff1dd;color:#7a4812}
+select,textarea{font:inherit;border:1px solid #adcbe4;border-radius:12px;padding:11px}select{max-width:100%;width:100%;margin:8px 0}textarea{min-height:85px;width:100%}
+small{color:#5b7087}@media(max-width:540px){.panel{padding:15px}.grid{grid-template-columns:1fr}}
+</style></head><body><main>
+<section class="panel"><h1>🤖 Etichetează lumea</h1><p class="muted">Laboratorul Robo-Cip: observă, grupează, verifică și explică deciziile.</p>
+<div class="row" aria-label="Alege vârsta elevului" id="ages">
+<button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button>
+<button class="age" data-age="8-9" aria-pressed="false">8–9 ani · Construiesc</button>
+<button class="age" data-age="9-10" aria-pressed="false">9–10 ani · Investighez</button></div></section>
+<section class="panel"><h2 id="missionTitle"></h2><p id="instruction"></p>
+<label for="criterion"><b>Alege criteriul de clasificare:</b></label><select id="criterion"></select>
+<p class="muted">Selectează un obiect, apoi apasă pe categoria potrivită. Poți muta un obiect alegând o altă categorie.</p>
+<div class="grid" id="buckets"></div>
+<h2 style="margin-top:20px">Obiecte de clasificat <span id="counter"></span></h2><div id="pool" class="row"></div>
+<div class="row" style="margin-top:16px"><button class="primary" id="check">Verifică răspunsurile</button><button class="secondary" id="reset">Reîncepe</button></div>
+<div id="feedback" class="status" aria-live="polite" role="status">Selectează un obiect pentru a începe.</div>
+<small id="progress"></small></section>
+<section class="panel"><h2>🎨 Provocarea creativă</h2><p id="creative"></p>
+<label for="reflection"><b>Explicația mea:</b></label><textarea id="reflection" placeholder="Descrie regula și ce ai observat."></textarea>
+<p class="muted" id="ethics"></p><div class="row"><button class="secondary" id="save">Salvează reflecția în acest browser</button><span id="saveMessage" role="status"></span></div>
+</section><p><a href="/modules.html" style="color:#165b94">← Înapoi la module</a></p></main>
+<script>
+(function(){"use strict";
+const DATA={
+"7-8":{title:"Descopăr asemănări și deosebiri",instruction:"Exersează clasificarea a 10 exemple. Schimbă criteriul pentru a vedea că aceeași lume poate fi grupată în moduri diferite.",creative:"Desenează sau descrie două obiecte noi pentru una dintre categorii. Spune de ce le-ai ales.",ethics:"Nu există obiecte «bune» și «rele» doar pentru că apar în categorii diferite.",rounds:[
+{name:"Alimente sau jucării?",categories:["Alimente","Jucării"],items:[["🍎 măr",0],["🍌 banană",0],["🍞 pâine",0],["🥕 morcov",0],["🍐 pară",0],["🧸 ursuleț de pluș",1],["🪀 titirez",1],["🧩 puzzle",1],["🚂 trenuleț de jucărie",1],["🪁 zmeu de jucărie",1]]},
+{name:"Plante sau animale?",categories:["Plante","Animale"],items:[["🌳 stejar",0],["🌷 lalea",0],["🌻 floarea-soarelui",0],["🌿 mentă",0],["🌲 brad",0],["🐈 pisică",1],["🐕 câine",1],["🐟 pește",1],["🐝 albină",1],["🐦 vrabie",1]]},
+{name:"Mijloace de transport sau instrumente muzicale?",categories:["Transport","Instrumente muzicale"],items:[["🚲 bicicletă",0],["🚆 tren",0],["🚌 autobuz",0],["🚢 vapor",0],["✈️ avion",0],["🥁 tobă",1],["🎹 pian",1],["🎸 chitară",1],["🎻 vioară",1],["🪈 flaut",1]]}]},
+"8-9":{title:"Construiesc reguli de clasificare",instruction:"Clasifică 10 exemple în trei categorii. Observă ce proprietate comună justifică apartenența la fiecare grup.",creative:"Inventeză o regulă proprie, cu trei categorii. Propune trei exemple și explică alegerea.",ethics:"O clasificare este utilă numai dacă regula este clară și aplicată consecvent.",rounds:[
+{name:"Ce fel de organism este?",categories:["Plante","Animale","Ciuperci"],items:[["stejar",0],["trandafir",0],["brad",0],["mentă",0],["pisică",1],["urs",1],["rândunică",1],["fluture",1],["hrib",2],["champignon (ciupercă de cultură)",2]]},
+{name:"Din ce material este făcut obiectul descris?",categories:["Hârtie","Metal","Plastic"],items:[["foaie de caiet din hârtie",0],["plic din hârtie",0],["ziar din hârtie",0],["cutie din carton",0],["lingură din oțel",1],["cuie din fier",1],["cheie din metal",1],["sticlă de apă din plastic",2],["riglă din plastic",2],["pahar din plastic",2]]},
+{name:"Ce rol are obiectul?",categories:["Scriere și desen","Măsurare","Muzică"],items:[["creion",0],["stilou",0],["creion colorat",0],["cariocă",0],["riglă gradată",1],["ruletă",1],["termometru",1],["tobă",2],["vioară",2],["flaut",2]]}]},
+"9-10":{title:"Investighez regulile și excepțiile",instruction:"Clasifică 10 obiecte după descriere, nu doar după aspect. În ultimul grup ajung exemplele care necesită informații suplimentare.",creative:"Propune două exemple care par să aparțină aceleiași categorii, dar necesită verificări diferite. Explică de ce.",ethics:"O regulă de clasificare poate avea limite. Nu ghici când lipsesc informații; explică ce ar trebui verificat.",rounds:[
+{name:"Identifică materialul dominant",categories:["Hârtie / carton","Metal","Material mixt sau neprecizat"],items:[["foaie de hârtie",0],["cutie din carton simplu",0],["ziar tipărit pe hârtie",0],["plic simplu din hârtie",0],["cui din fier",1],["cheie din oțel",1],["lingură din inox",1],["ambalaj din hârtie și folie",2],["jucărie cu piese din plastic și metal",2],["obiect fără material precizat",2]]},
+{name:"Ce se poate afirma din descriere?",categories:["Descriere clară: plante","Descriere clară: animale","Informații insuficiente"],items:[["stejar viu",0],["trandafir viu",0],["brad viu",0],["mentă crescută în ghiveci",0],["pisică vie",1],["fluture viu",1],["vrabie vie",1],["vietate necunoscută",2],["organism neidentificat",2],["fotografie neclară cu un organism",2]]},
+{name:"Verifică certitudinea unei clasificări",categories:["Transport","Instrument muzical","Depinde de context"],items:[["autobuz pentru pasageri",0],["bicicletă pentru deplasare",0],["tren de călători",0],["avion de pasageri",0],["vioară folosită la concert",1],["pian folosit pentru muzică",1],["flaut cântat de muzician",1],["obiect denumit «organ» fără alt context",2],["«claviatură» fără alte precizări",2],["«tobă» fără context: instrument sau piesă de mecanism",2]]}]}
+};
+const $=id=>document.getElementById(id);let age,round=0,placements=[],selected=null,checked=false;
+function show(message,kind=""){$("feedback").textContent=message;$("feedback").className="status"+(kind?" "+kind:"")}
+function chooseAge(a){age=DATA[a]?a:"7-8";try{localStorage.setItem("roboCip:ageTrack",age)}catch(e){}document.querySelectorAll("[data-age]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.age===age)));$("missionTitle").textContent=DATA[age].title;$("instruction").textContent=DATA[age].instruction;$("creative").textContent=DATA[age].creative;$("ethics").textContent=DATA[age].ethics;const sel=$("criterion");sel.replaceChildren();DATA[age].rounds.forEach((r,i)=>{const opt=document.createElement("option");opt.value=i;opt.textContent="Criteriul "+(i+1)+": "+r.name;sel.appendChild(opt)});round=0;load()}
+function load(){const d=DATA[age].rounds[round];placements=Array(d.items.length).fill(null);selected=null;checked=false;$("criterion").value=round;try{$("reflection").value=localStorage.getItem("roboCip:labels:"+age+":"+round)||""}catch(e){$("reflection").value=""}$("saveMessage").textContent="";show("Alege un obiect, apoi categoria potrivită.");render()}
+function labelButton(text,onClick,css,pressed){const b=document.createElement("button");b.type="button";b.className=css;b.textContent=text;if(pressed!==undefined)b.setAttribute("aria-pressed",String(pressed));b.onclick=onClick;return b}
+function render(){const d=DATA[age].rounds[round];const root=$("buckets");root.replaceChildren();d.categories.forEach((name,category)=>{const section=document.createElement("section");section.className="bucket";section.appendChild(labelButton("📥 "+name+" – pune aici obiectul selectat",()=>{if(selected===null){show("Selectează mai întâi un obiect.","warn");return}placements[selected]=category;selected=null;checked=false;show("Obiectul a fost clasificat. Continuă cu celelalte.");render()},"secondary"));const area=document.createElement("div");d.items.forEach((it,i)=>{if(placements[i]===category)area.appendChild(labelButton(it[0]+" ×",()=>{placements[i]=null;selected=i;render()},"chip"))});section.appendChild(area);root.appendChild(section)});
+const pool=$("pool");pool.replaceChildren();d.items.forEach((it,i)=>{if(placements[i]===null)pool.appendChild(labelButton(it[0],()=>{selected=i;show("Ai selectat «"+it[0]+"». Alege o categorie.");render()},"chip"+(selected===i?" selected":""),selected===i))});
+$("counter").textContent="("+placements.filter(x=>x!==null).length+"/10)";$("progress").textContent="Criteriul "+(round+1)+" din 3 – "+d.name}
+$("check").onclick=()=>{const d=DATA[age].rounds[round],missing=placements.filter(x=>x===null).length;if(missing){show("Mai sunt "+missing+" obiecte neclasificate. Completează toate cele 10 exemple.","warn");return}
+const wrong=[];d.items.forEach((item,i)=>{if(placements[i]!==item[1])wrong.push(i)});
+if(!wrong.length){checked=true;show("Bravo! Ai clasificat corect toate cele 10 exemple. Explică regula folosită și încearcă alt criteriu.","good")}else{checked=false;show("Ai "+(10-wrong.length)+" clasificări corecte din 10. Verifică «"+d.items[wrong[0]][0]+"»: categoria potrivită este «"+d.categories[d.items[wrong[0]][1]]+"». Poți schimba alegerea.","warn")}
+};
+$("reset").onclick=load;
+$("criterion").onchange=e=>{round=Number(e.target.value);load()};
+$("save").onclick=()=>{try{localStorage.setItem("roboCip:labels:"+age+":"+round,$("reflection").value);$("saveMessage").textContent="Reflecția a fost salvată în acest browser."}catch(e){$("saveMessage").textContent="Nu se poate salva. Copiază textul înainte de a ieși."}};
+document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>chooseAge(b.dataset.age));
+const requested=new URLSearchParams(location.search).get("age");let stored=null;try{stored=localStorage.getItem("roboCip:ageTrack")}catch(e){}chooseAge(DATA[requested]?requested:stored);
+})();
+</script>
+<script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script>
+<script>if(typeof roboLogActivity==="function")roboLogActivity({title:"Etichetează lumea",module:"Algoritmi lingvistici",type:"Clasificare și evaluarea regulilor"});</script>
+</body></html>
