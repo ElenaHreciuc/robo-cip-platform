@@ -273,10 +273,14 @@
 
   let state = loadState(moduleId);
 
+  const ageTrack = new URL(window.location.href).searchParams.get("age") || localStorage.getItem("roboCip:ageTrack") || "7-8";
+  const ageLabels = {"7-8":"7–8 ani · Descopăr","8-9":"8–9 ani · Construiesc","9-10":"9–10 ani · Investighez"};
+  const selectedAgeLabel = ageLabels[ageTrack] || ageLabels["7-8"];
+
   function renderHero() {
     $("module-title").textContent = moduleDef.title;
     $("module-subtitle").textContent = moduleDef.subtitle;
-    $("module-hero-tag").textContent = moduleDef.heroTag;
+    $("module-hero-tag").textContent = moduleDef.heroTag + " · " + selectedAgeLabel;
 
     const img = $("module-hero-image");
     img.src = moduleDef.heroImage;
