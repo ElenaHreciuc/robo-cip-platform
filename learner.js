@@ -287,6 +287,17 @@
           resources: []
         },
         {
+          missionId: "scratchjr-steam",
+          pill: "ScratchJr – Animații STEAM",
+          miniLabel: "Blocuri · animație · viața reală",
+          image: "/assets/img/robo_programare.png",
+          tagline: "Construiești animații simple în ScratchJr pornind de la algoritmi-model.",
+          bullets: ["Urmezi un algoritm ilustrat.", "Testezi pașii în Robo-Cip.", "Recreezi animația în ScratchJr."],
+          creative: "Provocare: o poveste animată despre siguranță, vreme sau economisirea apei.",
+          pageHref: "/resources/scratchjr-steam.html",
+          resources: []
+        },
+        {
           missionId: "portofolio",
           pill: "Portofoliu",
           miniLabel: "Colecție lucrări",
