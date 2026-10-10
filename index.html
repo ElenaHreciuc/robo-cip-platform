@@ -159,7 +159,15 @@
         <img src="/assets/img/robo_hero.png" alt="Robo-Cip">
       </div>
       <h1>Bun venit!</h1>
-            <a class="btn" href="/modules.html">▶ Începe</a>
+            <div style="margin:14px auto 2px;max-width:340px;text-align:left;">
+        <label for="start-age" style="display:block;font-weight:750;font-size:1rem;color:#0b2a4a;margin-bottom:7px;">Câți ani ai?</label>
+        <select id="start-age" style="width:100%;padding:12px;border-radius:12px;border:1px solid #8ebbe8;background:#fff;color:#0b2a4a;font:inherit;">
+          <option value="7-8">7–8 ani · Descopăr</option>
+          <option value="8-9">8–9 ani · Construiesc</option>
+          <option value="9-10">9–10 ani · Investighez</option>
+        </select>
+      </div>
+      <a class="btn" id="start-link" href="/modules.html">▶ Începe</a>
       <!-- Dacă browserul blochează vocea automată, apare acest buton -->
       <button id="enableVoice" class="audio-fallback" type="button">
         🔊 Pornește vocea
@@ -190,6 +198,21 @@
 
 
 
+  <script>
+  (function() {
+    const age = document.getElementById("start-age");
+    const start = document.getElementById("start-link");
+    const allowed = ["7-8","8-9","9-10"];
+    const saved = localStorage.getItem("roboCip:ageTrack");
+    if (allowed.includes(saved)) age.value = saved;
+    function update() {
+      localStorage.setItem("roboCip:ageTrack",age.value);
+      start.href = "/modules.html?age=" + encodeURIComponent(age.value);
+    }
+    age.addEventListener("change",update);
+    update();
+  })();
+  </script>
   <script>
 
     const roboBox = document.getElementById("roboBox");
