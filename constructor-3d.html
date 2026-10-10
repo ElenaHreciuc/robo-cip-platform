@@ -43,7 +43,7 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 6px;
   }
 
@@ -119,7 +119,7 @@
     font-size: 12px;
     opacity: 0.8;
   }
-</style>
+.agebar,.tools,.metrics{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.agebar button,.tools button{padding:10px 12px;border-radius:11px;background:#e0f4e8;color:#135f4c}.agebar button[aria-pressed=true],.tools button[aria-pressed=true]{background:#16836d;color:white}.tile{width:auto;aspect-ratio:1;height:auto;min-width:0}.grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.tile .block{inset:auto 20% 14%;height:var(--h);border-radius:2px;box-shadow:inset -8px 0 #0002,3px 4px 5px #0003;transition:height .2s}.tile .block:before{content:"";position:absolute;left:0;top:-9px;height:10px;width:100%;background:inherit;filter:brightness(1.2);transform:skewX(-30deg)}.levelmark{position:absolute;top:2px;right:3px;font-weight:700;background:white;border-radius:6px;padding:1px 5px;color:#174739;font-size:12px}.metrics span{background:#e5f5ed;border-radius:10px;padding:5px 9px}.status{background:#eef7ef;border-radius:12px;padding:12px;line-height:1.5}.status.warn{background:#fff0db}.status.good{background:#ddf4e1}.color{width:38px;height:38px}.intro{font-size:16px}.tile:focus-visible,button:focus-visible{outline:3px solid #f6a53c;outline-offset:2px}@media(max-width:700px){.layout{grid-template-columns:1fr}.grid{gap:5px}.page{max-width:100%}}</style>
 </head>
 
 <body>
@@ -135,25 +135,23 @@
   </span>
 </div>
 
-<div class="layout">
+<div class="intro" style="margin-top:12px"><b>🎯 Alege nivelul:</b><div class="agebar"><button data-age="7-8">7–8 ani</button><button data-age="8-9">8–9 ani</button><button data-age="9-10">9–10 ani</button></div><h2 id="mission">Construiește orașul</h2><p id="goal"></p><p id="mathematics"></p><p id="algorithm"></p></div><div class="layout">
 
   <div class="scene">
-    <div class="grid" id="grid"></div>
+    <div class="grid" id="grid"></div><div class="metrics"><span id="countBlocks">Cuburi: 0</span><span id="countBuildings">Clădiri: 0</span><span id="highest">Înălțime maximă: 0</span></div>
   </div>
 
   <div class="panel">
-    <b>Paletă de blocuri</b>
+    <b>Paletă de blocuri</b><p>Alege un instrument, apoi apasă pe celulele terenului. Fiecare apăsare adaugă sau elimină un nivel.</p><div class="tools"><button data-tool="add" aria-pressed="true">+ Adaugă nivel</button><button data-tool="remove" aria-pressed="false">− Elimină nivel</button><button data-tool="paint" aria-pressed="false">🎨 Colorează</button></div>
 
     <div class="palette" id="palette"></div>
 
     <div class="controls">
-      <button class="clear" id="clearBtn">Curăță scena</button>
+      <button class="save" id="verifyBtn">Verifică misiunea</button><button class="clear" id="undoBtn">↶ Anulează</button><button class="clear" id="clearBtn">Curăță scena</button>
       <button class="save" id="saveBtn">Salvează creația</button>
     </div>
 
-    <div class="hint">
-      Creația se salvează local în portofoliul elevului.
-    </div>
+    <div class="status" id="status" role="status" aria-live="polite">Construiește primul cub.</div><p class="hint">Orașul este o reprezentare 3D simplificată. Nu simulăm rezistența reală a clădirilor. Creația se salvează în portofoliul local.</p>
   </div>
 
 </div>
@@ -161,93 +159,37 @@
 </div>
 
 <script>
-  const grid = document.getElementById("grid");
-  const palette = document.getElementById("palette");
-
-  const colors = [
-    "#ff7043",
-    "#ffa726",
-    "#fff176",
-    "#81c784",
-    "#4db6ac",
-    "#64b5f6",
-    "#9575cd",
-    "#e57373"
-  ];
-
-  let currentColor = colors[0];
-  const tiles = [];
-
-  // Generate palette
-  colors.forEach(c => {
-    const sw = document.createElement("div");
-    sw.className = "color";
-    sw.style.background = c;
-
-    if (c === currentColor) sw.classList.add("active");
-
-    sw.addEventListener("click", () => {
-      currentColor = c;
-      document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
-      sw.classList.add("active");
-    });
-
-    palette.appendChild(sw);
-  });
-
-  // Build grid
-  for (let i = 0; i < 8 * 8; i++) {
-    const tile = document.createElement("div");
-    tile.className = "tile";
-
-    tile.addEventListener("click", () => {
-      if (tile.firstChild) {
-        tile.removeChild(tile.firstChild);
-        return;
-      }
-
-      const block = document.createElement("div");
-      block.className = "block";
-      block.style.background = currentColor;
-
-      tile.appendChild(block);
-    });
-
-    tiles.push(tile);
-    grid.appendChild(tile);
-  }
-
-  // Clear scene
-  document.getElementById("clearBtn").addEventListener("click", () => {
-    tiles.forEach(t => t.innerHTML = "");
-  });
-
-  // Save to local portfolio
-  document.getElementById("saveBtn").addEventListener("click", () => {
-    const layout = tiles.map(t => t.firstChild ? t.firstChild.style.background : null);
-
-    const saved = JSON.parse(localStorage.getItem("roboCity") || "[]");
-    saved.push({
-      layout,
-      date: new Date().toLocaleString("ro-RO")
-    });
-
-    localStorage.setItem("roboCity", JSON.stringify(saved));
-
-    alert("Creația a fost salvată în portofoliu.");
-  });
-</script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),colors=["#ff7043","#ffa726","#fff176","#81c784","#4db6ac","#64b5f6","#9575cd","#e57373"];let currentColor=colors[0],tool="add",age="7-8";
+let cells=Array.from({length:36},()=>({height:0,color:colors[0]}));let history=[];
+const levels={
+"7-8":{mission:"Descopăr cuburile și nivelurile",goal:"Construiește 3 clădiri. Cel puțin una să aibă 2 niveluri.",math:"Numără cuburile. Ce se întâmplă când adaugi încă un nivel?",algorithm:"Algoritm: alege locul → adaugă cuburi → numără → verifică.",check:x=>x.buildings>=3&&x.max>=2},
+"8-9":{mission:"Construiesc un cartier colorat",goal:"Construiește 5 clădiri, folosind două culori. Una dintre clădiri trebuie să aibă 3 niveluri.",math:"Compară înălțimile a două clădiri. Câte niveluri le despart?",algorithm:"Algoritm: planifică zonele → construiește → compară → corectează.",check:x=>x.buildings>=5&&x.max>=3&&x.colors>=2},
+"9-10":{mission:"Proiectez un oraș inteligent",goal:"Construiește 7 clădiri din minimum 15 cuburi, cu 3 culori și o clădire de 4 niveluri.",math:"Numărul total de cuburi este suma nivelurilor. Compară două moduri de organizare.",algorithm:"Algoritm: definește condițiile → construiește → măsoară → optimizează.",check:x=>x.buildings>=7&&x.blocks>=15&&x.colors>=3&&x.max>=4}};
+function totals(){const active=cells.filter(c=>c.height>0);return {blocks:active.reduce((n,c)=>n+c.height,0),buildings:active.length,max:Math.max(0,...active.map(c=>c.height)),colors:new Set(active.map(c=>c.color)).size}}
+function status(txt,kind){$('status').textContent=txt;$('status').className="status "+(kind||"")}
+function render(){const grid=$('grid');grid.replaceChildren();cells.forEach((c,i)=>{const t=document.createElement("button");t.className="tile";t.type="button";t.setAttribute("aria-label","Rând "+(Math.floor(i/6)+1)+", coloană "+(i%6+1)+", "+c.height+" niveluri");if(c.height){let b=document.createElement("span");b.className="block";b.style.background=c.color;b.style.setProperty("--h",(12+c.height*13)+"%");t.appendChild(b);let l=document.createElement("span");l.className="levelmark";l.textContent=c.height;t.appendChild(l)}t.onclick=()=>edit(i);grid.appendChild(t)});const n=totals();$('countBlocks').textContent="Cuburi: "+n.blocks;$('countBuildings').textContent="Clădiri: "+n.buildings;$('highest').textContent="Înălțime maximă: "+n.max}
+function edit(i){const c=cells[i];if(tool==="add"&&c.height>=5){status("Maximum 5 niveluri pe celulă.","warn");return}if(tool==="paint"&&!c.height){status("Adaugă un nivel înainte să colorezi.","warn");return}if(tool==="remove"&&!c.height)return;history.push(cells.map(x=>({...x})));if(tool==="add"){if(!c.height)c.color=currentColor;c.height++}else if(tool==="remove")c.height--;else c.color=currentColor;render();status("Orașul a fost actualizat.")}
+colors.forEach((color,i)=>{const b=document.createElement("button");b.className="color";b.type="button";b.style.background=color;b.setAttribute("aria-label","Culoarea "+(i+1));b.setAttribute("aria-pressed",String(i===0));b.onclick=()=>{currentColor=color;document.querySelectorAll(".color").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))};$('palette').appendChild(b)});
+document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll("[data-tool]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+function select(a){age=levels[a]?a:"7-8";try{localStorage.setItem("roboCip:ageTrack",age)}catch(e){}document.querySelectorAll("[data-age]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.age===age)));const v=levels[age];$('mission').textContent=v.mission;$('goal').textContent=v.goal;$('mathematics').textContent="Matematică: "+v.math;$('algorithm').textContent="Gândire algoritmică: "+v.algorithm;status("Poți continua construcția sau poți începe una nouă.")}
+document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>select(b.dataset.age));
+$('undoBtn').onclick=()=>{if(history.length){cells=history.pop();render();status("Ultima operație a fost anulată.")}};
+$('clearBtn').onclick=()=>{history.push(cells.map(x=>({...x})));cells.forEach(x=>x.height=0);render();status("Scena a fost curățată.")};
+$('verifyBtn').onclick=()=>{let n=totals(),ok=levels[age].check(n);status(ok?"Felicitări! Ai îndeplinit misiunea.":"Mai ai de lucru: "+n.buildings+" clădiri, "+n.blocks+" cuburi, "+n.colors+" culori și înălțime maximă "+n.max+".",ok?"good":"warn")};
+$('saveBtn').onclick=()=>{const n=totals();if(!n.blocks){status("Construiește înainte să salvezi.","warn");return}try{let saved=JSON.parse(localStorage.getItem("roboCity")||"[]");if(!Array.isArray(saved))throw Error("format");saved.push({layout:cells.map(x=>x.height?x.color:null),heights:cells.map(x=>x.height),gridSize:6,age,date:new Date().toLocaleString("ro-RO")});localStorage.setItem("roboCity",JSON.stringify(saved));status("Orașul a fost salvat în portofoliul local.","good")}catch(e){status("Salvarea nu a reușit.","warn")}};
+let stored="";try{stored=localStorage.getItem("roboCip:ageTrack")||""}catch(e){}select(new URLSearchParams(location.search).get("age")||stored);render();
+})();</script>
 
 <!-- Buton global Meniu Robo-Cip -->
 <script src="/js/robo-menu-button.js"></script>
-<!-- Buton meniu global -->
-<script src="/js/robo-menu-button.js"></script>
+
 
 <!-- Log activitate -->
 <script src="/js/activity-log.js"></script>
 
 <script>
-roboLogActivity({
+if(typeof roboLogActivity==="function")roboLogActivity({
   title: "Constructor 3D – Orașul lui Robo-Cip",
   module: "Creativitate vizual-spațială",
   type: "Construcție digitală"
