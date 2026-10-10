@@ -133,17 +133,6 @@
           creative: "Spune ce ai descoperit în activitate.",
           pageHref: "/resources/reciclare-materiale.html",
           resources: []
-        },
-        {
-          missionId: "module-report",
-          pill: "Raportul meu",
-          miniLabel: "Raport progres",
-          image: "/assets/img/robo_cartografie.png",
-          tagline: "Vezi ce ai lucrat și ce ai învățat.",
-          bullets: ["Verifici activitățile.", "Notezi observații.", "Salvezi raportul."],
-          creative: "",
-          pageHref: "/resources/module-report.html",
-          resources: []
         }
       ]
     },
