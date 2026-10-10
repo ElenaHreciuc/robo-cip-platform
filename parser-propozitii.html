@@ -1,96 +1,69 @@
 <!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8">
+<html lang="ro"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Parser de propoziții – Robo-Cip</title>
 <style>
-body{font-family:system-ui,sans-serif;background:#f4fbff;padding:16px}
-.page{max-width:900px;margin:0 auto}
-.card{background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.area{display:flex;gap:10px;flex-wrap:wrap}
-.slot{flex:1;min-height:60px;border:2px dashed #cfe2ff;border-radius:14px;
-background:#f8fbff;padding:8px}
-.token{background:#fff4ce;border:1px solid #f6c543;border-radius:12px;
-padding:6px 10px;font-size:13px;cursor:grab}
-.btn{border-radius:999px;border:none;padding:6px 12px;background:#2e86de;
-color:#fff;font-size:13px}
-</style>
-</head>
-
-<body>
-<div class="page">
-
-<h1>🧩 Parser de propoziții</h1>
-
-<div class="card">
-  Completează structura:
-  <b>cine – ce face – unde – când</b>
-</div>
-
-<div class="card">
-  <b>Cuvinte</b>
-  <div id="pool" class="area"></div>
-</div>
-
-<div class="card">
-  <div class="area">
-    <div class="slot" data-role="cine">CINE</div>
-    <div class="slot" data-role="ce-face">CE FACE</div>
-    <div class="slot" data-role="unde">UNDE</div>
-    <div class="slot" data-role="cand">CÂND</div>
-  </div>
-
-  <br>
-  <button class="btn" id="checkBtn">Formează propoziția</button>
-  <div id="out" style="margin-top:10px;font-size:13px"></div>
-</div>
-
-</div>
-
+*{box-sizing:border-box}body{margin:0;padding:18px;font-family:system-ui,Arial,sans-serif;background:linear-gradient(145deg,#e8f4ff,#f8faff);color:#18324c}
+.page{max-width:930px;margin:auto}.card{background:#fff;border-radius:20px;padding:20px;margin:13px 0;box-shadow:0 6px 20px #0e39521b}
+h1{font-size:clamp(25px,4vw,34px);margin:0 0 6px}h2{margin:0 0 8px;font-size:21px}.muted{color:#47617a}
+.ageRow,.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.age{border:2px solid #bed6ee;border-radius:999px;padding:10px 15px;background:#eef6ff;color:#174d7c;font-weight:700;cursor:pointer}
+.age[aria-pressed="true"]{background:#1267ac;color:white;border-color:#1267ac}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:14px}.slot{border:2px dashed #a4c9e9;background:#f5faff;border-radius:14px;min-height:100px;padding:12px;text-align:center;cursor:pointer}
+.slot b{display:block;font-size:14px}.slot span{display:block;margin-top:12px;font-size:16px}.slot.selected{outline:3px solid #ffbb46}
+.tokens{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.token{padding:10px 14px;background:#fff2ca;border:1px solid #e8b644;border-radius:12px;color:#18324c;font:inherit;cursor:pointer}
+.token:disabled{opacity:.4;cursor:default}.token:focus-visible,.slot:focus-visible,button:focus-visible{outline:3px solid #f6a800;outline-offset:2px}
+.btn{border:0;border-radius:12px;padding:12px 17px;background:#1569a9;color:white;font-weight:750;cursor:pointer;font-size:15px}.btn.secondary{background:#e5f2fb;color:#14547f}
+.feedback{padding:14px;border-radius:12px;background:#edf5fc;min-height:48px;margin-top:12px}.feedback.good{background:#e0f5ea;color:#165f3b}.feedback.bad{background:#fff2e0;color:#854b07}
+textarea{width:100%;padding:12px;border:1px solid #aacbe5;border-radius:12px;font:inherit;min-height:85px}small{color:#52667b}
+@media(max-width:560px){.card{padding:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head>
+<body><main class="page">
+<section class="card"><h1>🧩 Parser de propoziții</h1><p class="muted">Laboratorul lui Robo-Cip: construiește, verifică și explică propoziții.</p>
+<div class="ageRow" id="ages" aria-label="Alege vârsta">
+<button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button>
+<button class="age" data-age="8-9" aria-pressed="false">8–9 ani · Construiesc</button>
+<button class="age" data-age="9-10" aria-pressed="false">9–10 ani · Investighez</button>
+</div></section>
+<section class="card"><p id="instruction"></p><h2 id="question"></h2>
+<p class="muted">1. Atinge o casetă. 2. Alege cuvântul sau grupul de cuvinte potrivit. Poți schimba oricând răspunsul.</p>
+<div id="slots" class="grid"></div><h2 style="margin-top:20px">Piese de propoziție</h2><div id="tokens" class="tokens"></div>
+<div class="row" style="margin-top:17px"><button class="btn" id="check">Verifică propoziția</button><button class="btn secondary" id="clear">Resetează</button><button class="btn secondary" id="next" hidden>Următoarea provocare →</button></div>
+<div class="feedback" id="feedback" role="status" aria-live="polite">Alege piesele pentru a începe.</div><small id="progress"></small></section>
+<section class="card"><h2>🎨 Provocarea creativă</h2><p id="creative"></p><label for="answer"><b>Ideea mea:</b></label><textarea id="answer" placeholder="Scrie aici sau explică unui coleg ori profesor."></textarea><p class="muted" id="reflection"></p><div class="row"><button class="btn secondary" id="save">Salvează reflecția pe acest dispozitiv</button><span id="saveStatus" role="status"></span></div></section>
+<p><a href="/modules.html" style="color:#155f9e">← Înapoi la module</a></p>
+</main>
 <script>
-const words=[
-  "Robo-Cip","copilul","aleargă","scrie","ajută",
-  "în parc","în clasă","acum","astăzi","dimineața"
-];
-
-const pool=document.getElementById("pool");
-words.forEach(w=>pool.appendChild(make(w)));
-
-function make(t){
-  const el=document.createElement("div");
-  el.className="token";el.textContent=t;el.draggable=true;
-  el.addEventListener("dragstart",e=>{
-    e.dataTransfer.setData("text/plain",t);
-  });
-  return el;
-}
-
-document.querySelectorAll(".slot").forEach(s=>{
-  s.addEventListener("dragover",e=>e.preventDefault());
-  s.addEventListener("drop",e=>{
-    e.preventDefault();
-    s.innerHTML="";
-    s.appendChild(make(e.dataTransfer.getData("text/plain")));
-  });
-});
-
-document.getElementById("checkBtn").onclick=()=>{
-  const v=[...document.querySelectorAll(".slot")]
-    .map(x=>x.innerText.trim());
-  out.textContent="Propoziție: "+v.join(" ");
+(function(){
+"use strict";
+const PACKS={
+"7-8":{instruction:"Descopăr cine face o acțiune. Folosesc propoziții scurte și clare.",roles:["CINE?","CE FACE?"],questions:[
+{q:"Cine citește?",words:["Robo-Cip","citește","aleargă","copilul"],correct:["Robo-Cip","citește"],explain:"Robo-Cip este cine?; citește ne spune ce face."},
+{q:"Cine desenează?",words:["fetița","desenează","cântă","băiatul"],correct:["fetița","desenează"],explain:"Fetița face acțiunea; desenează numește acțiunea."},
+{q:"Cine sare?",words:["iepurele","sare","scrie","ursul"],correct:["iepurele","sare"],explain:"Iepurele sare: o propoziție simplă, cu sens."}],
+creative:"Inventează o propoziție nouă cu Robo-Cip și o acțiune.",reflection:"Spune cu voce tare: Cine? Ce face?"},
+"8-9":{instruction:"Construiesc o propoziție completă și găsesc locul și momentul acțiunii.",roles:["CINE?","CE FACE?","UNDE?","CÂND?"],questions:[
+{q:"Unde și când citește Robo-Cip?",words:["Robo-Cip","citește","în bibliotecă","dimineața","aleargă","în parc"],correct:["Robo-Cip","citește","în bibliotecă","dimineața"],explain:"Ai aflat cine, ce face, unde și când."},
+{q:"Compune traseul unei acțiuni.",words:["copiii","se joacă","în parc","astăzi","în clasă","scriu"],correct:["copiii","se joacă","în parc","astăzi"],explain:"Ordinea aleasă construiește o propoziție clară."},
+{q:"Construiește o propoziție despre școală.",words:["elevii","învață","în clasă","dimineața","în grădină","zboară"],correct:["elevii","învață","în clasă","dimineața"],explain:"Fiecare grup de cuvinte are rolul potrivit."}],
+creative:"Schimbă locul și momentul unei propoziții. Ce informație nouă transmiți?",reflection:"Explică de ce «unde» și «când» fac mesajul mai precis."},
+"9-10":{instruction:"Investighez informațiile din propoziții și observ cum pot modifica sensul.",roles:["CINE?","CE FACE?","UNDE?","CÂND?"],questions:[
+{q:"Construiește relatarea precisă a unui eveniment.",words:["echipa","observă păsările","lângă școală","dimineața","fotografiază norii","seara"],correct:["echipa","observă păsările","lângă școală","dimineața"],explain:"Propoziția spune clar ce a observat echipa, unde și când."},
+{q:"Reconstruiește mesajul unei investigații.",words:["Robo-Cip","măsoară lumina","în laborator","astăzi","în parc","desenează"],correct:["Robo-Cip","măsoară lumina","în laborator","astăzi"],explain:"Alegerea unor informații precise ajută comunicarea rezultatelor."},
+{q:"Compune enunțul unui reporter.",words:["reporterul","intervievează elevii","în curtea școlii","după-amiază","în bibliotecă","plantează flori"],correct:["reporterul","intervievează elevii","în curtea școlii","după-amiază"],explain:"Verifică dacă enunțul răspunde tuturor celor patru întrebări."}],
+creative:"Scrie două propoziții care diferă numai prin «unde» sau «când». Explică schimbarea de informație.",reflection:"Argumentează cum verifici dacă un mesaj este clar și suficient de precis."}
 };
-</script>
-
-<script src="/js/robo-menu-button.js"></script>
-<script src="/js/activity-log.js"></script>
-<script>
-roboLogActivity({
-  title:"Parser de propoziții",
-  module:"Algoritmi lingvistici",
-  type:"Structură sintactică"
-});
-</script>
-
-</body>
-</html>
+const $=id=>document.getElementById(id);let age="",index=0,values=[],selected=0,success=false;
+const ages=[...document.querySelectorAll("[data-age]")];
+const queryAge=new URLSearchParams(location.search).get("age");
+function chooseAge(a){age=PACKS[a]?a:"7-8";try{localStorage.setItem("roboCip:ageTrack",age)}catch(e){};ages.forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.age===age)));index=0;load();}
+function load(){const pack=PACKS[age],item=pack.questions[index];success=false;values=pack.roles.map(()=>null);selected=0;$("instruction").textContent=pack.instruction;$("question").textContent=item.q;$("creative").textContent=pack.creative;$("reflection").textContent=pack.reflection;$("answer").value="";try{$("answer").value=localStorage.getItem("roboCip:parser:"+age+":reflection")||""}catch(e){};$("saveStatus").textContent="";$("progress").textContent="Provocarea "+(index+1)+" din "+pack.questions.length;$("next").hidden=true;message("Selectează prima casetă și apoi piesele.");render();}
+function render(){const roles=PACKS[age].roles,words=PACKS[age].questions[index].words;const sl=$("slots");sl.replaceChildren();roles.forEach((role,i)=>{const b=document.createElement("button");b.type="button";b.className="slot"+(i===selected?" selected":"");b.setAttribute("aria-label",role+" – "+(values[i]||"necompletat"));const strong=document.createElement("b");strong.textContent=role;const span=document.createElement("span");span.textContent=values[i]||"Alege o piesă";b.append(strong,span);b.onclick=()=>{selected=i;render()};sl.appendChild(b)});const tokens=$("tokens");tokens.replaceChildren();words.forEach(word=>{const b=document.createElement("button");b.className="token";b.textContent=word;b.disabled=values.includes(word);b.onclick=()=>{values[selected]=word;selected=Math.min(selected+1,roles.length-1);success=false;$("next").hidden=true;message("Ai ales «"+word+"». Continuă sau verifică propoziția.");render()};tokens.appendChild(b)})}
+function message(t,type){$("feedback").textContent=t;$("feedback").className="feedback"+(type?" "+type:"")}
+$("check").onclick=()=>{const q=PACKS[age].questions[index];if(values.some(x=>!x)){message("Completează toate casetele înainte de verificare.","bad");return}const mismatches=q.correct.map((x,i)=>x===values[i]);if(mismatches.every(Boolean)){success=true;message("Bravo! "+values.join(" ")+"."+" "+q.explain,"good");$("next").hidden=index===PACKS[age].questions.length-1;if(index===PACKS[age].questions.length-1)message("Ai încheiat toate provocările! "+q.explain+" Acum rezolvă provocarea creativă.","good")}else{success=false;const wrong=mismatches.findIndex(x=>!x);selected=wrong;message("Mai încearcă. Verifică partea «"+PACKS[age].roles[wrong]+"». Poți schimba piesa printr-o atingere.","bad");render()}};
+$("clear").onclick=()=>{values=PACKS[age].roles.map(()=>null);selected=0;success=false;$("next").hidden=true;message("Poți construi din nou propoziția.");render()};
+$("next").onclick=()=>{if(success&&index<PACKS[age].questions.length-1){index++;load()}};
+$("save").onclick=()=>{try{localStorage.setItem("roboCip:parser:"+age+":reflection",$("answer").value);$("saveStatus").textContent="Reflecția a fost salvată în acest browser."}catch(e){$("saveStatus").textContent="Salvarea nu este disponibilă. Poți copia textul."}};
+ages.forEach(b=>b.onclick=()=>chooseAge(b.dataset.age));let stored=null;try{stored=localStorage.getItem("roboCip:ageTrack")}catch(e){}chooseAge(PACKS[queryAge]?queryAge:stored);
+})();
+</script><script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script>
+<script>if(typeof roboLogActivity==="function")roboLogActivity({title:"Parser de propoziții",module:"Algoritmi lingvistici",type:"Structură și sens"});</script>
+</body></html>
