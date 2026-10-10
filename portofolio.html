@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Portofoliu elev – Robo-Cip</title>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: radial-gradient(circle at top, #eef2ff, #ffffff);
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  h1 { margin-top: 0; }
+
+  .section {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .section h2 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .card {
+    background: #f9fbff;
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    font-size: 13px;
+  }
+
+  .preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 6px;
+  }
+
+  .cell {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+  }
+
+  .date {
+    opacity: 0.8;
+    font-size: 12px;
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>🧾 Portofoliu elev – Robo-Cip</h1>
+
+<div class="section">
+  <h2>🧱 Construcții salvate din „Orașul lui Robo-Cip”</h2>
+
+  <div id="cityList" class="grid"></div>
+</div>
+
+<div class="section">
+  <h2>🧪 Activități creative (în curând)</h2>
+  Vor fi adăugate și alte rezultate ale misiunilor.
+</div>
+<div class="section">
+  <h2>🗣️ Reflecții după activități</h2>
+
+  <div id="reflectionList" class="grid"></div>
+</div>
+</div>
+
+<script>
+  function renderCityCreations() {
+
+    const list = document.getElementById("cityList");
+    list.innerHTML = "";
+
+    const saved = JSON.parse(localStorage.getItem("roboCity") || "[]");
+
+    if (saved.length === 0) {
+      list.innerHTML = "<i>Nicio creație salvată încă.</i>";
+      return;
+    }
+
+    saved.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const prev = document.createElement("div");
+      prev.className = "preview";
+
+      item.layout.slice(0, 16).forEach(color => {
+        const c = document.createElement("div");
+        c.className = "cell";
+        c.style.background = color || "#ffffff00";
+        prev.appendChild(c);
+      });
+
+      const date = document.createElement("div");
+      date.className = "date";
+      date.textContent = "Creat la: " + item.date;
+
+      card.appendChild(prev);
+      card.appendChild(date);
+
+      list.appendChild(card);
+    });
+  }
+
+  renderCityCreations();
+  function renderReflections() {
+
+  const list = document.getElementById("reflectionList");
+  list.innerHTML = "";
+
+  const notes = JSON.parse(localStorage.getItem("reflectionNotes") || "[]");
+
+  if (notes.length === 0) {
+    list.innerHTML = "<i>Nu există reflecții salvate încă.</i>";
+    return;
+  }
+
+  notes.forEach(n => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="date">${n.date}</div>
+      <b>Activitate:</b> ${n.activity}<br><br>
+
+      <b>1)</b> ${n.q1 || "(gol)"}<br>
+      <b>2)</b> ${n.q2 || "(gol)"}<br>
+      <b>3)</b> ${n.q3 || "(gol)"}
+    `;
+
+    list.appendChild(card);
+  });
+}
+renderReflections();
+</script>
+
+<!-- Buton global Meniu Robo-Cip -->
+<script src="/js/robo-menu-button.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Parser de propoziții – Robo-Cip</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#f4fbff;padding:16px}
+.page{max-width:900px;margin:0 auto}
+.card{background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.area{display:flex;gap:10px;flex-wrap:wrap}
+.slot{flex:1;min-height:60px;border:2px dashed #cfe2ff;border-radius:14px;
+background:#f8fbff;padding:8px}
+.token{background:#fff4ce;border:1px solid #f6c543;border-radius:12px;
+padding:6px 10px;font-size:13px;cursor:grab}
+.btn{border-radius:999px;border:none;padding:6px 12px;background:#2e86de;
+color:#fff;font-size:13px}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>🧩 Parser de propoziții</h1>
+
+<div class="card">
+  Completează structura:
+  <b>cine – ce face – unde – când</b>
+</div>
+
+<div class="card">
+  <b>Cuvinte</b>
+  <div id="pool" class="area"></div>
+</div>
+
+<div class="card">
+  <div class="area">
+    <div class="slot" data-role="cine">CINE</div>
+    <div class="slot" data-role="ce-face">CE FACE</div>
+    <div class="slot" data-role="unde">UNDE</div>
+    <div class="slot" data-role="cand">CÂND</div>
+  </div>
+
+  <br>
+  <button class="btn" id="checkBtn">Formează propoziția</button>
+  <div id="out" style="margin-top:10px;font-size:13px"></div>
+</div>
+
+</div>
+
+<script>
+const words=[
+  "Robo-Cip","copilul","aleargă","scrie","ajută",
+  "în parc","în clasă","acum","astăzi","dimineața"
+];
+
+const pool=document.getElementById("pool");
+words.forEach(w=>pool.appendChild(make(w)));
+
+function make(t){
+  const el=document.createElement("div");
+  el.className="token";el.textContent=t;el.draggable=true;
+  el.addEventListener("dragstart",e=>{
+    e.dataTransfer.setData("text/plain",t);
+  });
+  return el;
+}
+
+document.querySelectorAll(".slot").forEach(s=>{
+  s.addEventListener("dragover",e=>e.preventDefault());
+  s.addEventListener("drop",e=>{
+    e.preventDefault();
+    s.innerHTML="";
+    s.appendChild(make(e.dataTransfer.getData("text/plain")));
+  });
+});
+
+document.getElementById("checkBtn").onclick=()=>{
+  const v=[...document.querySelectorAll(".slot")]
+    .map(x=>x.innerText.trim());
+  out.textContent="Propoziție: "+v.join(" ");
+};
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+<script src="/js/activity-log.js"></script>
+<script>
+roboLogActivity({
+  title:"Parser de propoziții",
+  module:"Algoritmi lingvistici",
+  type:"Structură sintactică"
+});
+</script>
+
+</body>
+</html>

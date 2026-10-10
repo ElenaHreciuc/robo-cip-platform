@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modul Robo-Cip</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body class="module-page">
+  <header class="module-header">
+    <div class="module-header-top">
+      <div class="brand">
+        <div>
+          <span class="module-back-link-wrapper">
+            <a href="/" class="module-back-link">← Înapoi la toate modulele</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-hero-banner">
+      <div class="module-hero-text">
+        <h1 id="module-title">Modul Robo-Cip</h1>
+        <p class="module-hero-subtitle" id="module-subtitle">
+          Aici vei vedea doar resursele și misiunile acestui modul.
+        </p>
+        <span class="module-hero-tag" id="module-hero-tag">Modul tematic Robo-Cip</span>
+      </div>
+
+      <div class="module-hero-image-wrap">
+        <img
+          id="module-hero-image"
+          src="/assets/img/robo_hero.png"
+          alt="Robo-Cip în modulul selectat"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </header>
+
+  <div class="module-progress">
+    <div class="module-progress-label" id="module-progress-label">
+      Progres modul: 0/0 resurse (0%)
+    </div>
+
+    <div class="module-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+      <div class="module-progress-fill" id="module-progress-fill"></div>
+    </div>
+
+    <div class="module-badges" id="module-badges"></div>
+  </div>
+
+  <main>
+    <div class="layout layout-module">
+      <!-- IMPORTANT: acesta e containerul de carduri -->
+      <section class="module-grid" id="resources-grid"></section>
+    </div>
+  </main>
+
+  <!-- Modal detalii resursă -->
+  <div class="modal-backdrop" id="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-creative">
+      <h3 id="modal-title"></h3>
+      <p id="modal-creative"></p>
+
+      <div class="modal-resources" id="modal-resources" style="display:none;">
+        <span class="label">Resurse pentru această misiune:</span>
+        <div class="resource-buttons" id="resource-buttons"></div>
+      </div>
+
+      <div class="modal-stars-label">
+        Acordă stele misiunii (0–3):<br />
+        <small>1 stea: ai parcurs · 2 stele: ai creat ceva · 3 stele: ai și explicat altcuiva</small>
+      </div>
+      <div class="modal-stars-row" id="modal-stars"></div>
+
+      <div class="modal-footer">
+        <span class="modal-status" id="modal-status" aria-live="polite"></span>
+        <div>
+          <button type="button" id="modal-done-toggle" class="modal-done-toggle">Am terminat misiunea</button>
+          <button type="button" id="modal-close" class="modal-close-btn">Închide</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/learner.js" defer></script>
+</body>
+</html>

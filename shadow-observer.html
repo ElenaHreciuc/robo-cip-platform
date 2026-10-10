@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Shadow Observer – Observație discretă</title>
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  padding:16px;
+  margin:0;
+  background:#f4f7ff;
+}
+
+.card {
+  padding:12px;
+  border-radius:16px;
+  background:#ffffff;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  margin-bottom:10px;
+}
+
+textarea {
+  width:100%;
+  min-height:80px;
+  font-size:14px;
+  margin-top:6px;
+}
+
+button {
+  border:none;
+  border-radius:999px;
+  padding:8px 14px;
+  background:#34495e;
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+}
+
+h1 { margin-top:0; }
+</style>
+</head>
+
+<body>
+
+<h1>👁️ Shadow Observer</h1>
+
+<div class="card">
+  <label>Notă de observație scurtă</label>
+  <textarea id="obs"></textarea>
+  <button id="saveBtn">Salvează</button>
+</div>
+
+<div id="list"></div>
+
+<script>
+function loadObservations() {
+
+  list.innerHTML = "";
+
+  const data = JSON.parse(localStorage.getItem("shadowObs") || "[]");
+
+  data.forEach(o => {
+    const box = document.createElement("div");
+    box.className = "card";
+    box.innerHTML =
+      `<b>${o.date}</b><br>${o.text}`;
+    list.appendChild(box);
+  });
+}
+
+saveBtn.addEventListener("click", () => {
+
+  const data = JSON.parse(localStorage.getItem("shadowObs") || "[]");
+
+  data.push({
+    text: obs.value,
+    date: new Date().toLocaleString("ro-RO")
+  });
+
+  localStorage.setItem("shadowObs", JSON.stringify(data));
+
+  obs.value = "";
+
+  loadObservations();
+});
+
+loadObservations();
+</script>
+
+</body>
+</html>

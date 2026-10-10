@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Jurnal profesor – Observații Robo-Cip</title>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: radial-gradient(circle at top, #fff1f1, #ffffff);
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 { margin-top: 0; }
+
+  .section {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .section h2 {
+    margin-top: 0;
+    font-size: 16px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+
+  button {
+    border-radius: 999px;
+    border: none;
+    padding: 8px 14px;
+    font-size: 14px;
+    background: #8e44ad;
+    color: white;
+    cursor: pointer;
+  }
+
+  .list {
+    margin-top: 10px;
+    display: grid;
+    gap: 8px;
+  }
+
+  .card {
+    background: #faf7ff;
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    font-size: 13px;
+  }
+
+  .date {
+    opacity: .7;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>📓 Jurnal profesor – Observații în timp</h1>
+
+<div class="section">
+  <h2>Notă nouă</h2>
+
+  <textarea id="noteBox" placeholder="Scriu observația pedagogică aici..."></textarea>
+
+  <br /><br />
+
+  <button id="saveBtn">Salvează nota</button>
+</div>
+
+<div class="section">
+  <h2>Observații salvate</h2>
+
+  <div id="noteList" class="list"></div>
+</div>
+
+</div>
+
+<script>
+  function renderNotes() {
+
+    const list = document.getElementById("noteList");
+    list.innerHTML = "";
+
+    const notes = JSON.parse(localStorage.getItem("teacherJournal") || "[]");
+
+    if (notes.length === 0) {
+      list.innerHTML = "<i>Nu există încă observații salvate.</i>";
+      return;
+    }
+
+    notes.forEach(n => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const date = document.createElement("div");
+      date.className = "date";
+      date.textContent = n.date;
+
+      const text = document.createElement("div");
+      text.textContent = n.text;
+
+      card.appendChild(date);
+      card.appendChild(text);
+
+      list.appendChild(card);
+    });
+  }
+
+  document.getElementById("saveBtn").addEventListener("click", () => {
+
+    const box = document.getElementById("noteBox");
+    const text = box.value.trim();
+
+    if (!text) return;
+
+    const notes = JSON.parse(localStorage.getItem("teacherJournal") || "[]");
+
+    notes.push({
+      text,
+      date: new Date().toLocaleString("ro-RO")
+    });
+
+    localStorage.setItem("teacherJournal", JSON.stringify(notes));
+
+    box.value = "";
+    renderNotes();
+  });
+
+  renderNotes();
+</script>
+
+<!-- Buton global Meniu Robo-Cip -->
+<script src="/js/robo-menu-button.js"></script>
+</body>
+</html>

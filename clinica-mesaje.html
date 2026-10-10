@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Clinica de Mesaje – Robo-Cip</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#fff7f4;padding:16px}
+.page{max-width:900px;margin:0 auto}
+.card{background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.msg{background:#fff3cd;border:1px solid #f6c543;border-radius:12px;
+padding:8px;font-size:13px}
+.btn{border-radius:999px;border:none;padding:6px 12px;background:#2e86de;
+color:#fff;font-size:13px}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>🛠 Clinica de Mesaje</h1>
+
+<div class="card">
+  Mesaj inițial „stricat”:
+  <div id="msg" class="msg">
+    pleaca robo cip parc la repede
+  </div>
+</div>
+
+<div class="card">
+  <b>Rescrie mesajul corect</b>
+  <textarea id="fix" style="width:100%;height:80px"></textarea>
+  <br><br>
+  <button class="btn" id="saveBtn">Verifică</button>
+
+  <div id="out" style="margin-top:10px;font-size:13px"></div>
+</div>
+
+</div>
+
+<script>
+document.getElementById("saveBtn").onclick=()=>{
+  const v=fix.value.trim();
+  if(!v) out.textContent="Scrie varianta ta corectată.";
+  else out.textContent="Explică de ce e mai bun mesajul: ordine / lipsă / sens.";
+};
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+<script src="/js/activity-log.js"></script>
+<script>
+roboLogActivity({
+  title:"Clinica de mesaje",
+  module:"Algoritmi lingvistici",
+  type:"Debugging semantic"
+});
+</script>
+
+</body>
+</html>

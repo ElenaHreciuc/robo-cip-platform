@@ -1,0 +1,324 @@
+[
+  {
+    "id": "eticheteaza-lumea",
+    "moduleId": "algoritmi-lingvistici",
+    "title": "Etichetează Lumea",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Alege obiecte și decide dacă sunt exemple bune sau neclare.",
+      "Pune obiectele în „cutia de exemple” a lui Robo-Cip.",
+      "Testează robotul cu imagini noi și discută de ce a greșit sau a avut dreptate."
+    ],
+    "creativePrompt": "Inventeză un obiect nou pentru robot. Cum arată și în ce categorie crezi că l-ar pune?",
+    "resources": [
+      {
+        "label": "Simulator ML – Etichetează Lumea",
+        "url": "/resources/eticheteaza-lumea.html"
+      }
+    ]
+  },
+  {
+    "id": "copy-paste-logic",
+    "moduleId": "algoritmi-lingvistici",
+    "title": "Copy–Paste Logic & Excepții",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Aplică o regulă simplă de transformare (ex. singular → plural).",
+      "Observă unde regula funcționează și unde apar cuvinte „ciudate”.",
+      "Găsește excepții și creează mini-reguli noi pentru ele."
+    ],
+    "creativePrompt": "Gândește-te la un cuvânt pentru care regula nu funcționează. Cum ai explica robotului de ce este o excepție?",
+    "resources": [
+      {
+        "label": "Mașina de Transformări",
+        "url": "/resources/masina-transformari.html"
+      }
+    ]
+  },
+  {
+    "id": "povestea-algoritmului",
+    "moduleId": "algoritmi-lingvistici",
+    "title": "Povestea Algoritmului",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Alege acțiunile principale dintr-o poveste simplă.",
+      "Așază acțiunile în ordine pe o „bandă de film”.",
+      "Rulează povestea și corectează pașii care nu au sens."
+    ],
+    "creativePrompt": "Creează o mică poveste despre Robo-Cip. Scrie pașii ca într-un program: mai întâi..., apoi..., la final...",
+    "resources": [
+      {
+        "label": "Constructor de Povești",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "programatorul-de-gramatica",
+    "moduleId": "algoritmi-lingvistici",
+    "title": "Programatorul de Gramatică",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Trage cuvintele potrivite în sloturile propoziției (cine? ce face? unde? când?).",
+      "Observă cum se schimbă sensul dacă muți piesele.",
+      "Repară propozițiile care nu au structură clară."
+    ],
+    "creativePrompt": "Inventeză o propoziție amuzantă pentru Robo-Cip, dar păstrează ordinea logică (cine – ce face – unde – când).",
+    "resources": [
+      {
+        "label": "Parser de propoziții",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "debugging-creativ",
+    "moduleId": "algoritmi-lingvistici",
+    "title": "Debugging Creativ — Reparați mesajul robotului",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Citește mesajul amestecat sau ciudat al lui Robo-Cip.",
+      "Găsește tipul de eroare (ordine, lipsă, potrivire, sens).",
+      "Rearanjează și corectează mesajul, apoi explică de ce e varianta mai bună."
+    ],
+    "creativePrompt": "Scrie un mesaj scurt intenționat „stricat” pentru colegul tău și roagă-l să îl repare explicând ce tip de eroare a găsit.",
+    "resources": [
+      {
+        "label": "Clinica de Mesaje",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "robotul-care-recunoaste-emotii",
+    "moduleId": "algoritmi-lingvistici",
+    "title": "Robotul care recunoaște emoții — ML & empatie",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Arată robotului exemple de fețe cu expresii diferite.",
+      "Testează modelul cu expresii noi și decide dacă răspunsul e corect sau nu.",
+      "Discută de ce robotul poate greși și de ce nu putem ști sigur cum se simte cineva doar din expresie."
+    ],
+    "creativePrompt": "Desenează o față cu o expresie ambiguă. Ce ar spune robotul? Ce ai spune tu?",
+    "resources": [
+      {
+        "label": "Laboratorul Emoțiilor",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "robot-navigator",
+    "moduleId": "cartografie-digitala",
+    "title": "Robot Navigator pe harta grilă",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Privește harta grilă 5×5 și află unde este Robo-Cip.",
+      "Planifică pașii (sus, jos, stânga, dreapta) până la destinație.",
+      "Rulează traseul și corectează pașii greșiți."
+    ],
+    "creativePrompt": "Desenează o hartă simplă a clasei sau a camerei tale și scrie pașii pe care i-ar face Robo-Cip ca să ajungă la un obiect.",
+    "resources": [
+      {
+        "label": "Harta Interactivă",
+        "url": "/resources/harta-grid.html"
+      }
+    ]
+  },
+  {
+    "id": "misiunea-satelitului",
+    "moduleId": "cartografie-digitala",
+    "title": "Misiunea Satelitului",
+    "durationMinutes": 60,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Analizează harta și găsește platforma unde trebuie instalat satelitul.",
+      "Planifică traseul până la platformă, inclusiv urcarea pe un nivel superior.",
+      "Construiește baza satelitului și testează stabilitatea."
+    ],
+    "creativePrompt": "Imaginează-ți că satelitul tău vede orașul de sus. Descrie trei lucruri interesante pe care le observă.",
+    "resources": [
+      {
+        "label": "Simulator Misiunea Satelitului",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "robotul-ecologist",
+    "moduleId": "cartografie-digitala",
+    "title": "Robotul Ecologist — reciclare și clasificare ML",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Antrenează robotul cu exemple clare de plastic, hârtie, metal și sticlă.",
+      "Testează robotul cu obiecte mixte sau ambigue.",
+      "Discută ce faci dacă nu ești sigur în ce pubelă se aruncă un obiect."
+    ],
+    "creativePrompt": "Desenează un „colț verde” al școlii tale și explică cum ar ajuta un robot ecologist în viața reală.",
+    "resources": [
+      {
+        "label": "Stația de Reciclare Inteligentă",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "gradinarul-digital",
+    "moduleId": "cartografie-digitala",
+    "title": "Grădinarul Digital — frunze sănătoase și frunze afectate",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Privește frunze diferite și decide care par sănătoase și care par afectate.",
+      "Antrenează robotul cu exemple clare, apoi testează-l cu frunze ambigue.",
+      "Discută de ce nu putem pune un diagnostic doar dintr-o imagine."
+    ],
+    "creativePrompt": "Desenează o plantă din grădina ta preferată și scrie ce ai verifica înainte să spui că este bolnavă.",
+    "resources": [
+      {
+        "label": "Sera Inteligentă",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "constructor-orase-3d",
+    "moduleId": "proiectare-3d",
+    "title": "Constructorul de Orașe 3D",
+    "durationMinutes": 60,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Alege forme 3D (cub, cilindru, prismă) pentru baza orașului.",
+      "Construiește clădiri pe niveluri și verifică stabilitatea lor.",
+      "Integrează clădirile într-un mic oraș 3D."
+    ],
+    "creativePrompt": "Proiectează o clădire specială pentru Robo-Cip în orașul tău 3D. Ce rol are și de ce ai ales formele respective?",
+    "resources": [
+      {
+        "label": "Atelierul de Arhitectură 3D",
+        "url": "/resources/constructor-3d.html"
+      }
+    ]
+  },
+  {
+    "id": "podul-inteligent",
+    "moduleId": "proiectare-3d",
+    "title": "Podul Inteligent",
+    "durationMinutes": 60,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Construiește un pod simplu peste un râu folosind piese de sprijin și platforme.",
+      "Testează podul cu un vehicul și observă unde este fragil.",
+      "Îmbunătățește structura și compară două variante de pod."
+    ],
+    "creativePrompt": "Desenează un pod din orașul tău sau dintr-un oraș imaginar. Ce l-ar face „inteligent” în viziunea ta?",
+    "resources": [
+      {
+        "label": "Laboratorul de Poduri",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "robot-origami-3d",
+    "moduleId": "proiectare-3d",
+    "title": "Robot Origami 3D",
+    "durationMinutes": 60,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Pornește de la o formă plană (2D) și urmează pașii de pliere.",
+      "Privește cum se ridică modelul în volum 3D.",
+      "Personalizează robotul origami cu detalii proprii."
+    ],
+    "creativePrompt": "Imaginează-ți că robotul tău origami prinde viață. Ce ar putea face și unde ar călători?",
+    "resources": [
+      {
+        "label": "Atelierul Origami 3D",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "harta-spatiului-3d",
+    "moduleId": "proiectare-3d",
+    "title": "Harta Spațiului 3D",
+    "durationMinutes": 60,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Explorează o hartă cu două niveluri (sol și platformă suspendată).",
+      "Planifică un traseu care folosește atât mișcarea pe sol, cât și urcarea pe axa Z.",
+      "Compară un traseu mai scurt cu unul mai lung și explică diferențele."
+    ],
+    "creativePrompt": "Desenează o hartă a unei stații spațiale cu cel puțin două niveluri. Cum ar ajunge Robo-Cip dintr-un punct în altul?",
+    "resources": [
+      {
+        "label": "Navigatorul Spațial",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "orchestra-inteligenta",
+    "moduleId": "programare-vizuala",
+    "title": "Orchestra Inteligentă — sunete și tipare",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Ascultă sunete clare (tobă, clopoțel, pași, voce) și antrenează robotul.",
+      "Testează robotul cu sunete mixte și decide dacă răspunsul e corect, aproape corect sau greșit.",
+      "Compune un mic tipar sonor propriu și vezi cum încearcă robotul să îl clasifice."
+    ],
+    "creativePrompt": "Compune o „semnătură sonoră” pentru Robo-Cip (o mică bucată de ritm). Descrie cu cuvinte cum sună.",
+    "resources": [
+      {
+        "label": "Studioul de Sunete",
+        "url": "/resources/curand.html"
+      }
+    ]
+  },
+  {
+    "id": "masina-transformari",
+    "moduleId": "algoritmi-lingvistici",
+    "title": "Mașina de Transformări",
+    "durationMinutes": 45,
+    "ageRange": "7 ani",
+    "gradeLevel": "I",
+    "stepsShort": [
+      "Alege câteva cuvinte și pune-le în intrarea mașinii.",
+      "Aplică o regulă de transformare (ex.: singular → plural, diminutiv, adaugă „ne-”).",
+      "Compară cuvintele de ieșire și explică de ce s-au schimbat așa."
+    ],
+    "creativePrompt": "Gândește-te la un cuvânt la care regula nu funcționează bine. Cum ai explica robotului de ce este o excepție?",
+    "resources": [
+      {
+        "label": "Mașina de Transformări",
+        "url": "/resources/masina-transformari.html"
+      }
+    ]
+  }
+]
+
+

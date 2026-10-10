@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Laboratorul Emoțiilor – Robo-Cip</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#f2fcff;padding:16px}
+.page{max-width:900px;margin:0 auto}
+.card{background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.faces{display:flex;gap:10px;flex-wrap:wrap}
+.face{font-size:28px;border:1px solid #cde2ff;border-radius:14px;
+padding:8px 12px;cursor:pointer}
+.result{margin-top:8px;font-size:13px}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>😊 Laboratorul Emoțiilor</h1>
+
+<div class="card">
+  Alege expresia — spune dacă robotul poate greși și explică de ce.
+</div>
+
+<div class="card">
+  <div class="faces">
+    <div class="face" data-e="fericit">🙂</div>
+    <div class="face" data-e="trist">🙁</div>
+    <div class="face" data-e="surprins">😮</div>
+    <div class="face" data-e="confuz">😕</div>
+  </div>
+
+  <div id="out" class="result">
+    Selectează o expresie.
+  </div>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll(".face").forEach(f=>{
+  f.onclick=()=>{
+    out.textContent=
+      "Întrebare: De unde știm dacă emoția este corect interpretată? Poate robotul să greșească?";
+  };
+});
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+<script src="/js/activity-log.js"></script>
+<script>
+roboLogActivity({
+  title:"Laboratorul emoțiilor",
+  module:"Algoritmi lingvistici",
+  type:"ML & empatie"
+});
+</script>
+
+</body>
+</html>

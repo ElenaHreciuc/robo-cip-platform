@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Generator proiect interdisciplinar – Robo-Cip</title>
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 16px;
+  background: radial-gradient(circle at top, #eefdf6, #ffffff);
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+h1 { margin-top: 0; }
+
+.section {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input, select, textarea {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 14px;
+  padding: 6px;
+}
+
+.multiselect {
+  max-height: 120px;
+  overflow-y: auto;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  padding: 6px;
+  margin-top: 4px;
+}
+
+.multiselect label {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+button {
+  border-radius: 999px;
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #27ae60;
+  color: white;
+}
+
+#output {
+  white-space: pre-wrap;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>📚 Generator proiect interdisciplinar – Robo-Cip</h1>
+
+<div class="section">
+  <label>Tema proiectului</label>
+  <input id="theme" placeholder="Ex: Orașul inteligent, Călătoria sunetului, etc.">
+</div>
+
+<div class="section">
+  <label>Clasa / grupa</label>
+  <input id="grade" placeholder="Ex: Clasa I, Clasa a II-a, grupă mixtă">
+</div>
+
+<div class="section">
+  <label>Durata aproximativă</label>
+  <input id="duration" placeholder="Ex: 3 lecții, 2 săptămâni">
+</div>
+
+<div class="section">
+  <label>Module implicate (bifează cele relevante)</label>
+  <div id="moduleBox" class="multiselect"></div>
+</div>
+
+<div class="section">
+  <button id="generateBtn">Generează proiect</button>
+</div>
+
+<div class="section">
+  <h2 style="margin-top:0;">Propunere proiect</h2>
+  <div id="output">(proiectul generat va apărea aici)</div>
+  <br>
+  <button id="exportBtn">Exportă ca fișier .txt</button>
+</div>
+
+</div>
+
+<script>
+(function () {
+  const logs = JSON.parse(localStorage.getItem("roboModuleLog") || "[]");
+  const moduleBox = document.getElementById("moduleBox");
+
+  const modules = {};
+  logs.forEach(a => {
+    modules[a.module] = true;
+  });
+  const moduleNames = Object.keys(modules);
+
+  if (moduleNames.length === 0) {
+    moduleBox.innerHTML = "<i>Nu există încă module în jurnal. Derulează câteva activități înainte de a genera un proiect.</i>";
+  } else {
+    moduleNames.forEach(name => {
+      const lbl = document.createElement("label");
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.value = name;
+      lbl.appendChild(cb);
+      lbl.append(" " + name);
+      moduleBox.appendChild(lbl);
+    });
+  }
+
+  const output = document.getElementById("output");
+
+  document.getElementById("generateBtn").addEventListener("click", () => {
+    const theme = document.getElementById("theme").value || "Proiect interdisciplinar";
+    const grade = document.getElementById("grade").value || "(clasă nespecificată)";
+    const duration = document.getElementById("duration").value || "(durată nespecificată)";
+
+    const selected = Array.from(moduleBox.querySelectorAll("input[type=checkbox]:checked"))
+      .map(cb => cb.value);
+
+    let text = "";
+    text += `PROIECT INTERDISCIPLINAR – ${theme}\n\n`;
+    text += `Clasa / grupa: ${grade}\n`;
+    text += `Durata: ${duration}\n\n`;
+
+    if (selected.length > 0) {
+      text += "Module implicate:\n";
+      selected.forEach(m => text += `• ${m}\n`);
+    } else {
+      text += "Module implicate: (nu au fost selectate explicit)\n";
+    }
+
+    text += "\nObiectiv general:\n";
+    text += "• dezvoltarea gândirii complexe prin îmbinarea activităților digitale din Robo-Cip cu situații reale de învățare.\n\n";
+
+    text += "Posibilă secvență de activități:\n";
+    text += "1) Activitate de explorare (hartă / clasificare / ritm) – descoperire și discuție.\n";
+    text += "2) Activitate creativă (construcție 3D / poveste interactivă) – aplicare și exprimare.\n";
+    text += "3) Reflecție ghidată – elevii explică ce au făcut, ce a fost dificil și cum ar proceda altfel.\n\n";
+
+    text += "Rolul elevului:\n";
+    text += "• investighează, experimentează, explică și colaborează.\n\n";
+
+    text += "Rolul profesorului:\n";
+    text += "• mediere, ghidare prin întrebări, observare formativă, sprijin în formularea reflecțiilor.\n";
+
+    output.textContent = text;
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const text = output.textContent || "";
+    if (!text.trim()) return;
+
+    const blob = new Blob([text], { type:"text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "Proiect_interdisciplinar_RoboCip.txt";
+    a.click();
+  });
+})();
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+</body>
+</html>

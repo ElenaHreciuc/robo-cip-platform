@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Constructor 3D Lite – Orașul lui Robo-Cip</title>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: radial-gradient(circle at top, #f3fff1, #ffffff);
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  h1 { margin-top: 0; }
+
+  .intro {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 14px;
+  }
+
+  .layout {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 14px;
+  }
+
+  .scene {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+  }
+
+  .tile {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: #eef7ec;
+    border: 1px solid #a5d6a7;
+    position: relative;
+    cursor: pointer;
+    transition: .12s;
+  }
+
+  .tile:hover {
+    background: #e0f2e0;
+  }
+
+  .block {
+    position: absolute;
+    inset: 6px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.18);
+  }
+
+  .panel {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 14px;
+  }
+
+  .palette {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .color {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+
+  .color.active {
+    border-color: #2e7d32;
+  }
+
+  .controls {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    border-radius: 999px;
+    border: none;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .clear { background: #bdc3c7; color: white; }
+  .save { background: #27ae60; color: white; }
+
+  .hint {
+    margin-top: 8px;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>🧱 Constructor 3D Lite – Orașul lui Robo-Cip</h1>
+
+<div class="intro">
+  Plasează blocuri colorate pe hartă și construiește structuri creative.
+  <br />
+  <span class="hint">
+    Profesorul poate invita elevii să explice: „Cum ai decis forma construcției tale?”
+  </span>
+</div>
+
+<div class="layout">
+
+  <div class="scene">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="panel">
+    <b>Paletă de blocuri</b>
+
+    <div class="palette" id="palette"></div>
+
+    <div class="controls">
+      <button class="clear" id="clearBtn">Curăță scena</button>
+      <button class="save" id="saveBtn">Salvează creația</button>
+    </div>
+
+    <div class="hint">
+      Creația se salvează local în portofoliul elevului.
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+  const grid = document.getElementById("grid");
+  const palette = document.getElementById("palette");
+
+  const colors = [
+    "#ff7043",
+    "#ffa726",
+    "#fff176",
+    "#81c784",
+    "#4db6ac",
+    "#64b5f6",
+    "#9575cd",
+    "#e57373"
+  ];
+
+  let currentColor = colors[0];
+  const tiles = [];
+
+  // Generate palette
+  colors.forEach(c => {
+    const sw = document.createElement("div");
+    sw.className = "color";
+    sw.style.background = c;
+
+    if (c === currentColor) sw.classList.add("active");
+
+    sw.addEventListener("click", () => {
+      currentColor = c;
+      document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
+      sw.classList.add("active");
+    });
+
+    palette.appendChild(sw);
+  });
+
+  // Build grid
+  for (let i = 0; i < 8 * 8; i++) {
+    const tile = document.createElement("div");
+    tile.className = "tile";
+
+    tile.addEventListener("click", () => {
+      if (tile.firstChild) {
+        tile.removeChild(tile.firstChild);
+        return;
+      }
+
+      const block = document.createElement("div");
+      block.className = "block";
+      block.style.background = currentColor;
+
+      tile.appendChild(block);
+    });
+
+    tiles.push(tile);
+    grid.appendChild(tile);
+  }
+
+  // Clear scene
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    tiles.forEach(t => t.innerHTML = "");
+  });
+
+  // Save to local portfolio
+  document.getElementById("saveBtn").addEventListener("click", () => {
+    const layout = tiles.map(t => t.firstChild ? t.firstChild.style.background : null);
+
+    const saved = JSON.parse(localStorage.getItem("roboCity") || "[]");
+    saved.push({
+      layout,
+      date: new Date().toLocaleString("ro-RO")
+    });
+
+    localStorage.setItem("roboCity", JSON.stringify(saved));
+
+    alert("Creația a fost salvată în portofoliu.");
+  });
+</script>
+
+<!-- Buton global Meniu Robo-Cip -->
+<script src="/js/robo-menu-button.js"></script>
+<!-- Buton meniu global -->
+<script src="/js/robo-menu-button.js"></script>
+
+<!-- Log activitate -->
+<script src="/js/activity-log.js"></script>
+
+<script>
+roboLogActivity({
+  title: "Constructor 3D – Orașul lui Robo-Cip",
+  module: "Creativitate vizual-spațială",
+  type: "Construcție digitală"
+});
+</script>
+</body>
+</html>
+

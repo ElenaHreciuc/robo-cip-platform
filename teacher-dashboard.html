@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Dashboard profesor – Robo-Cip</title>
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 16px;
+  background: radial-gradient(circle at top, #e9f3ff, #ffffff);
+}
+
+.page {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+h1 { margin-top: 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+  gap: 10px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  font-size: 14px;
+}
+
+.metric {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.label {
+  font-size: 12px;
+  opacity: .8;
+}
+
+.module-box {
+  background: #f5fbff;
+  border-radius: 14px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+a.btn-link {
+  font-size: 12px;
+  text-decoration: none;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #2e86de;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>📊 Dashboard profesor – Robo-Cip</h1>
+
+<div class="grid">
+
+  <div class="card" id="activitiesCard">
+    <div class="metric" id="totalActivities">0</div>
+    <div class="label">activități înregistrate în jurnal</div>
+  </div>
+
+  <div class="card" id="reflectionsCard">
+    <div class="metric" id="totalReflections">0</div>
+    <div class="label">reflecții elev salvate</div>
+  </div>
+
+  <div class="card" id="notesCard">
+    <div class="metric" id="totalNotes">0</div>
+    <div class="label">note în jurnalul profesorului</div>
+  </div>
+
+  <div class="card" id="shadowCard">
+    <div class="metric" id="totalShadow">0</div>
+    <div class="label">observații „Shadow Observer”</div>
+  </div>
+
+</div>
+
+<br>
+
+<div class="card">
+  <b>Distribuție pe module</b>
+  <div id="modulesList" style="margin-top:6px;"></div>
+</div>
+
+<br>
+
+<div class="card">
+  <b>Acces rapid</b>
+  <div class="links">
+    <a class="btn-link" href="/module-report.html">Raport pe modul</a>
+    <a class="btn-link" href="/module-synthesis.html">Sinteză pe modul</a>
+    <a class="btn-link" href="/teacher-notes.html">Jurnal profesor</a>
+    <a class="btn-link" href="/lesson-feedback.html">Feedback după lecție</a>
+    <a class="btn-link" href="/portfolio.html">Portofoliu elev</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+(function() {
+  const log = JSON.parse(localStorage.getItem("roboModuleLog") || "[]");
+  const reflections = JSON.parse(localStorage.getItem("reflectionNotes") || "[]");
+  const notes = JSON.parse(localStorage.getItem("teacherJournal") || "[]");
+  const shadow = JSON.parse(localStorage.getItem("shadowObs") || "[]");
+
+  document.getElementById("totalActivities").textContent = log.length;
+  document.getElementById("totalReflections").textContent = reflections.length;
+  document.getElementById("totalNotes").textContent = notes.length;
+  document.getElementById("totalShadow").textContent = shadow.length;
+
+  const modulesBox = document.getElementById("modulesList");
+
+  if (log.length === 0) {
+    modulesBox.innerHTML = "<i>Încă nu există activități înregistrate.</i>";
+    return;
+  }
+
+  const modules = {};
+  log.forEach(a => {
+    if (!modules[a.module]) modules[a.module] = 0;
+    modules[a.module]++;
+  });
+
+  Object.entries(modules).forEach(([name, count]) => {
+    const div = document.createElement("div");
+    div.className = "module-box";
+    div.textContent = `${name} – ${count} activități`;
+    modulesBox.appendChild(div);
+  });
+})();
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+</body>
+</html>

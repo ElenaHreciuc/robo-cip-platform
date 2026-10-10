@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Hub narativ – Povestea învățării</title>
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 16px;
+  background: radial-gradient(circle at top, #fff5f1, #ffffff);
+}
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 { margin-top: 0; }
+
+.section {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+}
+
+.timeline {
+  border-left: 3px solid #ffb27e;
+  margin-left: 8px;
+  padding-left: 14px;
+}
+
+.event {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.event::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e67e22;
+}
+
+.event-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.event-meta {
+  font-size: 12px;
+  opacity: .7;
+}
+
+.event-text {
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>📖 Hub narativ – Povestea învățării</h1>
+
+<div class="section">
+  <p style="font-size:14px;">
+    Aici vedem parcursul elevilor sub formă de poveste:
+    activitățile parcurse în ordine cronologică, cu accent pe modul în care au fost explorate modulele.
+  </p>
+</div>
+
+<div class="section">
+  <b>Povestea până acum</b>
+  <div id="timeline" class="timeline" style="margin-top:8px;"></div>
+</div>
+
+<div class="section">
+  <b>Sinteză narativă</b>
+  <div id="summaryText" style="margin-top:6px;font-size:13px;"></div>
+</div>
+
+</div>
+
+<script>
+(function () {
+  const log = JSON.parse(localStorage.getItem("roboModuleLog") || "[]");
+  const timeline = document.getElementById("timeline");
+  const summary = document.getElementById("summaryText");
+
+  if (log.length === 0) {
+    timeline.innerHTML = "<i>Nu există activități înregistrate încă.</i>";
+    summary.innerHTML = "Povestea învățării va apărea aici după primele activități.";
+    return;
+  }
+
+  log.forEach(entry => {
+    const div = document.createElement("div");
+    div.className = "event";
+
+    const title = document.createElement("div");
+    title.className = "event-title";
+    title.textContent = entry.title;
+
+    const meta = document.createElement("div");
+    meta.className = "event-meta";
+    meta.textContent = `${entry.module} • ${entry.type} • ${entry.date}`;
+
+    const text = document.createElement("div");
+    text.className = "event-text";
+    text.textContent =
+      "Elevii au explorat această activitate, exersând gândirea secvențială, explicația și reflecția asupra procesului.";
+
+    div.appendChild(title);
+    div.appendChild(meta);
+    div.appendChild(text);
+
+    timeline.appendChild(div);
+  });
+
+  // Sinteză narativă simplă
+  const modules = {};
+  log.forEach(e => {
+    modules[e.module] = true;
+  });
+  const moduleNames = Object.keys(modules);
+
+  let s = "Până acum, elevii au lucrat în modulele: " + moduleNames.join(", ") + ". ";
+  s += "Parcursul arată o combinație de activități de explorare, construcție digitală și reflecție, ";
+  s += "susținând dezvoltarea gândirii algoritmice, creative și semantice.";
+
+  summary.textContent = s;
+})();
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+</body>
+</html>

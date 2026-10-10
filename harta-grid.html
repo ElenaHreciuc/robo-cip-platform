@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Robo-Explorer – Hartă Grid</title>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: radial-gradient(circle at top, #e8f8ff, #ffffff);
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  h1 { 
+    margin-top: 0; 
+  }
+
+  .intro {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 14px;
+  }
+
+  .layout {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 14px;
+  }
+
+  .grid-wrap {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .cell {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: #f4fbff;
+    border: 1px solid #bbdefb;
+    position: relative;
+  }
+
+  .target {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    opacity: 0.7;
+  }
+
+  .robot {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+
+  .panel {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 14px;
+  }
+
+  .steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+    min-height: 30px;
+  }
+
+  .step {
+    padding: 6px 10px;
+    border-radius: 12px;
+    background: #e8f4ff;
+    border: 1px solid #64b5f6;
+    font-size: 13px;
+  }
+
+  .controls {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    border-radius: 999px;
+    border: none;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .run { 
+    background: #27ae60; 
+    color: white; 
+  }
+
+  .clear { 
+    background: #bdc3c7; 
+    color: white; 
+  }
+
+  .cmds {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .cmd-btn {
+    background: #3498db;
+    color: white;
+  }
+
+  .hint {
+    margin-top: 8px;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>🧭 Robo-Explorer – Hartă Grid</h1>
+
+<div class="intro">
+  Adaugă pași în planul de mișcare și apoi rulează traseul.
+  <br />
+  <span class="hint">
+    Profesorul poate provoca elevul: „Cum știi că Robo-Cip ajunge la destinație?”
+  </span>
+</div>
+
+<div class="layout">
+  <div class="grid-wrap">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="panel">
+    <b>Plan de mișcare</b>
+
+    <div class="steps" id="steps"></div>
+
+    <div class="cmds">
+      <button class="cmd-btn" data-cmd="UP">↑ Sus</button>
+      <button class="cmd-btn" data-cmd="DOWN">↓ Jos</button>
+      <button class="cmd-btn" data-cmd="LEFT">← Stânga</button>
+      <button class="cmd-btn" data-cmd="RIGHT">→ Dreapta</button>
+    </div>
+
+    <div class="controls">
+      <button class="run" id="runBtn">Rulează traseul</button>
+      <button class="clear" id="clearBtn">Șterge pașii</button>
+    </div>
+
+    <div class="hint">
+      Elevul explică: „Ce strategie am folosit pentru traseu?”
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+  const gridSize = 6;
+  const grid = document.getElementById("grid");
+  const stepsBox = document.getElementById("steps");
+
+  let robot = { x: 0, y: 0 };
+  const target = { x: 5, y: 5 };
+  const steps = [];
+
+  function drawGrid() {
+    grid.innerHTML = "";
+
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+
+        if (x === target.x && y === target.y) {
+          const t = document.createElement("div");
+          t.className = "target";
+          t.textContent = "⭐";
+          cell.appendChild(t);
+        }
+
+        if (x === robot.x && y === robot.y) {
+          const r = document.createElement("div");
+          r.className = "robot";
+          r.textContent = "🤖";
+          cell.appendChild(r);
+        }
+
+        grid.appendChild(cell);
+      }
+    }
+  }
+
+  function renderSteps() {
+    stepsBox.innerHTML = "";
+    steps.forEach(s => {
+      const el = document.createElement("div");
+      el.className = "step";
+      el.textContent = s;
+      stepsBox.appendChild(el);
+    });
+  }
+
+  function move(cmd) {
+    if (cmd === "UP" && robot.y > 0) robot.y--;
+    if (cmd === "DOWN" && robot.y < gridSize - 1) robot.y++;
+    if (cmd === "LEFT" && robot.x > 0) robot.x--;
+    if (cmd === "RIGHT" && robot.x < gridSize - 1) robot.x++;
+  }
+
+  document.querySelectorAll(".cmd-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cmd = btn.dataset.cmd;
+      steps.push(cmd);
+      renderSteps();
+    });
+  });
+
+  document.getElementById("runBtn").addEventListener("click", async () => {
+    robot = { x: 0, y: 0 };
+    drawGrid();
+
+    for (const cmd of steps) {
+      await new Promise(r => setTimeout(r, 350));
+      move(cmd);
+      drawGrid();
+    }
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    steps.length = 0;
+    renderSteps();
+    robot = { x: 0, y: 0 };
+    drawGrid();
+  });
+
+  renderSteps();
+  drawGrid();
+</script>
+
+<!-- Buton global Meniu Robo-Cip -->
+<script src="/js/robo-menu-button.js"></script>
+<!-- Buton meniu global -->
+<script src="/js/robo-menu-button.js"></script>
+
+<!-- Log activitate -->
+<script src="/js/activity-log.js"></script>
+
+<script>
+roboLogActivity({
+  title: "Robo-Explorer – Hartă Grid",
+  module: "Gândire algoritmică și planificare",
+  type: "Traseu secvențial"
+});
+</script>
+</body>
+</html>
+

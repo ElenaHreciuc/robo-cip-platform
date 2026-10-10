@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Feedback după lecție – Robo-Cip</title>
+
+<style>
+body { 
+  font-family: system-ui, sans-serif; 
+  padding:16px; 
+  margin:0;
+  background:#f3f6ff;
+}
+
+.card {
+  background:#ffffff;
+  border-radius:16px;
+  padding:12px;
+  margin-bottom:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+textarea {
+  width:100%;
+  min-height:80px;
+  margin-top:6px;
+  font-size:14px;
+}
+
+button {
+  border-radius:999px;
+  border:none;
+  padding:8px 14px;
+  background:#2e86de;
+  color:#fff;
+  cursor:pointer;
+  font-size:14px;
+}
+
+h1 { margin-top:0; }
+</style>
+</head>
+
+<body>
+
+<h1>📝 Feedback după lecție</h1>
+
+<div class="card">
+  <label>Ce a mers bine în activitate?</label>
+  <textarea id="good"></textarea>
+</div>
+
+<div class="card">
+  <label>Unde a fost nevoie de sprijin suplimentar?</label>
+  <textarea id="needs"></textarea>
+</div>
+
+<div class="card">
+  <label>Ce aș modifica la următoarea desfășurare?</label>
+  <textarea id="improve"></textarea>
+</div>
+
+<button id="saveBtn">Salvează feedback-ul</button>
+
+<script>
+saveBtn.addEventListener("click", () => {
+
+  const log = JSON.parse(localStorage.getItem("lessonFeedback") || "[]");
+
+  log.push({
+    good: good.value,
+    needs: needs.value,
+    improve: improve.value,
+    date: new Date().toLocaleString("ro-RO")
+  });
+
+  localStorage.setItem("lessonFeedback", JSON.stringify(log));
+
+  good.value = "";
+  needs.value = "";
+  improve.value = "";
+
+  alert("Feedback salvat local.");
+});
+</script>
+
+</body>
+</html>

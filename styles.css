@@ -1,0 +1,1606 @@
+:root {
+  --module-algoritmi: #f5b7b1;
+  --module-cartografie: #aed6f1;
+  --module-proiectare: #a3e4d7;
+  --module-programare: #f9e79f;
+  --card-radius: 18px;
+
+}
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #e3f2fd 0, #eaf2ff 40%, #ffffff 100%);
+  color: #222;
+}
+/* ===== ROBOT BRAND ===== */
+header {
+  padding: 16px 24px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.robot {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.robot-head {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  width: 48px;
+  height: 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.robot-eye {
+  position: absolute;
+  top: 10px;
+  width: 8px;
+  height: 8px;
+  background: #3498db;
+  border-radius: 50%;
+}
+.robot-eye.left { left: 10px; }
+.robot-eye.right { right: 10px; }
+.robot-body {
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  width: 56px;
+  height: 36px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.robot-antenna {
+  position: absolute;
+  top: -10px;
+  left: 30px;
+  width: 4px;
+  height: 10px;
+  background: #3498db;
+  border-radius: 2px;
+}
+.robot-antenna::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(52, 152, 219, 0.6);
+}
+h1 { margin: 0; font-size: 26px; }
+.subtitle {
+  margin: 2px 0 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+/* ===== LAYOUT GENERAL PENTRU PAGINILE DE MODUL ===== */
+main {
+  padding: 0 24px 24px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
+/* ===== PROGRES / BADGE ===== */
+.module-progress {
+  padding: 0 24px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.module-progress-label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+.module-progress-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+.module-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #42a5f5, #66bb6a);
+  transition: width 0.2s ease;
+}
+.module-badges {
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.badge-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #fffde7;
+  border: 1px solid #fbc02d;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.badge-pill span.icon {
+ font-size: 14px;
+}
+/* ===== MISSION OF THE DAY ===== */
+.mission-of-day {
+  background: #ffffff;
+  border-radius: var(--card-radius);
+  padding: 16px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
+}
+.mission-of-day h2 {
+  margin-top: 0;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.mission-of-day small {
+  display: inline-block;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+.mission-of-day-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.mission-of-day-steps {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+}
+.mission-of-day-creative {
+  margin-top: 10px;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f8fbff;
+  border: 1px dashed #bbdefb;
+}
+.mission-of-day-footer {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+
+
+.refresh-btn {
+
+  font-size: 12px;
+
+  border-radius: 999px;
+
+  border: none;
+
+  padding: 6px 10px;
+
+  background: #ecf0f1;
+
+  cursor: pointer;
+
+  margin-left: 4px;
+
+}
+
+
+
+/* ===== LISTĂ DE MISIUNI (CARDURI) ===== */
+
+
+
+.mission-list {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+  gap: 12px;
+
+}
+
+
+
+.mission-card {
+
+  background: #ffffff;
+
+  border-radius: var(--card-radius);
+
+  padding: 14px 14px 10px;
+
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+
+  cursor: pointer;
+
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+
+  position: relative;
+
+  overflow: hidden;
+
+}
+
+
+
+.mission-card:hover {
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+
+}
+
+
+
+.mission-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: -40px;
+
+  right: -40px;
+
+  width: 80px;
+
+  height: 80px;
+
+  border-radius: 50%;
+
+  opacity: 0.2;
+
+}
+
+
+
+.mission-card.module-algoritmi { border-left: 6px solid #e74c3c; }
+
+.mission-card.module-algoritmi::before { background: var(--module-algoritmi); }
+
+
+
+.mission-card.module-cartografie { border-left: 6px solid #2980b9; }
+
+.mission-card.module-cartografie::before { background: var(--module-cartografie); }
+
+
+
+.mission-card.module-proiectare { border-left: 6px solid #16a085; }
+
+.mission-card.module-proiectare::before { background: var(--module-proiectare); }
+
+
+
+.mission-card.module-programare { border-left: 6px solid #f1c40f; }
+
+.mission-card.module-programare::before { background: var(--module-programare); }
+
+
+
+.mission-card.mission-done {
+
+  opacity: 0.75;
+
+}
+
+
+
+.mission-title {
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  margin-bottom: 4px;
+
+  position: relative;
+
+  z-index: 1;
+
+}
+
+
+
+.mission-meta {
+
+  font-size: 12px;
+
+  opacity: 0.75;
+
+  margin-bottom: 6px;
+
+  position: relative;
+
+  z-index: 1;
+
+}
+
+
+
+.mission-steps {
+
+  margin: 0;
+
+  padding-left: 16px;
+
+  font-size: 13px;
+
+  position: relative;
+
+  z-index: 1;
+
+}
+
+
+
+.mission-duration {
+
+  margin-top: 6px;
+
+  font-size: 12px;
+
+  opacity: 0.7;
+
+  position: relative;
+
+  z-index: 1;
+
+}
+
+
+
+.mission-footer {
+
+  margin-top: 6px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  font-size: 12px;
+
+  position: relative;
+
+  z-index: 1;
+
+}
+
+
+
+.mission-done-label {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+
+}
+
+
+
+.mission-stars-info {
+
+  font-size: 11px;
+
+  opacity: 0.8;
+
+}
+
+
+
+.mission-done-btn {
+
+  font-size: 12px;
+
+  border-radius: 999px;
+
+  border: none;
+
+  padding: 6px 10px;
+
+  cursor: pointer;
+
+  background: #ecf0f1;
+
+}
+
+
+
+.mission-done-btn.done {
+
+  background: #2ecc71;
+
+  color: #ffffff;
+
+}
+
+
+
+/* ===== SIDE PANEL ===== */
+
+
+
+.side-panel {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+}
+
+
+
+.side-card {
+
+  background: #ffffff;
+
+  border-radius: var(--card-radius);
+
+  padding: 12px 14px;
+
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+
+  font-size: 13px;
+
+}
+
+
+
+.side-card h3 {
+
+  margin-top: 0;
+
+  margin-bottom: 6px;
+
+  font-size: 15px;
+
+}
+
+
+
+.journal-list {
+
+  list-style: none;
+
+  padding-left: 0;
+
+  margin: 0;
+
+  max-height: 200px;
+
+  overflow-y: auto;
+
+}
+
+
+
+.journal-list li {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin-bottom: 4px;
+
+  font-size: 12px;
+
+}
+
+
+
+.journal-checkbox {
+
+  width: 14px;
+
+  height: 14px;
+
+}
+
+
+
+.journal-title-done {
+
+  text-decoration: line-through;
+
+  opacity: 0.7;
+
+}
+
+
+
+/* ===== MODAL ===== */
+
+
+
+.modal-backdrop {
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0,0,0,0.35);
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 1000;
+
+}
+
+
+
+.modal {
+
+  background: #ffffff;
+
+  border-radius: 20px;
+
+  max-width: 440px;
+
+  width: calc(100% - 32px);
+
+  padding: 18px 20px 14px;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+
+  font-size: 14px;
+
+}
+
+
+
+.modal h3 {
+
+  margin-top: 0;
+
+  margin-bottom: 6px;
+
+  font-size: 18px;
+
+}
+
+
+
+.modal-resources {
+
+  margin-top: 10px;
+
+}
+
+
+
+.modal-resources span.label {
+
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-weight: 600;
+
+}
+
+
+
+.resource-buttons {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+}
+
+
+
+.resource-buttons button {
+
+  font-size: 12px;
+
+  border-radius: 999px;
+
+  border: none;
+
+  padding: 6px 10px;
+
+  background: #ecf0f1;
+
+  cursor: pointer;
+
+}
+
+
+
+.modal-stars-label {
+
+  margin-top: 8px;
+
+  font-size: 13px;
+
+  opacity: 0.85;
+
+}
+
+
+
+.modal-stars-row {
+
+  margin-top: 4px;
+
+}
+
+
+
+.modal-star {
+
+  font-size: 22px;
+
+  cursor: pointer;
+
+  margin-right: 4px;
+
+  opacity: 0.4;
+
+  user-select: none;
+
+}
+
+
+
+.modal-star.active {
+
+  opacity: 1;
+
+}
+
+
+
+.modal-footer {
+
+  margin-top: 10px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+
+}
+
+
+
+.modal-status {
+
+  font-size: 12px;
+
+  opacity: 0.8;
+
+}
+
+
+
+.modal-done-toggle {
+
+  font-size: 12px;
+
+  border-radius: 999px;
+
+  border: none;
+
+  padding: 6px 10px;
+
+  cursor: pointer;
+
+  background: #ecf0f1;
+
+}
+
+
+
+.modal-done-toggle.done {
+
+  background: #2ecc71;
+
+  color: #ffffff;
+
+}
+
+
+
+.modal-close-btn {
+
+  font-size: 12px;
+
+  border-radius: 999px;
+
+  border: none;
+
+  padding: 6px 10px;
+
+  cursor: pointer;
+
+  background: #bdc3c7;
+
+  color: #ffffff;
+
+}
+
+
+
+/* ========= PAGINA PRINCIPALĂ – HERO & MODULE IMAGISTICE ========= */
+
+
+
+.home-header {
+
+  padding: 20px 24px 8px;
+
+}
+
+
+
+.home-hero {
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+
+  gap: 20px;
+
+  align-items: center;
+
+}
+
+
+
+@media (max-width: 900px) {
+
+  .home-hero {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}
+
+
+
+.home-hero-text h1 {
+
+  margin: 0 0 8px;
+
+  font-size: 30px;
+
+}
+
+
+
+.hero-tagline {
+
+  margin: 0 0 10px;
+
+  font-size: 14px;
+
+  opacity: 0.9;
+
+}
+
+
+
+.hero-bullets {
+
+  margin: 0;
+
+  padding-left: 18px;
+
+  font-size: 13px;
+
+}
+
+
+
+.home-hero-visual {
+
+  position: relative;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+}
+
+
+
+.hero-image-frame {
+
+  width: 220px;
+
+  max-width: 100%;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+
+  border: 3px solid rgba(52,152,219,0.35);
+
+  background: radial-gradient(circle at top, #e3f2fd 0, #ffffff 60%);
+
+}
+
+
+
+.hero-image-frame img {
+
+  width: 100%;
+
+  height: auto;
+
+  display: block;
+
+}
+
+
+
+.hero-orbit {
+
+  position: absolute;
+
+  width: 280px;
+
+  height: 280px;
+
+  border-radius: 50%;
+
+  border: 1px dashed rgba(52,152,219,0.35);
+
+  animation: hero-orbit-pulse 4s infinite ease-in-out;
+
+  pointer-events: none;
+
+}
+
+
+
+@keyframes hero-orbit-pulse {
+
+  0%   { transform: scale(0.95); opacity: 0.4; }
+
+  50%  { transform: scale(1.03); opacity: 0.7; }
+
+  100% { transform: scale(0.95); opacity: 0.4; }
+
+}
+
+
+
+.home-main {
+
+  padding: 12px 24px 24px;
+
+}
+
+
+
+.modules-heading {
+
+  margin: 0 0 10px;
+
+  font-size: 18px;
+
+  opacity: 0.9;
+
+}
+
+
+
+.module-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+  gap: 16px;
+
+}
+
+
+
+.module-card {
+
+  position: relative;
+
+  border-radius: 18px;
+
+  padding: 14px 14px 16px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  overflow: hidden;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+}
+
+
+
+.module-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0.2;
+
+  background: radial-gradient(circle at top right, #ffffff 0, transparent 60%);
+
+  pointer-events: none;
+
+}
+
+
+
+.module-header-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: baseline;
+
+  gap: 8px;
+
+}
+
+
+
+.module-pill {
+
+  font-size: 12px;
+
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.85);
+
+  font-weight: 600;
+
+}
+
+
+
+.module-mini-label {
+
+  font-size: 11px;
+
+  opacity: 0.85;
+
+}
+
+
+
+.module-visual {
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+
+  background: #ffffff;
+
+}
+
+
+
+.module-visual img {
+
+  width: 100%;
+
+  height: auto;
+
+  display: block;
+
+}
+
+
+
+.module-tagline {
+
+  margin: 4px 0;
+
+  font-size: 13px;
+
+}
+
+
+
+.module-algoritmi-card {
+
+  background: linear-gradient(135deg, #fde2e0, #ffffff);
+
+  border-left: 5px solid #e74c3c;
+
+}
+
+
+
+.module-cartografie-card {
+
+  background: linear-gradient(135deg, #d6eaf8, #ffffff);
+
+  border-left: 5px solid #2980b9;
+
+}
+
+
+
+.module-proiectare-card {
+
+  background: linear-gradient(135deg, #d1f2eb, #ffffff);
+
+  border-left: 5px solid #16a085;
+
+}
+
+
+
+.module-programare-card {
+
+  background: linear-gradient(135deg, #fcf3cf, #ffffff);
+
+  border-left: 5px solid #f1c40f;
+
+}
+
+
+
+.module-link {
+
+  align-self: flex-start;
+
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  border: none;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  background: #3498db;
+
+  color: #ffffff;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  margin-top: 4px;
+
+}
+
+
+
+/* Animațiile mici de sub fiecare modul */
+
+
+
+.module-animation {
+
+  margin-top: 6px;
+
+  margin-bottom: 6px;
+
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+}
+
+
+
+/* Algoritmi & ML */
+
+
+
+.module-animation-algoritmi .data-flow {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+}
+
+
+
+.module-animation-algoritmi .bit {
+
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #3498db;
+
+  opacity: 0.3;
+
+  animation: bit-flow 1.2s infinite ease-in-out;
+
+}
+
+
+
+.module-animation-algoritmi .bit1 { animation-delay: 0s; }
+
+.module-animation-algoritmi .bit2 { animation-delay: 0.2s; }
+
+.module-animation-algoritmi .bit3 { animation-delay: 0.4s; }
+
+
+
+@keyframes bit-flow {
+
+  0% { transform: translateX(0); opacity: 0.3; }
+
+  50% { transform: translateX(10px); opacity: 1; }
+
+  100% { transform: translateX(0); opacity: 0.3; }
+
+}
+
+
+
+.module-animation-algoritmi .mini-robot-head {
+
+  width: 26px;
+
+  height: 18px;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+
+  position: relative;
+
+}
+
+
+
+.module-animation-algoritmi .mini-eye {
+
+  position: absolute;
+
+  top: 6px;
+
+  width: 4px;
+
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #2980b9;
+
+}
+
+
+
+.module-animation-algoritmi .mini-eye.left { left: 6px; }
+
+.module-animation-algoritmi .mini-eye.right { right: 6px; }
+
+
+
+/* Cartografie – radar */
+
+
+
+.module-animation-cartografie {
+
+  position: relative;
+
+}
+
+
+
+.radar-circle {
+
+  width: 32px;
+
+  height: 32px;
+
+  border-radius: 50%;
+
+  border: 2px solid rgba(41, 128, 185, 0.6);
+
+  position: relative;
+
+  overflow: hidden;
+
+}
+
+
+
+.radar-sweep {
+
+  position: absolute;
+
+  width: 50%;
+
+  height: 100%;
+
+  background: linear-gradient(90deg, rgba(41, 128, 185, 0.3), transparent);
+
+  transform-origin: left center;
+
+  animation: radar-rotate 2s linear infinite;
+
+}
+
+
+
+@keyframes radar-rotate {
+
+  0% { transform: rotate(0deg); }
+
+  100% { transform: rotate(360deg); }
+
+}
+
+
+
+.radar-dot {
+
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #e74c3c;
+
+  animation: radar-dot-pulse 1.6s infinite ease-in-out;
+
+}
+
+
+
+@keyframes radar-dot-pulse {
+
+  0% { transform: scale(1); opacity: 0.4; }
+
+  50% { transform: scale(1.4); opacity: 1; }
+
+  100% { transform: scale(1); opacity: 0.4; }
+
+}
+
+
+
+/* Proiectare 3D – stâlpi */
+
+
+
+.module-animation-proiectare {
+
+  gap: 4px;
+
+}
+
+
+
+.tower-bar {
+
+  width: 8px;
+
+  border-radius: 4px;
+
+  background: #16a085;
+
+  animation: tower-grow 1.2s infinite ease-in-out;
+
+}
+
+
+
+.tower-bar.bar1 { height: 14px; animation-delay: 0s; }
+
+.tower-bar.bar2 { height: 18px; animation-delay: 0.2s; }
+
+.tower-bar.bar3 { height: 22px; animation-delay: 0.4s; }
+
+
+
+@keyframes tower-grow {
+
+  0% { transform: scaleY(0.8); opacity: 0.7; }
+
+  50% { transform: scaleY(1.1); opacity: 1; }
+
+  100% { transform: scaleY(0.8); opacity: 0.7; }
+
+}
+
+
+
+/* Programare vizuală – egalizator */
+
+
+
+.module-animation-programare {
+
+  gap: 3px;
+
+}
+
+
+
+.eq-bar {
+
+  width: 6px;
+
+  border-radius: 3px;
+
+  background: #f1c40f;
+
+  animation: eq-bounce 0.9s infinite ease-in-out;
+
+}
+
+
+
+.eq-bar.e1 { height: 10px; animation-delay: 0s; }
+
+.eq-bar.e2 { height: 16px; animation-delay: 0.15s; }
+
+.eq-bar.e3 { height: 12px; animation-delay: 0.3s; }
+
+.eq-bar.e4 { height: 18px; animation-delay: 0.45s; }
+
+
+
+@keyframes eq-bounce {
+
+  0% { transform: scaleY(0.6); opacity: 0.7; }
+
+  50% { transform: scaleY(1.2); opacity: 1; }
+
+  100% { transform: scaleY(0.6); opacity: 0.7; }
+
+}
+
+
+
+/* ========= PAGINA DE MODUL – BANNER & TEME ========= */
+
+
+
+body.module-page {
+  background: radial-gradient(circle at top, #e3f2fd 0, #eaf2ff 40%, #ffffff 100%);
+}
+
+.module-header {
+  padding: 14px 24px 8px;
+}
+.module-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.module-back-link-wrapper {
+  font-size: 13px;
+}
+.module-back-link {
+  text-decoration: none;
+  color: #2980b9;
+}
+.module-hero-banner {
+  margin-top: 4px;
+  border-radius: 20px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(
+    135deg,
+    #e6f3ff 0%,
+    #f4f9ff 45%,
+    #ffffff 100%
+  );
+
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+@media (max-width: 900px) {
+  .module-hero-banner {
+    grid-template-columns: 2fr;
+  }
+}
+.module-hero-text h1 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+.module-hero-subtitle {
+  margin: 0 0 6px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+.module-hero-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: rgba(255,255,255,0.9);
+}
+.module-hero-image-wrap {
+  justify-self: end;
+  max-width: 260px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  background: #ffffff;
+}
+.module-hero-image-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/* temă de culoare pe modul */
+body.theme-algoritmi .module-hero-banner {
+  background: linear-gradient(135deg, #fde2e0, #ffffff);
+}
+body.theme-cartografie .module-hero-banner {
+  background: linear-gradient(135deg, #d6eaf8, #ffffff);
+}
+body.theme-proiectare .module-hero-banner {
+  background: linear-gradient(135deg, #d1f2eb, #ffffff);
+}
+body.theme-programare .module-hero-banner {
+  background: linear-gradient(135deg, #fcf3cf, #ffffff);
+}
+.layout.layout-module {
+  margin-top: 8px;
+}
+/* Chip status pe card (Terminat · ★★) */
+.mission-chip{
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.06);
+}
+/* Butoane stele în modal (dacă nu există) */
+.star-btn{
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #fff;
+  cursor: pointer;
+}
+.star-btn[aria-pressed="true"]{
+  transform: scale(1.02);
+  border-color: rgba(0,0,0,.5);
+}
+/* Modal backdrop fallback (dacă nu există în CSS-ul tău) */
+.modal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 999;
+}
+/* Resurse în modal */
+.resource-btn{
+  display: inline-block;
+  margin: 6px 6px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  background: rgba(0,0,0,.06);
+}
+/* ===== Learner: grid centrat + max 6 coloane ===== */
+.module-page .layout.layout-module {
+  display: block;
+}
+/* centru pentru întregul grid (container) */
+.module-page #resources-grid.module-grid {
+  display: grid;
+  gap: 18px;
+  align-items: start;
+  /* max 6 coloane, flexibile */
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  /* centrează “blocul” de carduri */
+  max-width: 1800px;   /* ~ 6 coloane confortabile */
+  margin: 18px auto 0; /* auto = centrat */
+  /* dacă rândul nu e plin, centrează coloanele */
+  justify-content: center;
+}
+/* Responsive: scade coloanele */
+@media (max-width: 1600px) {
+  .module-page #resources-grid.module-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (max-width: 1320px) {
+  .module-page #resources-grid.module-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 1060px) {
+  .module-page #resources-grid.module-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .module-page #resources-grid.module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .module-page #resources-grid.module-grid { grid-template-columns: 1fr; }
+}
+
+/* cardurile să nu forțeze lățimi fixe */
+.module-page #resources-grid .module-card {
+  width: auto;
+  max-width: 100%;
+}
+.module-page #resources-grid.module-grid {
+  padding: 0 16px;
+}

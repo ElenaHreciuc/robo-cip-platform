@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Constructor de Povești – Robo-Cip</title>
+
+<style>
+body{font-family:system-ui,sans-serif;background:#f3f7ff;margin:0;padding:16px}
+.page{max-width:900px;margin:0 auto}
+.card{background:#fff;border-radius:18px;padding:12px 14px;margin-bottom:12px;
+box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.slot-area{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.token{background:#fff8d6;border:1px solid #f6c543;padding:6px 10px;border-radius:12px;
+cursor:grab;font-size:13px}
+.slot{flex:1;min-height:60px;border:2px dashed #bcd7ff;border-radius:14px;
+background:#f7fbff;padding:8px;font-size:13px}
+.btn{border-radius:999px;border:none;padding:6px 12px;background:#2e86de;
+color:#fff;cursor:pointer;font-size:13px}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>📖 Constructor de Povești</h1>
+
+<div class="card">
+  Trage elementele potrivite în ordine:
+  <b>cine → ce face → unde → când</b>.
+</div>
+
+<div class="card">
+  <b>Bază de idei</b>
+  <div id="pool" class="slot-area"></div>
+</div>
+
+<div class="card">
+  <b>Bandă de poveste</b>
+
+  <div class="slot-area">
+    <div class="slot" data-role="cine">CINE</div>
+    <div class="slot" data-role="ce-face">CE FACE</div>
+    <div class="slot" data-role="unde">UNDE</div>
+    <div class="slot" data-role="cand">CÂND</div>
+  </div>
+
+  <br>
+  <button class="btn" id="runBtn">Rulează povestea</button>
+
+  <div id="storyOut" style="margin-top:10px;font-size:13px"></div>
+</div>
+
+</div>
+
+<script>
+const parts=[
+  "Robo-Cip","pisica curioasă","un copil","o pasăre mică",
+  "aleargă","învață","ajută","construiește",
+  "în parc","în clasă","în oraș","pe Marte",
+  "dimineața","după-amiaza","seara","în weekend"
+];
+
+const pool=document.getElementById("pool");
+const storyOut=document.getElementById("storyOut");
+
+function token(t){
+  const el=document.createElement("div");
+  el.className="token";
+  el.textContent=t;
+  el.draggable=true;
+  el.addEventListener("dragstart",e=>{
+    e.dataTransfer.setData("text/plain",t);
+  });
+  return el;
+}
+
+parts.forEach(p=>pool.appendChild(token(p)));
+
+document.querySelectorAll(".slot").forEach(slot=>{
+  slot.addEventListener("dragover",e=>e.preventDefault());
+  slot.addEventListener("drop",e=>{
+    e.preventDefault();
+    slot.innerHTML="";
+    slot.appendChild(token(e.dataTransfer.getData("text/plain")));
+  });
+});
+
+document.getElementById("runBtn").onclick=()=>{
+  const s=[...document.querySelectorAll(".slot")]
+    .map(x=>x.innerText.replace(/\s+/g," ").trim());
+  storyOut.textContent="Poveste: "+s.join(" ");
+};
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+<script src="/js/activity-log.js"></script>
+<script>
+roboLogActivity({
+  title:"Constructor de Povești",
+  module:"Algoritmi lingvistici",
+  type:"Structură narativă"
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "robo-cip-app",
+  "version": "1.0.0",
+  "main": "src/server/app.js",
+  "scripts": {
+    "start": "node src/server/app.js",
+    "dev": "nodemon src/server/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}
+

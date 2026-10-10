@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Reflecție după activitate – Robo-Cip</title>
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 16px;
+  background: radial-gradient(circle at top, #fff7eb, #ffffff);
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.section {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+}
+
+.question {
+  padding: 10px;
+  border-radius: 14px;
+  background: #fff2d6;
+  border: 1px solid #f6c67a;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 80px;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+button {
+  border-radius: 999px;
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  background: #e67e22;
+  color: white;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>🗣️ Reflecție după activitate</h1>
+
+<div class="section">
+  <div id="activityBox"><i>Ultima activitate din jurnal este selectată automat.</i></div>
+</div>
+
+<div class="section">
+  <b>Întrebare 1</b>
+  <div class="question">Ce ai făcut mai întâi și de ce?</div>
+  <textarea id="q1"></textarea>
+</div>
+
+<div class="section">
+  <b>Întrebare 2</b>
+  <div class="question">Ce a fost cel mai greu și cum ai găsit soluția?</div>
+  <textarea id="q2"></textarea>
+</div>
+
+<div class="section">
+  <b>Întrebare 3</b>
+  <div class="question">Ce ai face altfel data viitoare?</div>
+  <textarea id="q3"></textarea>
+</div>
+
+<button id="saveBtn">Salvează reflecția</button>
+
+</div>
+
+<script>
+  const activities = JSON.parse(localStorage.getItem("roboModuleLog") || "[]");
+  const box = document.getElementById("activityBox");
+
+  if (activities.length > 0) {
+    const last = activities[activities.length - 1];
+    box.innerHTML =
+      `<b>Activitate:</b> ${last.title}<br>
+       <b>Modul:</b> ${last.module}<br>
+       <b>Data:</b> ${last.date}`;
+  } else {
+    box.innerHTML = "<i>Nu există activități în jurnal încă.</i>";
+  }
+
+  document.getElementById("saveBtn").addEventListener("click", () => {
+
+    const notes = JSON.parse(localStorage.getItem("reflectionNotes") || "[]");
+
+    notes.push({
+      q1: q1.value,
+      q2: q2.value,
+      q3: q3.value,
+      activity: activities.at(-1)?.title || "Nespecificat",
+      date: new Date().toLocaleString("ro-RO")
+    });
+
+    localStorage.setItem("reflectionNotes", JSON.stringify(notes));
+
+    alert("Reflecția a fost salvată în portofoliu.");
+  });
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+</body>
+</html>

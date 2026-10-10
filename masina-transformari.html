@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<title>Mașina de Transformări – Robo-Cip</title>
+
+<style>
+body{
+  font-family: system-ui, sans-serif;
+  margin:0;
+  padding:16px;
+  background: radial-gradient(circle at top,#f2f7ff,#ffffff);
+}
+.page{max-width:900px;margin:0 auto;}
+.card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,.12);
+}
+
+h1{margin-top:0;}
+
+.board{
+  display:grid;
+  grid-template-columns:1fr 120px 1fr;
+  gap:12px;
+  align-items:center;
+}
+
+.box{
+  min-height:180px;
+  border-radius:16px;
+  border:2px dashed #bcd7ff;
+  background:#f7fbff;
+  padding:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-content:flex-start;
+}
+
+.machine{
+  text-align:center;
+  font-size:13px;
+}
+
+.token{
+  padding:6px 10px;
+  border-radius:12px;
+  background:#fff6d6;
+  border:1px solid #f4c542;
+  cursor:grab;
+  font-size:13px;
+  user-select:none;
+}
+
+.controls{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+button{
+  border-radius:999px;
+  border:none;
+  padding:6px 12px;
+  font-size:13px;
+  background:#2e86de;
+  color:#ffffff;
+  cursor:pointer;
+}
+
+.result{
+  margin-top:8px;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<h1>🔧 Mașina de Transformări – Mini-laborator Robo-Cip</h1>
+
+<div class="card">
+  Pune cuvintele în „intrare”, alege regula de transformare,
+  apoi apasă „Rulează mașina”.
+  <br>
+  <span style="font-size:12px;opacity:.8">
+    Exemple de reguli: singular → plural, mic → mare,
+    diminutiv, timp verbal, adăugare prefix etc.
+  </span>
+</div>
+
+<div class="card board">
+
+  <div>
+    <b>Intrare</b>
+    <div id="inputBox" class="box"></div>
+  </div>
+
+  <div class="machine">
+    🧠 Mașina de transformări
+    <br><br>
+    <label>
+      Regula:
+      <select id="ruleSelect">
+        <option value="plural">singular → plural</option>
+        <option value="diminutiv">diminutiv</option>
+        <option value="mare">mic → mare</option>
+        <option value="prefix">adaugă prefix „ne-”</option>
+      </select>
+    </label>
+
+    <br><br>
+
+    <button id="runBtn">Rulează</button>
+  </div>
+
+  <div>
+    <b>Ieşire</b>
+    <div id="outputBox" class="box"></div>
+  </div>
+
+</div>
+
+<div class="card">
+  <b>Cuvinte disponibile</b>
+  <div id="pool" class="box"></div>
+
+  <div class="controls">
+    <button id="resetBtn">Resetează</button>
+    <button id="explainBtn">Explică regula</button>
+  </div>
+
+  <div id="resultMsg" class="result">
+    Elevul explică regula în cuvintele lui.
+  </div>
+</div>
+
+</div>
+
+<script>
+const words = [
+  "pom","sac","nor","fag",
+  "elev","plop","prieten","doctor"
+];
+
+const pool = document.getElementById("pool");
+const inputBox = document.getElementById("inputBox");
+const outputBox = document.getElementById("outputBox");
+const resultMsg = document.getElementById("resultMsg");
+const ruleSelect = document.getElementById("ruleSelect");
+
+function makeToken(text){
+  const el=document.createElement("div");
+  el.className="token";
+  el.textContent=text;
+  el.draggable=true;
+
+  el.addEventListener("dragstart",e=>{
+    e.dataTransfer.setData("text/plain",text);
+  });
+
+  return el;
+}
+
+function renderPool(){
+  pool.innerHTML="";
+  words.forEach(w=>pool.appendChild(makeToken(w)));
+}
+
+function makeDropTarget(box){
+  box.addEventListener("dragover",e=>e.preventDefault());
+  box.addEventListener("drop",e=>{
+    e.preventDefault();
+    const text=e.dataTransfer.getData("text/plain");
+    box.appendChild(makeToken(text));
+  });
+}
+
+makeDropTarget(inputBox);
+makeDropTarget(pool);
+
+renderPool();
+
+function applyRule(word,rule){
+  switch(rule){
+
+    case "plural":
+      return word+"i";
+
+    case "diminutiv":
+      return word+"el";
+
+    case "mare":
+      return word.toUpperCase();
+
+    case "prefix":
+      return "ne-"+word;
+
+    default:
+      return word;
+  }
+}
+
+document.getElementById("runBtn").addEventListener("click",()=>{
+
+  outputBox.innerHTML="";
+
+  const rule = ruleSelect.value;
+  const tokens = inputBox.querySelectorAll(".token");
+
+  tokens.forEach(t=>{
+    const transformed = applyRule(t.textContent,rule);
+    outputBox.appendChild(makeToken(transformed));
+  });
+
+  resultMsg.textContent =
+    "Profesorul întreabă: Ce regulă ai aplicat asupra cuvintelor?";
+});
+
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  inputBox.innerHTML="";
+  outputBox.innerHTML="";
+  renderPool();
+  resultMsg.textContent="Elevul explică regula în cuvintele lui.";
+});
+
+document.getElementById("explainBtn").addEventListener("click",()=>{
+  resultMsg.textContent=
+    "Elevul explică: „Cuvintele s-au schimbat pentru că am folosit regula…”";
+});
+</script>
+
+<script src="/js/robo-menu-button.js"></script>
+
+<script src="/js/activity-log.js"></script>
+<script>
+roboLogActivity({
+  title: "Mașina de Transformări",
+  module: "Algoritmi lingvistici & reguli",
+  type: "Transformare semantică"
+});
+</script>
+
+</body>
+</html>

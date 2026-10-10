@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+<html lang="ro">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <title>Etichetează Lumea – Robo-Cip</title>
+
+
+
+  <style>
+
+    body {
+
+      font-family: system-ui, sans-serif;
+
+      margin: 0;
+
+      padding: 16px;
+
+      background: radial-gradient(circle at top, #e3f2fd, #ffffff);
+
+    }
+
+
+
+    .page {
+
+      max-width: 920px;
+
+      margin: 0 auto;
+
+    }
+
+
+
+    h1 {
+
+      margin-top: 0;
+
+    }
+
+
+
+    .intro {
+
+      background: #ffffff;
+
+      border-radius: 16px;
+
+      padding: 12px 14px;
+
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+      font-size: 14px;
+
+    }
+
+
+
+    .board {
+
+      margin-top: 14px;
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 14px;
+
+    }
+
+
+
+    .zone {
+
+      background: #ffffff;
+
+      border-radius: 18px;
+
+      padding: 12px;
+
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+      min-height: 200px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 8px;
+
+    }
+
+
+
+    .zone h3 {
+
+      margin: 0 0 6px;
+
+      font-size: 15px;
+
+    }
+
+
+
+    .drop-area {
+
+      flex: 1;
+
+      border-radius: 14px;
+
+      border: 2px dashed #bbdefb;
+
+      background: #f7fbff;
+
+      padding: 8px;
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 8px;
+
+      align-content: flex-start;
+
+      transition: 0.15s;
+
+    }
+
+
+
+    .drop-area.drag-over {
+
+      background: #e3f2fd;
+
+      border-color: #64b5f6;
+
+    }
+
+
+
+    .item-pool {
+
+      margin-top: 14px;
+
+      background: #ffffff;
+
+      border-radius: 18px;
+
+      padding: 10px;
+
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    }
+
+
+
+    .item-pool h3 {
+
+      margin-top: 0;
+
+      font-size: 15px;
+
+    }
+
+
+
+    .item-list {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 8px;
+
+    }
+
+
+
+    .card {
+
+      padding: 8px 10px;
+
+      border-radius: 12px;
+
+      background: #fffbe6;
+
+      border: 1px solid #f4d03f;
+
+      cursor: grab;
+
+      font-size: 13px;
+
+      user-select: none;
+
+    }
+
+
+
+    .result-box {
+
+      margin-top: 10px;
+
+      font-size: 13px;
+
+      background: #ffffff;
+
+      border-radius: 12px;
+
+      padding: 8px;
+
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+
+    }
+
+
+
+    .actions {
+
+      margin-top: 10px;
+
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+    }
+
+
+
+    button {
+
+      border-radius: 999px;
+
+      border: none;
+
+      padding: 6px 12px;
+
+      font-size: 13px;
+
+      cursor: pointer;
+
+      background: #3498db;
+
+      color: #ffffff;
+
+    }
+
+
+
+    .hint {
+
+      font-size: 12px;
+
+      opacity: 0.8;
+
+    }
+
+  </style>
+
+</head>
+
+
+
+<body>
+
+  <div class="page">
+
+    <h1>🧩 Etichetează Lumea – Mini-laborator Robo-Cip</h1>
+
+
+
+    <div class="intro">
+
+      Trage obiectele în <b>Cutia A</b> sau <b>Cutia B</b> și spune ce regulă ai folosit.
+
+      <br />
+
+      <span class="hint">
+
+        Profesorul poate schimba criteriul: culoare, formă, viu / neviu, jucărie / aliment etc.
+
+      </span>
+
+    </div>
+
+
+
+    <div class="board">
+
+      <div class="zone">
+
+        <h3>Cutia A</h3>
+
+        <div class="drop-area" id="zoneA"></div>
+
+      </div>
+
+
+
+      <div class="zone">
+
+        <h3>Cutia B</h3>
+
+        <div class="drop-area" id="zoneB"></div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="item-pool">
+
+      <h3>Obiecte</h3>
+
+      <div class="item-list" id="itemPool"></div>
+
+    </div>
+
+
+
+    <div class="actions">
+
+      <button id="resetBtn">Resetează</button>
+
+      <button id="explainBtn">Explică regula</button>
+
+    </div>
+
+
+
+    <div class="result-box" id="resultBox">
+
+      Regulă aleasă: (completează elevul prin explicație)
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+
+    const items = [
+
+      "🍎 măr",
+
+      "🧸 ursuleț",
+
+      "🚗 mașină",
+
+      "🌿 frunză",
+
+      "⚽ minge",
+
+      "🐟 pește",
+
+      "📦 cutie",
+
+      "🍌 banană",
+
+      "🧩 piesă",
+
+      "🐦 pasăre"
+
+    ];
+
+
+
+    const pool = document.getElementById("itemPool");
+
+    const zoneA = document.getElementById("zoneA");
+
+    const zoneB = document.getElementById("zoneB");
+
+    const result = document.getElementById("resultBox");
+
+
+
+    function createCard(label) {
+
+      const el = document.createElement("div");
+
+      el.className = "card";
+
+      el.textContent = label;
+
+      el.draggable = true;
+
+
+
+      el.addEventListener("dragstart", e => {
+
+        e.dataTransfer.setData("text/plain", label);
+
+        el.classList.add("dragging");
+
+      });
+
+
+
+      el.addEventListener("dragend", () => {
+
+        el.classList.remove("dragging");
+
+      });
+
+
+
+      return el;
+
+    }
+
+
+
+    function renderPool() {
+
+      pool.innerHTML = "";
+
+      items.forEach(txt => pool.appendChild(createCard(txt)));
+
+    }
+
+
+
+    function makeDropArea(area) {
+
+      area.addEventListener("dragover", e => {
+
+        e.preventDefault();
+
+        area.classList.add("drag-over");
+
+      });
+
+
+
+      area.addEventListener("dragleave", () => {
+
+        area.classList.remove("drag-over");
+
+      });
+
+
+
+      area.addEventListener("drop", e => {
+
+        e.preventDefault();
+
+        area.classList.remove("drag-over");
+
+
+
+        const label = e.dataTransfer.getData("text/plain");
+
+        const card = createCard(label);
+
+        area.appendChild(card);
+
+      });
+
+    }
+
+
+
+    makeDropArea(zoneA);
+
+    makeDropArea(zoneB);
+
+    renderPool();
+
+
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+
+      zoneA.innerHTML = "";
+
+      zoneB.innerHTML = "";
+
+      renderPool();
+
+      result.textContent = "Regulă aleasă: (repornește activitatea)";
+
+    });
+
+
+
+    document.getElementById("explainBtn").addEventListener("click", () => {
+
+      result.textContent =
+
+        "Profesorul întreabă: „Ce regulă ai folosit pentru a sorta obiectele?”";
+
+    });
+
+  </script>
+
+
+
+  <!-- Buton meniu global -->
+
+  <script src="/js/robo-menu-button.js"></script>
+
+
+
+  <!-- Log activitate -->
+
+  <script src="/js/activity-log.js"></script>
+
+  <script>
+
+    roboLogActivity({
+
+      title: "Etichetează lumea",
+
+      module: "Gândire semantică & ML conceptual",
+
+      type: "Clasificare și criterii"
+
+    });
+
+  </script>
+
+</body>
+
+</html>
