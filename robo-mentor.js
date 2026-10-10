@@ -34,7 +34,7 @@ model-viewer{height:120px;width:116px;position:relative;z-index:1;--poster-color
 <section id="panel" hidden role="dialog" aria-label="Ajutorul lui Robo">
 <button id="close" aria-label="Închide ajutorul">✕</button><h2 id="title"></h2>
 <p id="intro"></p><p id="age"></p>
-<div class="actions"><button class="action" id="hint">💡 Arată indiciul</button><button class="action" id="speak">🔊 Ascultă</button><button class="action secondary" id="stop">Oprește vocea</button></div>
+<p class="note">🎙️ Profil vocal de test: Robo tânăr, jucăuș și energic. Vocea depinde de dispozitiv.</p><div class="actions"><button class="action" id="hint">💡 Arată indiciul</button><button class="action" id="sample">🎵 Testează vocea</button><button class="action" id="speak">🔊 Ascultă explicația</button><button class="action secondary" id="stop">Oprește vocea</button></div>
 <p class="note" id="tip" hidden></p><small id="audioState" role="status" aria-live="polite"></small>
 </section>
 <button id="roboTrigger" aria-label="Deschide ajutorul mentorului Robo" aria-expanded="false">
@@ -66,25 +66,26 @@ window.speechSynthesis.addEventListener?.('voiceschanged',changed);
 const timer=setTimeout(finish,1800);window.speechSynthesis.getVoices();
 });
 }
-$('speak').addEventListener('click',async()=>{
+async function playRoboVoice(spokenText){
 const attempt=++speakingAttempt;
-const spokenText=[content.intro,ageText(),$('tip').hidden?'':content.hint].filter(Boolean).join(' ');
-if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window)){$('audioState').textContent='Acest browser nu permite citirea vocală. Explicația este disponibilă în scris.';return}
-$('audioState').textContent='Robo pregătește vocea…';
-let voices=await waitForVoices();if(attempt!==speakingAttempt)return;
+if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window)){$('audioState').textContent='Acest browser nu permite redarea vocală. Explicația rămâne în scris.';return}
+$('audioState').textContent='Robo pregătește proba vocală…';
+const voices=await waitForVoices();if(attempt!==speakingAttempt)return;
 const voice=romanianVoice(voices);
 window.speechSynthesis.cancel();
 const utterance=new SpeechSynthesisUtterance(spokenText);speech=utterance;
-utterance.lang='ro-RO';utterance.rate=0.88;utterance.pitch=1;
+utterance.lang='ro-RO';utterance.rate=1.08;utterance.pitch=1.35;utterance.volume=1;
 if(voice)utterance.voice=voice;
 let began=false;
-utterance.onstart=()=>{began=true;$('audioState').textContent=voice?'Robo vorbește în limba română.':'Robo vorbește cu vocea implicită a dispozitivului. Pronunția română poate fi imperfectă.'};
-utterance.onend=()=>{$('audioState').textContent='Explicația audio s-a încheiat.'};
-utterance.onerror=e=>{$('audioState').textContent='Vocea nu a putut fi redată ('+(e.error||'eroare necunoscută')+'). Verifică volumul și vocile instalate pe dispozitiv.'};
-if(!voice)$('audioState').textContent=voices.length?'Nu am găsit o voce românească; încerc vocea implicită a dispozitivului.':'Nu sunt raportate voci instalate; încerc sistemul audio implicit.';
-try{window.speechSynthesis.speak(utterance)}catch(e){$('audioState').textContent='Browserul a blocat redarea audio: '+e.message}
-setTimeout(()=>{if(!began&&speech===utterance&&window.speechSynthesis.speaking===false){$('audioState').textContent='Nu a pornit sunetul. Verifică setările de voce ale browserului și volumul dispozitivului.'}},3500);
-});
+utterance.onstart=()=>{began=true;$('audioState').textContent=voice?'Robo vorbește cu voce românească, ritm energic și tonalitate ridicată.':'Nu există voce românească; încerc vocea implicită. Pronunția poate fi incorectă.'};
+utterance.onend=()=>{$('audioState').textContent='Proba audio s-a încheiat.'};
+utterance.onerror=e=>{$('audioState').textContent='Nu se poate reda vocea ('+(e.error||'eroare necunoscută')+'). Verifică sunetul și vocile instalate.'};
+if(!voice)$('audioState').textContent='Nu am detectat o voce românească pe dispozitiv. Încerc totuși redarea.';
+try{window.speechSynthesis.speak(utterance)}catch(e){$('audioState').textContent='Browserul a blocat redarea audio: '+e.message;return}
+setTimeout(()=>{if(!began&&speech===utterance&&!window.speechSynthesis.speaking){$('audioState').textContent='Sunetul nu a pornit. Verifică volumul și instalarea unei voci românești.'}},3500);
+}
+$('sample').addEventListener('click',()=>playRoboVoice('Salut! Eu sunt Robo, prietenul tău digital! Astăzi descoperim ceva extraordinar. Ești pregătit? Hai să începem!'));
+$('speak').addEventListener('click',()=>playRoboVoice([content.intro,ageText(),$('tip').hidden?'':content.hint].filter(Boolean).join(' ')));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened)close()});
 window.addEventListener('pagehide',stopVoice);
 function load3D(){
