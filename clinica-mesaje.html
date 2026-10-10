@@ -1,60 +1,57 @@
 <!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8">
-<title>Clinica de Mesaje – Robo-Cip</title>
+<html lang="ro"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clinica de mesaje – Robo-Cip</title>
 <style>
-body{font-family:system-ui,sans-serif;background:#fff7f4;padding:16px}
-.page{max-width:900px;margin:0 auto}
-.card{background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.msg{background:#fff3cd;border:1px solid #f6c543;border-radius:12px;
-padding:8px;font-size:13px}
-.btn{border-radius:999px;border:none;padding:6px 12px;background:#2e86de;
-color:#fff;font-size:13px}
-</style>
-</head>
-
-<body>
-<div class="page">
-
-<h1>🛠 Clinica de Mesaje</h1>
-
-<div class="card">
-  Mesaj inițial „stricat”:
-  <div id="msg" class="msg">
-    pleaca robo cip parc la repede
-  </div>
-</div>
-
-<div class="card">
-  <b>Rescrie mesajul corect</b>
-  <textarea id="fix" style="width:100%;height:80px"></textarea>
-  <br><br>
-  <button class="btn" id="saveBtn">Verifică</button>
-
-  <div id="out" style="margin-top:10px;font-size:13px"></div>
-</div>
-
-</div>
-
+*{box-sizing:border-box}body{margin:0;padding:18px;font-family:system-ui,Arial,sans-serif;background:linear-gradient(140deg,#fff0eb,#edf7ff);color:#20334a}
+main{max-width:920px;margin:auto}.panel{background:white;border-radius:20px;padding:20px;margin:13px 0;box-shadow:0 5px 17px #1a395220}
+h1{margin:0 0 8px;font-size:clamp(25px,4vw,34px)}h2{font-size:21px;margin:0 0 12px}.muted{color:#506175}
+.row{display:flex;gap:9px;flex-wrap:wrap}.age,.choice,.btn{font:inherit;cursor:pointer;border-radius:13px;padding:12px 14px}.age{border:2px solid #b6cee8;background:#edf5ff;color:#155b94;font-weight:700}.age[aria-pressed=true]{background:#176fae;color:white}
+.msg{border-left:5px solid #ef8354;background:#fff3e9;border-radius:10px;padding:15px;font-size:19px;margin:10px 0}
+.choice{width:100%;text-align:left;background:#f6faff;color:#18364b;border:2px solid #d6e5f3;margin:5px 0}.choice[aria-pressed=true]{border-color:#1874b7;background:#e0f2ff}
+.btn{background:#1773ae;border:0;color:white;font-weight:700}.btn.alt{background:#e8f4fa;color:#155781}
+.result{padding:14px;margin:12px 0;background:#edf4fb;border-radius:12px;min-height:55px}.result.good{background:#e2f6e9;color:#19603a}.result.warn{background:#fff1df;color:#794d17}
+textarea{width:100%;min-height:100px;border:1px solid #b2cbe0;border-radius:12px;padding:12px;font:inherit}
+.check{display:block;margin:9px 0}input[type=checkbox]{width:20px;height:20px;vertical-align:middle}
+button:focus-visible,textarea:focus-visible{outline:3px solid orange;outline-offset:2px}
+</style></head><body><main>
+<section class="panel"><h1>💬 Clinica de mesaje</h1><p class="muted">Repară mesajele lui Robo-Cip: corect, clar și respectuos.</p><div class="row" id="ages">
+<button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button>
+<button class="age" data-age="8-9" aria-pressed="false">8–9 ani · Construiesc</button>
+<button class="age" data-age="9-10" aria-pressed="false">9–10 ani · Investighez</button></div></section>
+<section class="panel"><h2 id="levelTitle"></h2><p id="instruction"></p><b>Mesaj primit:</b><div id="message" class="msg"></div><p id="prompt"></p>
+<div id="choices"></div><div class="row" style="margin-top:13px"><button class="btn" id="verify">Verifică alegerea</button><button class="btn alt" id="next" hidden>Provocarea următoare →</button></div>
+<div id="result" class="result" role="status" aria-live="polite">Alege varianta cea mai potrivită.</div><small id="progress"></small></section>
+<section class="panel"><h2>✍️ Atelier de creație</h2><p id="creative"></p>
+<label for="answer"><b>Mesajul meu:</b></label><textarea id="answer" placeholder="Scrie mesajul tău aici."></textarea>
+<p><b>Verifică înainte de a salva:</b></p>
+<label class="check"><input type="checkbox" id="spelling"> Am verificat majusculele, diacriticele și semnele de punctuație.</label>
+<label class="check"><input type="checkbox" id="clarity"> Mesajul meu este clar și are sens.</label>
+<label class="check"><input type="checkbox" id="kindness"> Mesajul meu respectă persoana căreia i se adresează.</label>
+<div class="row"><button class="btn alt" id="save">Salvează pe acest dispozitiv</button><span id="saved" role="status"></span></div><p class="muted">Robo-Cip verifică automat doar răspunsurile cu variante date. Textul creat de tine se verifică prin această listă și, la nevoie, împreună cu profesorul.</p></section>
+<p><a href="/modules.html">← Înapoi la module</a></p></main>
 <script>
-document.getElementById("saveBtn").onclick=()=>{
-  const v=fix.value.trim();
-  if(!v) out.textContent="Scrie varianta ta corectată.";
-  else out.textContent="Explică de ce e mai bun mesajul: ordine / lipsă / sens.";
+(function(){"use strict";
+const LEVELS={
+"7-8":{title:"Descopăr mesaje clare și politicoase",instruction:"Alege mesajul scris corect și formulat cu respect.",creative:"Scrie un mesaj politicos prin care îi ceri unui coleg să îți împrumute un creion.",tasks:[
+{msg:"dam cartea",prompt:"Cum ceri o carte?",options:["Dă-mi cartea, te rog.","dam cartea","Dami cartea te rog"],correct:0,why:"Folosim majusculă la început, cratimă în «Dă-mi», virgulă înainte de «te rog» și punct la final."},
+{msg:"nu te juca cu mine esti rau",prompt:"Cum poți spune că te-a deranjat ceva, fără să jignești?",options:["Ești rău!","M-a supărat ce s-a întâmplat. Putem vorbi?","Nu te juca cu mine esti rau."],correct:1,why:"Spunem ce ne-a deranjat, fără etichete jignitoare. Folosim punctul și semnul întrebării corect."},
+{msg:"robo cip vino aici",prompt:"Cum îl chemăm pe Robo-Cip politicos?",options:["Robo cip vino aici","Robo-Cip, vino aici, te rog!","robo-cip vino aici te rog"],correct:1,why:"Numele Robo-Cip se scrie cu majuscule și cratimă, iar adresarea directă este separată prin virgulă."}]},
+"8-9":{title:"Construiesc mesaje potrivite situației",instruction:"Compară mesajele și alege varianta care exprimă cel mai bine ideea, cu ortografie și punctuație corecte.",creative:"Reformulează un mesaj supărat într-un mesaj asertiv și politicos. Explică în ce constă schimbarea.",tasks:[
+{msg:"nu mi ai trimis tema esti neserios",prompt:"Cum ceri lămuriri fără acuzații?",options:["Nu mi-ai trimis tema. Poți verifica, te rog, dacă ai reușit să o trimiți?","Nu mi ai trimis tema esti neserios","Ești neserios, trimite tema!"],correct:0,why:"Mesajul cere o verificare, evită etichetele negative și folosește corect «mi-ai»."},
+{msg:"vreau si eu sa vorbesc",prompt:"Ce variantă exprimă o solicitare respectuoasă?",options:["Tăceți, vorbesc eu!","Vreau si eu sa vorbesc","Aș dori să spun și eu ceva. Pot să intervin?"],correct:2,why:"Formularea este clară, politicoasă și folosește corect întrebarea."},
+{msg:"maine mergem la muzeu nu",prompt:"Care mesaj transmite o întrebare clară?",options:["Mâine mergem la muzeu, nu?","maine mergem la muzeu nu","Mâine mergem la muzeu."],correct:0,why:"Semnul întrebării și virgula arată că solicităm confirmarea informației."}]},
+"9-10":{title:"Investighez ambiguități, ton și sens",instruction:"Analizează contextul, intenția și formularea. Alege varianta cea mai clară și justificabilă.",creative:"Scrie două variante ale aceluiași mesaj: una pentru un prieten și una pentru un profesor. Menține sensul, dar adaptează formula de adresare.",tasks:[
+{msg:"Am văzut-o pe Ana cu binoclul.",prompt:"Vrei să precizezi că tu ai folosit binoclul. Cum elimini ambiguitatea?",options:["Ana avea un binoclu când am văzut-o.","Am văzut-o pe Ana folosind binoclul.","Cu binoclul Ana văzut-o am."],correct:1,why:"A doua variantă clarifică faptul că observatorul folosește binoclul. Prima comunică altă situație."},
+{msg:"Proiectul tău e prost.",prompt:"Cum formulezi un feedback util, care descrie problema?",options:["Nu ai talent!","Proiectul tău este prost.","Ideea este interesantă. Ar fi util să explici mai clar pașii și rezultatul."],correct:2,why:"Feedbackul se referă la aspecte care pot fi îmbunătățite, nu la valoarea persoanei."},
+{msg:"Profesorul i-a spus elevului că lucrarea lui este gata.",prompt:"Vrei să precizezi că lucrarea aparține elevului. Ce formulare este neambiguă?",options:["Profesorul i-a spus elevului că lucrarea elevului este gata.","Profesorul i-a spus elevului că lucrarea lui este gata.","Profesorul spus elevului lucrarea gata."],correct:0,why:"Repetarea substantivului «elevului» înlătură ambiguitatea pronumelui «lui»."}]}
 };
-</script>
-
-<script src="/js/robo-menu-button.js"></script>
-<script src="/js/activity-log.js"></script>
-<script>
-roboLogActivity({
-  title:"Clinica de mesaje",
-  module:"Algoritmi lingvistici",
-  type:"Debugging semantic"
-});
-</script>
-
-</body>
-</html>
+const $=id=>document.getElementById(id);let age="7-8",idx=0,selected=-1,complete=false;
+function feedback(text,kind=""){$("result").textContent=text;$("result").className="result"+(kind?" "+kind:"")}
+function selectAge(a){age=LEVELS[a]?a:"7-8";try{localStorage.setItem("roboCip:ageTrack",age)}catch(e){}document.querySelectorAll("[data-age]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.age===age)));idx=0;$("levelTitle").textContent=LEVELS[age].title;$("instruction").textContent=LEVELS[age].instruction;$("creative").textContent=LEVELS[age].creative;try{$("answer").value=localStorage.getItem("roboCip:clinica:"+age)||""}catch(e){$("answer").value=""}load()}
+function load(){const t=LEVELS[age].tasks[idx];selected=-1;complete=false;$("message").textContent=t.msg;$("prompt").textContent=t.prompt;$("progress").textContent="Provocarea "+(idx+1)+" din "+LEVELS[age].tasks.length;$("next").hidden=true;$("choices").replaceChildren();t.options.forEach((option,i)=>{const b=document.createElement("button");b.className="choice";b.textContent=option;b.setAttribute("aria-pressed","false");b.onclick=()=>{selected=i;[...$("choices").children].forEach((el,j)=>el.setAttribute("aria-pressed",String(i===j)));feedback("Ai ales varianta "+(i+1)+". Verifică răspunsul.")};$("choices").appendChild(b)});feedback("Alege varianta cea mai potrivită.")}
+$("verify").onclick=()=>{if(selected<0){feedback("Selectează mai întâi o variantă.","warn");return}const t=LEVELS[age].tasks[idx];if(selected===t.correct){complete=true;feedback("Corect! "+t.why,"good");$("next").hidden=idx===LEVELS[age].tasks.length-1;if(idx===LEVELS[age].tasks.length-1)feedback("Ai finalizat cele trei provocări! "+t.why+" Continuă cu atelierul de creație.","good")}else{complete=false;feedback("Mai încearcă. Recitește mesajul și verifică sensul, tonul și punctuația.","warn")}};
+$("next").onclick=()=>{if(complete&&idx<LEVELS[age].tasks.length-1){idx++;load()}};
+$("save").onclick=()=>{if(!$("answer").value.trim()){$("saved").textContent="Scrie mai întâi mesajul tău.";return}if(!["spelling","clarity","kindness"].every(id=>$(id).checked)){$("saved").textContent="Bifează cele trei verificări înainte de salvare.";return}try{localStorage.setItem("roboCip:clinica:"+age,$("answer").value);$("saved").textContent="Mesajul a fost salvat în acest browser."}catch(e){$("saved").textContent="Salvarea nu este disponibilă. Copiază mesajul."}};
+document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>selectAge(b.dataset.age));let stored=null;try{stored=localStorage.getItem("roboCip:ageTrack")}catch(e){}const requested=new URLSearchParams(location.search).get("age");selectAge(LEVELS[requested]?requested:stored);
+})();
+</script><script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script><script>if(typeof roboLogActivity==="function")roboLogActivity({title:"Clinica de mesaje",module:"Algoritmi lingvistici",type:"Empatie, ortografie și claritate"});</script>
+</body></html>
