@@ -1,192 +1,27 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8" />
-<title>Generator proiect interdisciplinar – Robo-Cip</title>
-
-<style>
-body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
-  padding: 16px;
-  background: radial-gradient(circle at top, #eefdf6, #ffffff);
-}
-
-.page {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-h1 { margin-top: 0; }
-
-.section {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 12px 14px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.1);
-}
-
-label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-input, select, textarea {
-  width: 100%;
-  margin-top: 4px;
-  font-size: 14px;
-  padding: 6px;
-}
-
-.multiselect {
-  max-height: 120px;
-  overflow-y: auto;
-  border: 1px solid #d0d7de;
-  border-radius: 10px;
-  padding: 6px;
-  margin-top: 4px;
-}
-
-.multiselect label {
-  display: block;
-  font-size: 13px;
-  font-weight: 400;
-}
-
-button {
-  border-radius: 999px;
-  border: none;
-  padding: 8px 14px;
-  font-size: 14px;
-  cursor: pointer;
-  background: #27ae60;
-  color: white;
-}
-
-#output {
-  white-space: pre-wrap;
-  font-family: system-ui, sans-serif;
-  font-size: 13px;
-}
-</style>
-</head>
-
-<body>
-<div class="page">
-
-<h1>📚 Generator proiect interdisciplinar – Robo-Cip</h1>
-
-<div class="section">
-  <label>Tema proiectului</label>
-  <input id="theme" placeholder="Ex: Orașul inteligent, Călătoria sunetului, etc.">
-</div>
-
-<div class="section">
-  <label>Clasa / grupa</label>
-  <input id="grade" placeholder="Ex: Clasa I, Clasa a II-a, grupă mixtă">
-</div>
-
-<div class="section">
-  <label>Durata aproximativă</label>
-  <input id="duration" placeholder="Ex: 3 lecții, 2 săptămâni">
-</div>
-
-<div class="section">
-  <label>Module implicate (bifează cele relevante)</label>
-  <div id="moduleBox" class="multiselect"></div>
-</div>
-
-<div class="section">
-  <button id="generateBtn">Generează proiect</button>
-</div>
-
-<div class="section">
-  <h2 style="margin-top:0;">Propunere proiect</h2>
-  <div id="output">(proiectul generat va apărea aici)</div>
-  <br>
-  <button id="exportBtn">Exportă ca fișier .txt</button>
-</div>
-
-</div>
-
-<script>
-(function () {
-  const logs = JSON.parse(localStorage.getItem("roboModuleLog") || "[]");
-  const moduleBox = document.getElementById("moduleBox");
-
-  const modules = {};
-  logs.forEach(a => {
-    modules[a.module] = true;
-  });
-  const moduleNames = Object.keys(modules);
-
-  if (moduleNames.length === 0) {
-    moduleBox.innerHTML = "<i>Nu există încă module în jurnal. Derulează câteva activități înainte de a genera un proiect.</i>";
-  } else {
-    moduleNames.forEach(name => {
-      const lbl = document.createElement("label");
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.value = name;
-      lbl.appendChild(cb);
-      lbl.append(" " + name);
-      moduleBox.appendChild(lbl);
-    });
-  }
-
-  const output = document.getElementById("output");
-
-  document.getElementById("generateBtn").addEventListener("click", () => {
-    const theme = document.getElementById("theme").value || "Proiect interdisciplinar";
-    const grade = document.getElementById("grade").value || "(clasă nespecificată)";
-    const duration = document.getElementById("duration").value || "(durată nespecificată)";
-
-    const selected = Array.from(moduleBox.querySelectorAll("input[type=checkbox]:checked"))
-      .map(cb => cb.value);
-
-    let text = "";
-    text += `PROIECT INTERDISCIPLINAR – ${theme}\n\n`;
-    text += `Clasa / grupa: ${grade}\n`;
-    text += `Durata: ${duration}\n\n`;
-
-    if (selected.length > 0) {
-      text += "Module implicate:\n";
-      selected.forEach(m => text += `• ${m}\n`);
-    } else {
-      text += "Module implicate: (nu au fost selectate explicit)\n";
-    }
-
-    text += "\nObiectiv general:\n";
-    text += "• dezvoltarea gândirii complexe prin îmbinarea activităților digitale din Robo-Cip cu situații reale de învățare.\n\n";
-
-    text += "Posibilă secvență de activități:\n";
-    text += "1) Activitate de explorare (hartă / clasificare / ritm) – descoperire și discuție.\n";
-    text += "2) Activitate creativă (construcție 3D / poveste interactivă) – aplicare și exprimare.\n";
-    text += "3) Reflecție ghidată – elevii explică ce au făcut, ce a fost dificil și cum ar proceda altfel.\n\n";
-
-    text += "Rolul elevului:\n";
-    text += "• investighează, experimentează, explică și colaborează.\n\n";
-
-    text += "Rolul profesorului:\n";
-    text += "• mediere, ghidare prin întrebări, observare formativă, sprijin în formularea reflecțiilor.\n";
-
-    output.textContent = text;
-  });
-
-  document.getElementById("exportBtn").addEventListener("click", () => {
-    const text = output.textContent || "";
-    if (!text.trim()) return;
-
-    const blob = new Blob([text], { type:"text/plain" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "Proiect_interdisciplinar_RoboCip.txt";
-    a.click();
-  });
-})();
-</script>
-
-<script src="/js/robo-menu-button.js"></script>
-</body>
-</html>
+<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Generator proiect interdisciplinar STEAM – Robo-Cip</title><style>
+*{box-sizing:border-box}body{margin:0;padding:17px;font:16px system-ui,sans-serif;background:linear-gradient(125deg,#e7f8ef,#f1f7ff);color:#23485a}main{max-width:1150px;margin:auto}.card{padding:20px;border-radius:19px;background:#fff;margin:14px 0;box-shadow:0 4px 16px #244d6019}h1{font-size:clamp(25px,4vw,35px)}h2{font-size:22px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}input,select,textarea{width:100%;font:inherit;padding:10px;border:1px solid #b8d8d2;border-radius:10px}textarea{min-height:87px}button{font:inherit;border:0;border-radius:12px;padding:12px 16px;background:#18866f;color:#fff;cursor:pointer}button.secondary{background:#287cb2}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #efa83c;outline-offset:2px}.modules{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.module{border-left:6px solid var(--accent);background:var(--tint);padding:12px;border-radius:13px}.module label{display:flex;gap:9px;align-items:center;font-weight:700}.module input{width:auto}.module p{margin:8px 0}.mission-list{display:grid;gap:5px}.mission-list label{font-size:14px;font-weight:400}.section{border-bottom:1px solid #e2ede9;padding-bottom:12px;margin-bottom:12px}.out{white-space:pre-wrap;line-height:1.6;font-size:14px;background:#f5faf8;border:1px solid #cce4da;border-radius:13px;padding:17px;max-height:850px;overflow:auto}.status{color:#476b65;font-size:14px}@media(max-width:700px){.grid,.modules{grid-template-columns:1fr}.card{padding:15px}}@media print{button,.no-print{display:none!important}.out{max-height:none}}
+</style></head><body><main><section class="card"><h1>📚 Generator de proiecte interdisciplinare STEAM – Robo-Cip</h1><p>Proiectează o experiență de învățare pornind de la o problemă reală, folosind activități din cele patru module. Generatorul produce un plan editabil pedagogic și o rubrică de evaluare prin portofoliu.</p><p class="status">Planul generat este o propunere didactică. Competențele sunt formulate operațional și trebuie corelate de profesor cu programa clasei.</p></section>
+<section class="card"><h2>1. Contextul proiectului</h2><div class="grid"><div class="field"><label for="theme">Tema proiectului</label><input id="theme" value="Orașul inteligent, sigur și sustenabil"></div><div class="field"><label for="grade">Clasa / grupa</label><input id="grade" placeholder="Clasa a II-a"></div><div class="field"><label for="age">Grupa de vârstă</label><select id="age"><option value="7–8">7–8 ani</option><option value="8–9">8–9 ani</option><option value="9–10">9–10 ani</option></select></div><div class="field"><label for="duration">Durata</label><input id="duration" value="5 lecții"></div></div><div class="field"><label for="problem">Întrebarea de investigație</label><textarea id="problem">Cum putem proiecta un oraș mai sigur și mai prietenos cu mediul?</textarea></div><div class="field"><label for="realLife">Situația reală și publicul produsului final</label><textarea id="realLife">Elevii observă probleme din cartier și propun soluții pentru comunitatea școlii.</textarea></div></section>
+<section class="card"><h2>2. Module și misiuni Robo-Cip</h2><p>Poți selecta orice modul, chiar dacă nu au fost accesate anterior activitățile sale.</p><div class="modules" id="moduleBox"></div></section>
+<section class="card"><h2>3. Proiectarea învățării</h2><div class="grid"><div class="field"><label for="subjects">Discipline școlare implicate</label><textarea id="subjects">Matematică; Științe ale naturii; Limba română; Arte; TIC</textarea></div><div class="field"><label for="competences">Competențe urmărite</label><textarea id="competences">Observarea și interpretarea datelor; măsurarea și calculul; formularea algoritmilor; comunicarea și colaborarea; creația digitală</textarea></div><div class="field"><label for="product">Produs final interdisciplinar</label><textarea id="product">Machetă digitală a orașului, animație explicativă și portofoliu cu dovezi din misiuni.</textarea></div><div class="field"><label for="materials">Resurse și organizare</label><textarea id="materials">Calculatoare; acces Robo-Cip; echipe de 3–4 elevi; fișe de observație; instrumente simple de măsurare.</textarea></div></div><div class="field"><label for="adaptation">Incluziune și diferențiere</label><textarea id="adaptation">7–8 ani: explorare ghidată; 8–9 ani: comparare și calcule; 9–10 ani: justificare și optimizarea soluțiilor. Alternativă fără sunet pentru activitățile audio.</textarea></div></section>
+<section class="card"><h2>4. Evaluare formativă</h2><div class="grid"><div class="field"><label for="criteria">Criterii pentru rubrică (separate prin punct și virgulă)</label><textarea id="criteria">Investigare și utilizarea dovezilor; Corectitudinea calculelor; Soluția STEAM; Algoritm și testare; Comunicare și reflecție; Colaborare</textarea></div><div class="field"><label for="evidence">Dovezi urmărite în portofoliu</label><textarea id="evidence">Capturi ale construcțiilor, valori și calcule, animații, explicații, reflecții și îmbunătățiri ale soluțiilor.</textarea></div></div><p class="status">Rubrica are trei niveluri descriptive: În dezvoltare, Realizat cu sprijin și Realizat autonom. Nu atribuie automat note sau calificative.</p></section>
+<section class="card"><button id="generateBtn">⚙️ Generează proiectul STEAM</button> <button class="secondary" id="exportBtn">⬇ Exportă .txt</button> <button class="secondary" id="printBtn">🖨 Imprimă / PDF</button><p id="status" role="status" class="status"></p></section><section class="card"><h2>5. Planul proiectului și rubrica de evaluare</h2><div class="out" id="output">Completează sau adaptează câmpurile și apasă „Generează proiectul STEAM”.</div></section><p><a href="/menu-robo.html">← Meniu profesor</a></p></main><script>
+(()=>{'use strict';const $=id=>document.getElementById(id),modules=[
+{id:'alg',title:'Algoritmi și Emoții',accent:'#ec5d54',tint:'#fff0eb',missions:['Parser de propoziții','Etichetează lumea','Clinica de mesaje','Laborator emoții','Reflection Talk']},
+{id:'geo',title:'Hărți și Sateliți',accent:'#2b8dce',tint:'#ebf6ff',missions:['Harta Grid 5×5','Sateliți și Pământul','Vremea și observațiile','Ecosisteme și biodiversitate','Reciclare și materiale']},
+{id:'3d',title:'Orașe și Poduri 3D',accent:'#16a57d',tint:'#e8f8f0',missions:['Constructor 3D','Podul Inteligent','Pârghii și echilibru','Lumina și umbrele','Atelierul corpurilor','Mașina transformărilor']},
+{id:'snd',title:'Sunete și Animații',accent:'#e8bd15',tint:'#fff8df',missions:['Laborator ritmuri','Constructor povești','Semaforul sonor','Alerta meteo','Economisim apa','Scratch online – Animații STEAM']}];
+for(const mod of modules){const box=document.createElement('div');box.className='module';box.style.setProperty('--accent',mod.accent);box.style.setProperty('--tint',mod.tint);const label=document.createElement('label'),check=document.createElement('input');check.type='checkbox';check.className='module-check';check.checked=true;check.dataset.module=mod.id;label.append(check,document.createTextNode(mod.title));box.append(label);const list=document.createElement('div');list.className='mission-list';mod.missions.forEach((name,i)=>{const l=document.createElement('label'),c=document.createElement('input');c.type='checkbox';c.checked=i<2;c.dataset.parent=mod.id;c.value=name;l.append(c,document.createTextNode(' '+name));list.append(l)});check.onchange=()=>{list.querySelectorAll('input').forEach(el=>el.disabled=!check.checked)};box.append(list);$('moduleBox').append(box)}
+const field=id=>$(id).value.trim();function selected(){return modules.filter(m=>$('moduleBox').querySelector('.module-check[data-module="'+m.id+'"]').checked).map(m=>({...m,selected:[...document.querySelectorAll('input[data-parent="'+m.id+'"]:checked')].map(x=>x.value)}))}
+let result='';
+$('generateBtn').onclick=()=>{const theme=field('theme')||'Proiect interdisciplinar',grade=field('grade')||'Clasă nespecificată',duration=field('duration')||'Durată de stabilit',age=field('age'),problem=field('problem'),real=field('realLife'),mods=selected().filter(m=>m.selected.length);if(!mods.length){$('status').textContent='Selectează cel puțin o misiune dintr-un modul.';return}const names=mods.flatMap(x=>x.selected.map(t=>({module:x.title,mission:t})));const lines=[];const add=(...s)=>lines.push(...s);
+add('PROIECT INTERDISCIPLINAR STEAM – '+theme,'','Clasa / grupa: '+grade,'Vârsta: '+age,'Durata estimată: '+duration,'Problema reală: '+problem,'Context: '+real,'','1. MODULE ȘI MISIUNI SELECTATE');mods.forEach(m=>{add('• '+m.title);m.selected.forEach(v=>add('  – '+v))});add('','2. COMPETENȚE ȘI DISCIPLINE','Discipline: '+field('subjects'),'Competențe urmărite: '+field('competences'),'Obiectiv general: elevii investighează problema, folosesc cunoștințe din mai multe discipline și propun o soluție justificată.','','3. SECVENȚA DIDACTICĂ');
+const stages=['Formularea problemei și explorarea inițială','Investigare și colectarea dovezilor','Experimentare, calcule și prototipare','Testare, revizuire și colaborare','Prezentare, reflecție și evaluare'];
+stages.forEach((stage,i)=>{add((i+1)+'. '+stage);const tasks=i===0?names.slice(0,2):i===1?names.slice(0,Math.min(3,names.length)):i===2?names:i===3?names.slice(-Math.min(3,names.length)):names.slice(-2);add('  Activități Robo-Cip: '+tasks.map(t=>t.mission+' ('+t.module+')').join('; '));add('  Dovadă: '+['întrebare și ipoteză','observații și date','calcul, model sau creație','variantă revizuită și explicație','produs prezentat și autoevaluare'][i])});
+add('','4. RESURSE ȘI DIFERENȚIERE','Resurse și echipe: '+field('materials'),'Adaptări: '+field('adaptation'),'','5. PRODUS FINAL ȘI DOVEZI','Produs: '+field('product'),'Dovezi în portofoliu: '+field('evidence'),'Portofolii Robo-Cip: /rezultate-portofolii.html','Profesorul verifică și selectează dovezile; activitatea accesată nu este echivalentă cu o competență demonstrată.','','6. RUBRICĂ DE EVALUARE FORMATIVĂ');
+const criteria=field('criteria').split(';').map(x=>x.trim()).filter(Boolean);criteria.forEach((c,i)=>add((i+1)+'. '+c,'  În dezvoltare: identifică elemente relevante cu ghidaj; sunt necesare clarificări.','  Realizat cu sprijin: aplică elemente relevante și explică parțial cu întrebări de sprijin.','  Realizat autonom: aplică și justifică prin dovezi, cu revizuirea soluției unde este cazul.'));
+add('','7. REFLECȚIE ȘI FEEDBACK','Elev: Ce am observat? Ce dovezi susțin soluția? Ce aș îmbunătăți?','Profesor: Ce transfer între discipline a fost vizibil? Ce sprijin este necesar?','', 'Notă: verificați corespondența cu programa școlară, disponibilitatea resurselor și timpul real înainte de aplicare.');
+result=lines.join('\n');$('output').textContent=result;$('status').textContent='Planul a fost generat. Îl puteți exporta sau imprima.'};
+$('exportBtn').onclick=()=>{if(!result){$('status').textContent='Generează întâi proiectul.';return}const blob=new Blob([result],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Proiect_STEAM_Robo-Cip.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('printBtn').onclick=()=>{if(!result){$('status').textContent='Generează întâi proiectul.';return}window.print()};
+})();</script></body></html>
