@@ -61,11 +61,47 @@ creative:'Propune un plan de reducere a deșeurilor în clasă: o acțiune, o m�
 const lab=DB[category];if(!lab)return;let age='7-8',idx=0,selection=-1,correct=0,finished=false;
 const feedback=(t,kind='')=>{$('feedback').textContent=t;$('feedback').className='feedback '+kind};
 function draw(){const t=lab.levels[age].questions[idx];$('scenario').textContent=t[0];$('choices').replaceChildren();selection=-1;$('next').hidden=true;t[1].forEach((option,i)=>{const b=document.createElement('button');b.textContent=option;b.type='button';b.className='option';b.setAttribute('aria-pressed','false');b.onclick=()=>{selection=i;[...$('choices').children].forEach((c,j)=>c.setAttribute('aria-pressed',String(i===j)));feedback('Răspuns ales. Apasă „Verifică”.')};$('choices').appendChild(b)});$('progress').textContent='Provocarea '+(idx+1)+' din 3';feedback('Alege o explicație pe baza observațiilor.')}
-function choose(a){age=lab.levels[a]?a:'7-8';try{localStorage.setItem('roboCip:ageTrack',age)}catch(e){}document.querySelectorAll('[data-age]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.age===age)));$('mission').textContent=lab.levels[age].mission;$('instruction').textContent=lab.levels[age].instruction;$('creative').textContent=lab.creative;idx=0;correct=0;finished=false;try{$('reflection').value=localStorage.getItem('roboCip:science:'+category+':'+age)||''}catch(e){$('reflection').value=''}draw()}
+
+const STEAM={
+satellites:{
+'7-8':{math:['O hartă are 3 lacuri și 2 râuri marcate. Câte elemente de apă sunt?',5,'Adunăm 3 + 2 = 5.'],algo:['Pentru a observa o zonă: 1. Alegi locul. 2. Privești imaginea. 3. Notezi observația. Care este primul pas?',0,['Aleg locul','Notez observația','Trag concluzia']]},
+'8-9':{math:['Pe o grilă, satelitul observă 4 rânduri cu câte 5 celule. Câte celule sunt?',20,'Calculăm 4 × 5 = 20.'],algo:['Pentru a compara două imagini ale aceluiași loc, care este ordinea potrivită?',1,['Trag concluzia → aleg imaginile → verific data','Aleg imaginile → verific locul și data → compar','Compar → șterg datele → aleg locul']]},
+'9-10':{math:['Suprafața unei păduri scade de la 45 la 32 de hectare. Cu câte hectare a scăzut?',13,'45 − 32 = 13 hectare.'],algo:['Când norii acoperă o imagine optică, algoritmul de analiză ar trebui să…',2,['inventeze ce se află dedesubt','declare automat pădure','marcheze observația drept incompletă și să solicite alte date']]}}
+,weather:{
+'7-8':{math:['Luni au fost 10°C, marți 12°C. Cu câte grade a crescut temperatura?',2,'12 − 10 = 2°C.'],algo:['Ce faci mai întâi când completezi jurnalul meteo?',0,['Observ vremea','Scriu rezultatul fără să observ','Inventez temperatura']]},
+'8-9':{math:['Temperaturile sunt 12°C, 15°C și 11°C. Care este diferența dintre maxim și minim?',4,'15 − 11 = 4°C.'],algo:['Care este ordinea corectă pentru o măsurătoare?',1,['Notez → aleg instrumentul → măsor','Aleg instrumentul → măsor → notez','Ghicesc → notez → verific']]},
+'9-10':{math:['La orele 9, 12 și 15 sunt 10°C, 16°C și 15°C. Care este media aritmetică, aproximată la o zecimală?',13.7,'(10 + 16 + 15) / 3 = 13,7°C, rotunjit la o zecimală.'],algo:['Dacă valoarea unui senzor lipsește, ce pas este responsabil?',2,['O înlocuiesc cu zero fără explicații','O înlocuiesc cu o valoare inventată','Marchez lipsa și verific instrumentul']]}}
+,nature:{
+'7-8':{math:['În grădină sunt 4 flori roșii și 3 galbene. Câte flori sunt?',7,'4 + 3 = 7.'],algo:['Pentru a îngriji o plantă, care este primul pas?',1,['Torn mereu apă','Observ solul și planta','Rup frunzele']]},
+'8-9':{math:['Pe 3 straturi cresc câte 4 plante. Câte plante cresc în total?',12,'3 × 4 = 12.'],algo:['Pentru a compara două zone cu flori, care este o regulă corectă?',0,['Observ aceeași durată în ambele zone','Observ una un minut și alta o oră','Număr numai insectele preferate']]},
+'9-10':{math:['Într-o zonă observi 18 albine, în alta 11, în intervale egale. Care este diferența observată?',7,'18 − 11 = 7 albine observate. Datele singure nu explică de ce.'],algo:['Dacă apar mai puține insecte într-o zonă, ce verifici înainte de concluzie?',1,['Presupun că au dispărut','Compar vremea, ora și durata observațiilor','Conchid că florile sunt inutile']]}}
+,recycle:{
+'7-8':{math:['Strângi 3 ambalaje din hârtie și 4 din plastic. Câte ambalaje ai?',7,'3 + 4 = 7.'],algo:['Care este o ordine potrivită pentru colectarea separată?',0,['Identific materialul → verific regulile locale → depun ambalajul','Arunc → verific → identific','Amestec toate materialele']]},
+'8-9':{math:['O clasă colectează 5 cutii luni și 7 marți. Câte cutii a colectat?',12,'5 + 7 = 12.'],algo:['Ce verifici înainte să depui un ambalaj compozit?',2,['Doar culoarea lui','Dacă îmi place','Marcajul și regulile locale de colectare']]},
+'9-10':{math:['Clasa reduce numărul ambalajelor de la 40 la 25. Cu câte ambalaje a scăzut numărul?',15,'40 − 25 = 15 ambalaje.'],algo:['Ce pași permit verificarea eficienței unui plan de reducere a deșeurilor?',1,['Schimb metoda de numărare zilnic','Număr înainte → aplic măsura → număr după, în condiții comparabile','Aleg doar rezultatele favorabile']]}}
+};
+let steamAnswers={math:'',algo:-1};
+function renderSteam(){
+const current=STEAM[category][age],container=$('steamArea');container.replaceChildren();
+const title=document.createElement('h2');title.textContent='🔢 Matematică și 🤖 Gândire algoritmică';container.appendChild(title);
+const m=document.createElement('p');m.textContent='Matematică: '+current.math[0];container.appendChild(m);
+const input=document.createElement('input');input.type='number';input.step='any';input.inputMode='decimal';input.placeholder='Răspuns numeric';input.setAttribute('aria-label','Răspuns la provocarea de matematică');input.style.cssText='font:inherit;padding:11px;border:1px solid #a5c8df;border-radius:10px;max-width:100%;width:220px';input.oninput=()=>steamAnswers.math=input.value;container.appendChild(input);
+const a=document.createElement('p');a.textContent='Algoritmică: '+current.algo[0];container.appendChild(a);
+current.algo[2].forEach((choice,i)=>{const b=document.createElement('button');b.type='button';b.className='option';b.textContent=choice;b.setAttribute('aria-pressed','false');b.onclick=()=>{steamAnswers.algo=i;[...container.querySelectorAll('.steamChoice')].forEach(x=>x.setAttribute('aria-pressed',String(Number(x.dataset.n)===i)))};b.classList.add('steamChoice');b.dataset.n=i;container.appendChild(b)});
+const check=document.createElement('button');check.type='button';check.className='primary';check.textContent='Verifică matematica și algoritmul';container.appendChild(check);
+const result=document.createElement('p');result.className='feedback';result.setAttribute('role','status');result.setAttribute('aria-live','polite');result.textContent='Rezolvă ambele provocări.';container.appendChild(result);
+check.onclick=()=>{if(steamAnswers.math.trim()===''||steamAnswers.algo<0){result.textContent='Completează calculul și alege pașii algoritmului.';return}
+const mv=Number(steamAnswers.math.replace(',','.'));const mathOK=Number.isFinite(mv)&&Math.abs(mv-current.math[1])<0.051;
+const algoOK=steamAnswers.algo===current.algo[1];result.className='feedback '+(mathOK&&algoOK?'good':'warn');
+result.textContent=(mathOK?'Matematică: corect. ':'Matematică: verifică rezultatul. ')+(algoOK?'Algoritmică: corect. ':'Algoritmică: verifică ordinea sau regula. ')+(mathOK&&algoOK?current.math[2]:'Poți încerca din nou.')};
+}
+
+function choose(a){age=lab.levels[a]?a:'7-8';try{localStorage.setItem('roboCip:ageTrack',age)}catch(e){}document.querySelectorAll('[data-age]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.age===age)));$('mission').textContent=lab.levels[age].mission;$('instruction').textContent=lab.levels[age].instruction;$('creative').textContent=lab.creative;idx=0;correct=0;finished=false;steamAnswers={math:'',algo:-1};renderSteam();try{$('reflection').value=localStorage.getItem('roboCip:science:'+category+':'+age)||''}catch(e){$('reflection').value=''}draw()}
 $('verify').onclick=()=>{if(selection<0){feedback('Alege un răspuns.','warn');return}const t=lab.levels[age].questions[idx];if(selection===t[2]){finished=true;feedback('Corect! '+t[3],'good');$('next').hidden=idx===2;if(idx===2)feedback('Ai terminat cele trei provocări! '+t[3]+' Continuă cu misiunea creativă.','good')}else{finished=false;$('next').hidden=true;feedback('Mai încearcă. Gândește-te ce dovezi ai și recitește variantele.','warn')}};
 $('next').onclick=()=>{if(finished&&idx<2){idx++;draw()}};
 $('save').onclick=()=>{if(!$('reflection').value.trim()){ $('saveStatus').textContent='Scrie mai întâi răspunsul tău.';return}try{localStorage.setItem('roboCip:science:'+category+':'+age,$('reflection').value);$('saveStatus').textContent=' Reflecția este salvată pe acest dispozitiv.'}catch(e){$('saveStatus').textContent=' Salvarea nu a reușit.'}};
 document.querySelectorAll('[data-age]').forEach(b=>b.onclick=()=>choose(b.dataset.age));$('title').textContent=lab.title;$('lead').textContent=lab.lead;
+const extra=document.createElement('section');extra.className='card';extra.id='steamArea';document.querySelector('main').insertBefore(extra,document.querySelector('main').children[2]);
 let stored='';try{stored=localStorage.getItem('roboCip:ageTrack')||''}catch(e){}choose(new URLSearchParams(location.search).get('age')||stored);
 if(typeof roboLogActivity==='function')roboLogActivity({title:lab.title,module:'Cartografie digitală și mediu',type:'Științe – explorare și investigație'});
 })();
