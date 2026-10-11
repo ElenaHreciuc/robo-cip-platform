@@ -1,4 +1,4 @@
-/* Robo-Cip · 4 laboratoare de Științe, trei niveluri de vârstă */
+/* ROBO-CIP · 4 laboratoare de Științe, trei niveluri de vârstă */
 (()=>{'use strict';const $=id=>document.getElementById(id);const category=document.body.dataset.lab;
 const DB={
 satellites:{title:'🛰️ Sateliți și Pământul',lead:'Observă planeta și află ce informații ne pot oferi sateliții.',levels:{
