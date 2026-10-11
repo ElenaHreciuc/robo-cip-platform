@@ -286,17 +286,6 @@
           creative: "Provocare: o poveste animată despre siguranță, vreme sau economisirea apei.",
           pageHref: "/resources/scratchjr-steam.html",
           resources: []
-        },
-        {
-          missionId: "portofolio",
-          pill: "Portofoliu",
-          miniLabel: "Colecție lucrări",
-          image: "/assets/img/robo_programare.png",
-          tagline: "Organizezi produsele realizate (portofoliu).",
-          bullets: ["Adaugi un produs.", "Scrii descriere.", "Salvezi."],
-          creative: "",
-          pageHref: "/resources/portofolio.html",
-          resources: []
         }
       ]
     }
@@ -554,6 +543,7 @@
       const card = document.createElement("article");
       card.className = `module-card ${moduleDef.cardClass || ""}`;
       card.dataset.missionId = item.missionId;
+      if (moduleId === "programare-vizuala" && item.missionId === "scratchjr-steam") card.classList.add("last-centered-sunete");
       if (moduleId === "proiectare-3d" && item.missionId === "masina-transformari") card.classList.add("last-centered-3d");
 
       card.innerHTML = `
