@@ -9,7 +9,7 @@ h1{font-size:clamp(25px,4vw,34px);margin:0 0 6px}h2{margin:0 0 8px;font-size:21p
 .age[aria-pressed="true"]{background:#1267ac;color:white;border-color:#1267ac}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:14px}.slot{border:2px dashed #a4c9e9;background:#f5faff;border-radius:14px;min-height:100px;padding:12px;text-align:center;cursor:pointer}
 .slot b{display:block;font-size:14px}.slot span{display:block;margin-top:12px;font-size:16px}.slot.selected{outline:3px solid #ffbb46}
-.punct-panel{margin-top:18px;padding:14px;border:1px solid #c6dcf0;border-radius:15px;background:#f5faff}.punct-panel h2{font-size:18px}.punct{padding:9px 13px;border:1px solid #a8c9e5;border-radius:10px;background:#fff;color:#15527b;font:600 14px system-ui,sans-serif;cursor:pointer}.punct.active,.punct[aria-pressed=true]{background:#1569a9;color:white}.sentence-preview{padding:12px;background:white;border-radius:10px;border:1px solid #d7e7f5;min-height:43px;font-weight:650}.tokens{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.token{padding:10px 14px;background:#fff2ca;border:1px solid #e8b644;border-radius:12px;color:#18324c;font:inherit;cursor:pointer}
+.punct-panel{margin-top:18px;padding:14px;border:1px solid #c6dcf0;border-radius:15px;background:#f5faff}.punct-panel h2{font-size:18px}.punct{padding:9px 13px;border:1px solid #a8c9e5;border-radius:10px;background:#fff;color:#15527b;font:600 14px system-ui,sans-serif;cursor:pointer}.punct.active,.punct[aria-pressed=true]{background:#1569a9;color:white}.sentence-preview{padding:12px;background:white;border-radius:10px;border:1px solid #d7e7f5;min-height:43px;font-weight:650}.word-group{width:100%;border:1px solid #d6e6f5;background:#f8fbff;border-radius:13px;padding:12px;margin:7px 0}.word-group>strong{color:#16547b}.word-group .tokens{margin-top:9px}.tokens{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.token{padding:10px 14px;background:#fff2ca;border:1px solid #e8b644;border-radius:12px;color:#18324c;font:inherit;cursor:pointer}
 .token:disabled{opacity:.4;cursor:default}.token:focus-visible,.slot:focus-visible,button:focus-visible{outline:3px solid #f6a800;outline-offset:2px}
 .btn{border:0;border-radius:12px;padding:12px 17px;background:#1569a9;color:white;font-weight:750;cursor:pointer;font-size:15px}.btn.secondary{background:#e5f2fb;color:#14547f}
 .feedback{padding:14px;border-radius:12px;background:#edf5fc;min-height:48px;margin-top:12px}.feedback.good{background:#e0f5ea;color:#165f3b}.feedback.bad{background:#fff2e0;color:#854b07}
@@ -35,27 +35,359 @@ textarea{width:100%;padding:12px;border:1px solid #aacbe5;border-radius:12px;fon
 (function(){
 "use strict";
 const PACKS={
-"7-8":{instruction:"Descopăr cine face o acțiune. Folosesc propoziții scurte și clare.",roles:["CINE?","CE FACE?"],questions:[
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["Robo-Cip","citește","aleargă","copilul"],correct:["Robo-Cip","citește"],explain:"Robo-Cip este cine?; citește ne spune ce face."},
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["fetița","desenează","cântă","băiatul"],correct:["fetița","desenează"],explain:"Fetița face acțiunea; desenează numește acțiunea."},
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["iepurele","sare","scrie","ursul"],correct:["iepurele","sare"],explain:"Iepurele sare: o propoziție simplă, cu sens."}],
-creative:"Inventează o propoziție nouă cu Robo-Cip și o acțiune.",reflection:"Spune cu voce tare: Cine? Ce face?"},
-"8-9":{instruction:"Construiesc o propoziție completă și găsesc locul și momentul acțiunii.",roles:["CINE?","CE FACE?","UNDE?","CÂND?"],questions:[
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["Robo-Cip","citește","în bibliotecă","dimineața","aleargă","în parc"],correct:["Robo-Cip","citește","în bibliotecă","dimineața"],explain:"Ai aflat cine, ce face, unde și când."},
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["copiii","se joacă","în parc","astăzi","în clasă","scriu"],correct:["copiii","se joacă","în parc","astăzi"],explain:"Ordinea aleasă construiește o propoziție clară."},
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["elevii","învață","în clasă","dimineața","în grădină","zboară"],correct:["elevii","învață","în clasă","dimineața"],explain:"Fiecare grup de cuvinte are rolul potrivit."}],
-creative:"Schimbă locul și momentul unei propoziții. Ce informație nouă transmiți?",reflection:"Explică de ce «unde» și «când» fac mesajul mai precis."},
-"9-10":{instruction:"Investighez informațiile din propoziții și observ cum pot modifica sensul.",roles:["CINE?","CE FACE?","UNDE?","CÂND?"],questions:[
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["echipa","observă păsările","lângă școală","dimineața","fotografiază norii","seara"],correct:["echipa","observă păsările","lângă școală","dimineața"],explain:"Propoziția spune clar ce a observat echipa, unde și când."},
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["Robo-Cip","măsoară lumina","în laborator","astăzi","în parc","desenează"],correct:["Robo-Cip","măsoară lumina","în laborator","astăzi"],explain:"Alegerea unor informații precise ajută comunicarea rezultatelor."},
-{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["reporterul","intervievează elevii","în curtea școlii","după-amiază","în bibliotecă","plantează flori"],correct:["reporterul","intervievează elevii","în curtea școlii","după-amiază"],explain:"Verifică dacă enunțul răspunde tuturor celor patru întrebări."}],
-creative:"Scrie două propoziții care diferă numai prin «unde» sau «când». Explică schimbarea de informație.",reflection:"Argumentează cum verifici dacă un mesaj este clar și suficient de precis."}
+ "7-8": {
+  "instruction": "Alege cuvinte pentru trei propoziții scurte. Verifică cine face acțiunea și folosește punctuația.",
+  "roles": [
+   "CINE?",
+   "CE FACE?"
+  ],
+  "questions": [
+   {
+    "q": "Propoziția 1 din 3: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 2 din 3: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 3 din 3: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   }
+  ],
+  "creative": "Scrie o nouă propoziție și explică alegerile tale.",
+  "reflection": "Verifică sensul, acordul și punctuația."
+ },
+ "8-9": {
+  "instruction": "Construiește șase propoziții diferite. Alege cine, ce face, unde și când.",
+  "roles": [
+   "CINE?",
+   "CE FACE?",
+   "UNDE?",
+   "CÂND?"
+  ],
+  "questions": [
+   {
+    "q": "Propoziția 1 din 6: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 2 din 6: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 3 din 6: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 4 din 6: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 5 din 6: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 6 din 6: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   }
+  ],
+  "creative": "Scrie o nouă propoziție și explică alegerile tale.",
+  "reflection": "Verifică sensul, acordul și punctuația."
+ },
+ "9-10": {
+  "instruction": "Construiește douăsprezece propoziții diferite. Folosește exprimări precise și semnele de punctuație.",
+  "roles": [
+   "CINE?",
+   "CE FACE?",
+   "UNDE?",
+   "CÂND?"
+  ],
+  "questions": [
+   {
+    "q": "Propoziția 1 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 2 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 3 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 4 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 5 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 6 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 7 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 8 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 9 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 10 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 11 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   },
+   {
+    "q": "Propoziția 12 din 12: creează un enunț nou, cu sens.",
+    "words": [],
+    "correct": [],
+    "explain": "Explică alegerea cuvintelor și a semnelor de punctuație."
+   }
+  ],
+  "creative": "Scrie o nouă propoziție și explică alegerile tale.",
+  "reflection": "Verifică sensul, acordul și punctuația."
+ }
 };
-const $=id=>document.getElementById(id);let age="",index=0,values=[],selected=0,success=false,sentenceType="statement",frontTime=false,dialogue=false;
+const $=id=>document.getElementById(id);
+const completedByAge={"7-8":new Set(),"8-9":new Set(),"9-10":new Set()};let age="",index=0,values=[],selected=0,success=false,sentenceType="statement",frontTime=false,dialogue=false;
 const GRAMMAR={
-"7-8":{who:["Robo-Cip","fetița","băiatul","iepurele","ursul","pisica","cățelul","copilul","pasărea","robotul","mama","tata"],verb:["citește","desenează","cântă","sare","scrie","aleargă","dansează","zâmbește","doarme","lucrează","explorează","se joacă"]},
-"8-9":{who:["Robo-Cip","copiii","elevii","fetița","băiatul","profesorul","robotul","echipa","prietenii","cercetătorii"],verb:["citește","se joacă","învață","desenează","observă","explorează","lucrează","construiește","citesc","se joacă","învață","desenează","observă","explorează","lucrează","construiesc"],where:["în bibliotecă","în parc","în clasă","în grădină","în laborator","în curtea școlii","la muzeu","acasă"],when:["dimineața","astăzi","seara","după-amiază","mâine","în fiecare zi"]},
-"9-10":{who:["echipa","Robo-Cip","reporterul","cercetătorul","elevii","copiii","cercetătorii","voluntarii","profesorul","fetița"],verb:["observă păsările","măsoară lumina","intervievează elevii","fotografiază norii","plantează flori","analizează datele","construiește un model","compară imaginile","observă păsările","măsoară lumina","analizează datele","compară imaginile","plantează flori","construiesc un model","s-a întors"],where:["lângă școală","în laborator","în curtea școlii","în bibliotecă","în parc","la muzeu","în grădină","în oraș"],when:["dimineața","astăzi","seara","după-amiază","mâine","în fiecare zi","la prânz"]}
+ "7-8": {
+  "who": [
+   "Robo-Cip",
+   "fetița",
+   "băiatul",
+   "iepurele",
+   "ursul",
+   "pisica",
+   "cățelul",
+   "copilul",
+   "pasărea",
+   "robotul",
+   "mama",
+   "tata",
+   "bunica",
+   "bunicul",
+   "eleva",
+   "elevul",
+   "vulpea",
+   "albina"
+  ],
+  "verb": [
+   "citește",
+   "desenează",
+   "cântă",
+   "sare",
+   "scrie",
+   "aleargă",
+   "dansează",
+   "zâmbește",
+   "doarme",
+   "lucrează",
+   "explorează",
+   "se joacă",
+   "înoată",
+   "mănâncă",
+   "se plimbă",
+   "ascultă",
+   "pictează",
+   "învață"
+  ]
+ },
+ "8-9": {
+  "who": [
+   "Robo-Cip",
+   "fetița",
+   "băiatul",
+   "elevul",
+   "eleva",
+   "profesorul",
+   "robotul",
+   "echipa",
+   "copiii",
+   "elevii",
+   "prietenii",
+   "cercetătorii",
+   "părinții",
+   "pisica",
+   "cățelul",
+   "bunica",
+   "vecinii",
+   "grădinarul"
+  ],
+  "verb": [
+   "citește",
+   "desenează",
+   "observă",
+   "explorează",
+   "lucrează",
+   "construiește",
+   "scrie",
+   "aleargă",
+   "învață",
+   "se joacă",
+   "pictează",
+   "fotografiază",
+   "analizează",
+   "măsoară",
+   "plantează",
+   "citesc",
+   "construiesc",
+   "scriu"
+  ],
+  "where": [
+   "în bibliotecă",
+   "în parc",
+   "în clasă",
+   "în grădină",
+   "în laborator",
+   "în curtea școlii",
+   "la muzeu",
+   "acasă",
+   "pe terenul de sport",
+   "la bibliotecă",
+   "în oraș",
+   "la școală"
+  ],
+  "when": [
+   "dimineața",
+   "astăzi",
+   "seara",
+   "după-amiaza",
+   "mâine",
+   "în fiecare zi",
+   "la prânz",
+   "sâmbătă",
+   "duminică",
+   "în pauză"
+  ]
+ },
+ "9-10": {
+  "who": [
+   "Robo-Cip",
+   "echipa",
+   "reporterul",
+   "cercetătorul",
+   "elevii",
+   "copiii",
+   "cercetătorii",
+   "voluntarii",
+   "profesorul",
+   "fetița",
+   "elevul",
+   "jurnalistul",
+   "astronomul",
+   "ecologistul",
+   "părinții",
+   "vecinii",
+   "robotul",
+   "inventatorul",
+   "meteorologul",
+   "biologul",
+   "experții",
+   "exploratorii"
+  ],
+  "verb": [
+   "observă păsările",
+   "măsoară lumina",
+   "intervievează elevii",
+   "fotografiază norii",
+   "plantează flori",
+   "analizează datele",
+   "construiește un model",
+   "compară imaginile",
+   "testează un senzor",
+   "verifică rezultatele",
+   "prezintă descoperirile",
+   "studiază vremea",
+   "organizează o expoziție",
+   "s-a întors",
+   "cercetează mediul",
+   "proiectează un pod",
+   "construiesc un model",
+   "testează senzorii"
+  ],
+  "where": [
+   "lângă școală",
+   "în laborator",
+   "în curtea școlii",
+   "în bibliotecă",
+   "în parc",
+   "la muzeu",
+   "în grădină",
+   "în oraș",
+   "la observator",
+   "pe teren",
+   "în atelier",
+   "în sala de clasă",
+   "pe malul râului",
+   "în cartier"
+  ],
+  "when": [
+   "dimineața",
+   "astăzi",
+   "seara",
+   "după-amiaza",
+   "mâine",
+   "în fiecare zi",
+   "la prânz",
+   "în weekend",
+   "ieri",
+   "luni",
+   "în timpul experimentului",
+   "în vacanță"
+  ]
+ }
 };
 const PLURAL_SUBJECTS=new Set(["copiii","elevii","prietenii","cercetătorii","voluntarii"]);
 const PLURAL_VERBS=new Set(["citesc","desenează","observă","explorează","lucrează","construiesc","se joacă","învață","analizează datele","compară imaginile","plantează flori"]);
@@ -72,13 +404,13 @@ const ages=[...document.querySelectorAll("[data-age]")];
 const queryAge=new URLSearchParams(location.search).get("age");
 function chooseAge(a){age=PACKS[a]?a:"7-8";try{localStorage.setItem("roboCip:ageTrack",age)}catch(e){};ages.forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.age===age)));index=0;sentenceType="statement";frontTime=false;dialogue=false;$("hyphen").hidden=age!=="9-10";$("dialogDash").hidden=age!=="9-10";$("dialogDash").setAttribute("aria-pressed","false");setPunctuation("statement");$("frontTime").hidden=age==="7-8";$("frontTime").setAttribute("aria-pressed","false");load();}
 function load(){const pack=PACKS[age],item=pack.questions[index];success=false;values=pack.roles.map(()=>null);selected=0;$("instruction").textContent=pack.instruction;$("question").textContent=item.q;$("creative").textContent=pack.creative;$("reflection").textContent=pack.reflection;$("answer").value="";try{$("answer").value=localStorage.getItem("roboCip:parser:"+age+":reflection")||""}catch(e){};$("saveStatus").textContent="";$("progress").textContent="Provocarea "+(index+1)+" din "+pack.questions.length;$("next").hidden=true;message("Selectează prima casetă și apoi piesele.");render();}
-function render(){const roles=PACKS[age].roles,lex=GRAMMAR[age],words=[...new Set([...PACKS[age].questions[index].words,...(lex.who||[]),...(lex.verb||[]),...(lex.where||[]),...(lex.when||[])])];const sl=$("slots");sl.replaceChildren();roles.forEach((role,i)=>{const b=document.createElement("button");b.type="button";b.className="slot"+(i===selected?" selected":"");b.setAttribute("aria-label",role+" – "+(values[i]||"necompletat"));const strong=document.createElement("b");strong.textContent=role;const span=document.createElement("span");span.textContent=values[i]||"Alege o piesă";b.append(strong,span);b.onclick=()=>{selected=i;render()};sl.appendChild(b)});const tokens=$("tokens");tokens.replaceChildren();words.sort((a,b)=>a.localeCompare(b,"ro")).forEach(word=>{const b=document.createElement("button");b.className="token";b.textContent=word;b.disabled=values.includes(word);b.onclick=()=>{values[selected]=word;selected=Math.min(selected+1,roles.length-1);success=false;$("next").hidden=true;message("Ai ales «"+word+"». Continuă sau verifică propoziția.");render()};tokens.appendChild(b)});refreshSentence()}
+function render(){const roles=PACKS[age].roles,lex=GRAMMAR[age],words=[...new Set([...lex.who,...lex.verb,...(lex.where||[]),...(lex.when||[])])];const sl=$("slots");sl.replaceChildren();roles.forEach((role,i)=>{const b=document.createElement("button");b.type="button";b.className="slot"+(i===selected?" selected":"");b.setAttribute("aria-label",role+" – "+(values[i]||"necompletat"));const strong=document.createElement("b");strong.textContent=role;const span=document.createElement("span");span.textContent=values[i]||"Alege o piesă";b.append(strong,span);b.onclick=()=>{selected=i;render()};sl.appendChild(b)});const tokens=$("tokens");tokens.replaceChildren();const groups=[["CINE?",lex.who],["CE FACE?",lex.verb],...(lex.where?[["UNDE?",lex.where],["CÂND?",lex.when]]:[])];for(const [title,items] of groups){const group=document.createElement("div");group.className="word-group";const heading=document.createElement("strong");heading.textContent=title+" · "+new Set(items).size+" opțiuni";group.appendChild(heading);const list=document.createElement("div");list.className="tokens";for(const word of [...new Set(items)].sort((a,b)=>a.localeCompare(b,"ro"))){const btn=document.createElement("button");btn.type="button";btn.className="token";btn.textContent=word;btn.disabled=values.includes(word);btn.onclick=()=>{selected=roles.indexOf(title);values[selected]=word;selected=Math.min(selected+1,roles.length-1);success=false;$("next").hidden=true;message("Ai ales «"+word+"». Continuă sau verifică propoziția.");render()};list.appendChild(btn)}group.appendChild(list);tokens.appendChild(group)}refreshSentence();return;words.sort((a,b)=>a.localeCompare(b,"ro")).forEach(word=>{const b=document.createElement("button");b.className="token";b.textContent=word;b.disabled=values.includes(word);b.onclick=()=>{values[selected]=word;selected=Math.min(selected+1,roles.length-1);success=false;$("next").hidden=true;message("Ai ales «"+word+"». Continuă sau verifică propoziția.");render()};tokens.appendChild(b)});refreshSentence()}
 function message(t,type){$("feedback").textContent=t;$("feedback").className="feedback"+(type?" "+type:"")}
 $("check").onclick=()=>{const q=PACKS[age].questions[index];if(values.some(x=>!x)){message("Completează toate casetele înainte de verificare.","bad");return}
 const lex=GRAMMAR[age], keys=["who","verb","where","when"];const wrong=values.findIndex((v,i)=>!lex[keys[i]].includes(v));
 if(wrong>=0){selected=wrong;message("Verifică rolul «"+PACKS[age].roles[wrong]+"». Alege un cuvânt potrivit din acea categorie.","bad");render();return}
 if(!grammatical()){selected=1;message("Verifică acordul dintre cine face acțiunea și verb (singular sau plural).","bad");render();return}
-success=true;message("Corect! "+sentence()+" Ai folosit o structură clară și punctuația potrivită.","good");$("next").hidden=index===PACKS[age].questions.length-1;
+if(completedByAge[age].has(sentence())){message("Această propoziție a fost deja folosită. Schimbă cel puțin un cuvânt sau semnul de punctuație.","bad");return}completedByAge[age].add(sentence());success=true;message("Corect! "+sentence()+" Ai folosit o structură clară și punctuația potrivită.","good");$("next").hidden=index===PACKS[age].questions.length-1;
 if(index===PACKS[age].questions.length-1)message("Ai încheiat toate provocările! "+sentence()+" Acum rezolvă provocarea creativă.","good")
 };
 $("clear").onclick=()=>{values=PACKS[age].roles.map(()=>null);selected=0;success=false;$("next").hidden=true;message("Poți construi din nou propoziția.");render()};
