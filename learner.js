@@ -202,7 +202,7 @@
         },
         {
           missionId: "masina-transformari",
-          pill: "Mașina transformări",
+          pill: "Mașina de transformări",
           miniLabel: "2D → 3D · forme",
           image: "/assets/img/robo_3d.png",
           tagline: "Transformi forme și înțelegi cum apar volumele.",
@@ -554,6 +554,7 @@
       const card = document.createElement("article");
       card.className = `module-card ${moduleDef.cardClass || ""}`;
       card.dataset.missionId = item.missionId;
+      if (moduleId === "proiectare-3d" && item.missionId === "masina-transformari") card.classList.add("last-centered-3d");
 
       card.innerHTML = `
         <div class="module-header-row">
