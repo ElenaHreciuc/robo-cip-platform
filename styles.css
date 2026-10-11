@@ -1610,3 +1610,9 @@ body.theme-programare .module-hero-banner {
  .module-page #resources-grid.module-grid:has(> .last-centered-3d) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
  .module-page #resources-grid.module-grid > .last-centered-3d { grid-column: 3; }
 }
+
+/* Sunete și Animații: Scratch centrat sub celelalte cinci activități, numai pe desktop. */
+@media (min-width: 1321px) {
+ .module-page #resources-grid.module-grid:has(> .last-centered-sunete) {grid-template-columns:repeat(5,minmax(0,1fr));}
+ .module-page #resources-grid.module-grid > .last-centered-sunete {grid-column:3;}
+}
