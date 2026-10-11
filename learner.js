@@ -282,7 +282,7 @@
           miniLabel: "Blocuri · animație · viața reală",
           image: "/assets/img/robo_programare.png",
           tagline: "Construiești animații în Scratch online, fără instalare, urmând algoritmi-model.",
-          bullets: ["Urmezi un algoritm ilustrat.", "Testezi pașii în Robo-Cip.", "Recreezi animația în Scratch online."],
+          bullets: ["Urmezi un algoritm ilustrat.", "Testezi pașii în ROBO-CIP.", "Recreezi animația în Scratch online."],
           creative: "Provocare: o poveste animată despre siguranță, vreme sau economisirea apei.",
           pageHref: "/resources/scratchjr-steam.html",
           resources: []
@@ -384,7 +384,7 @@
 
     const img = $("module-hero-image");
     img.src = moduleDef.heroImage;
-    img.alt = `Robo-Cip în modulul: ${moduleDef.title}`;
+    img.alt = `ROBO-CIP în modulul: ${moduleDef.title}`;
     img.onerror = () => { img.onerror = null; img.src = "/assets/img/robo_hero.png"; };
   }
 
