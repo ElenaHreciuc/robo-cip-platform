@@ -36,19 +36,19 @@ textarea{width:100%;padding:12px;border:1px solid #aacbe5;border-radius:12px;fon
 "use strict";
 const PACKS={
 "7-8":{instruction:"Descopăr cine face o acțiune. Folosesc propoziții scurte și clare.",roles:["CINE?","CE FACE?"],questions:[
-{q:"Cine citește?",words:["Robo-Cip","citește","aleargă","copilul"],correct:["Robo-Cip","citește"],explain:"Robo-Cip este cine?; citește ne spune ce face."},
-{q:"Cine desenează?",words:["fetița","desenează","cântă","băiatul"],correct:["fetița","desenează"],explain:"Fetița face acțiunea; desenează numește acțiunea."},
-{q:"Cine sare?",words:["iepurele","sare","scrie","ursul"],correct:["iepurele","sare"],explain:"Iepurele sare: o propoziție simplă, cu sens."}],
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["Robo-Cip","citește","aleargă","copilul"],correct:["Robo-Cip","citește"],explain:"Robo-Cip este cine?; citește ne spune ce face."},
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["fetița","desenează","cântă","băiatul"],correct:["fetița","desenează"],explain:"Fetița face acțiunea; desenează numește acțiunea."},
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["iepurele","sare","scrie","ursul"],correct:["iepurele","sare"],explain:"Iepurele sare: o propoziție simplă, cu sens."}],
 creative:"Inventează o propoziție nouă cu Robo-Cip și o acțiune.",reflection:"Spune cu voce tare: Cine? Ce face?"},
 "8-9":{instruction:"Construiesc o propoziție completă și găsesc locul și momentul acțiunii.",roles:["CINE?","CE FACE?","UNDE?","CÂND?"],questions:[
-{q:"Unde și când citește Robo-Cip?",words:["Robo-Cip","citește","în bibliotecă","dimineața","aleargă","în parc"],correct:["Robo-Cip","citește","în bibliotecă","dimineața"],explain:"Ai aflat cine, ce face, unde și când."},
-{q:"Compune traseul unei acțiuni.",words:["copiii","se joacă","în parc","astăzi","în clasă","scriu"],correct:["copiii","se joacă","în parc","astăzi"],explain:"Ordinea aleasă construiește o propoziție clară."},
-{q:"Construiește o propoziție despre școală.",words:["elevii","învață","în clasă","dimineața","în grădină","zboară"],correct:["elevii","învață","în clasă","dimineața"],explain:"Fiecare grup de cuvinte are rolul potrivit."}],
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["Robo-Cip","citește","în bibliotecă","dimineața","aleargă","în parc"],correct:["Robo-Cip","citește","în bibliotecă","dimineața"],explain:"Ai aflat cine, ce face, unde și când."},
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["copiii","se joacă","în parc","astăzi","în clasă","scriu"],correct:["copiii","se joacă","în parc","astăzi"],explain:"Ordinea aleasă construiește o propoziție clară."},
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["elevii","învață","în clasă","dimineața","în grădină","zboară"],correct:["elevii","învață","în clasă","dimineața"],explain:"Fiecare grup de cuvinte are rolul potrivit."}],
 creative:"Schimbă locul și momentul unei propoziții. Ce informație nouă transmiți?",reflection:"Explică de ce «unde» și «când» fac mesajul mai precis."},
 "9-10":{instruction:"Investighez informațiile din propoziții și observ cum pot modifica sensul.",roles:["CINE?","CE FACE?","UNDE?","CÂND?"],questions:[
-{q:"Construiește relatarea precisă a unui eveniment.",words:["echipa","observă păsările","lângă școală","dimineața","fotografiază norii","seara"],correct:["echipa","observă păsările","lângă școală","dimineața"],explain:"Propoziția spune clar ce a observat echipa, unde și când."},
-{q:"Reconstruiește mesajul unei investigații.",words:["Robo-Cip","măsoară lumina","în laborator","astăzi","în parc","desenează"],correct:["Robo-Cip","măsoară lumina","în laborator","astăzi"],explain:"Alegerea unor informații precise ajută comunicarea rezultatelor."},
-{q:"Compune enunțul unui reporter.",words:["reporterul","intervievează elevii","în curtea școlii","după-amiază","în bibliotecă","plantează flori"],correct:["reporterul","intervievează elevii","în curtea școlii","după-amiază"],explain:"Verifică dacă enunțul răspunde tuturor celor patru întrebări."}],
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["echipa","observă păsările","lângă școală","dimineața","fotografiază norii","seara"],correct:["echipa","observă păsările","lângă școală","dimineața"],explain:"Propoziția spune clar ce a observat echipa, unde și când."},
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["Robo-Cip","măsoară lumina","în laborator","astăzi","în parc","desenează"],correct:["Robo-Cip","măsoară lumina","în laborator","astăzi"],explain:"Alegerea unor informații precise ajută comunicarea rezultatelor."},
+{q:"Construiește o propoziție cu sens, alegând cuvintele potrivite.",words:["reporterul","intervievează elevii","în curtea școlii","după-amiază","în bibliotecă","plantează flori"],correct:["reporterul","intervievează elevii","în curtea școlii","după-amiază"],explain:"Verifică dacă enunțul răspunde tuturor celor patru întrebări."}],
 creative:"Scrie două propoziții care diferă numai prin «unde» sau «când». Explică schimbarea de informație.",reflection:"Argumentează cum verifici dacă un mesaj este clar și suficient de precis."}
 };
 const $=id=>document.getElementById(id);let age="",index=0,values=[],selected=0,success=false,sentenceType="statement",frontTime=false;
@@ -61,7 +61,7 @@ const PLURAL_SUBJECTS=new Set(["copiii","elevii","prietenii","cercetătorii","vo
 const PLURAL_VERBS=new Set(["citesc","desenează","observă","explorează","lucrează","construiesc","se joacă","învață","analizează datele","compară imaginile","plantează flori"]);
 const SINGULAR_ONLY=new Set(["citește","desenează","cântă","sare","scrie","aleargă","dansează","zâmbește","doarme","lucrează","explorează","construiește","măsoară lumina","intervievează elevii","fotografiază norii","construiește un model"]);
 function grammatical(){const subj=values[0],verb=values[1];if(PLURAL_SUBJECTS.has(subj)&&SINGULAR_ONLY.has(verb))return false;if(!PLURAL_SUBJECTS.has(subj)&&["citesc","construiesc"].includes(verb))return false;return true}
-function sentence(){if(values.some(x=>!x))return "Completează casetele pentru a vedea propoziția.";let v=[...values];if(frontTime&&v.length===4)v=[v[3]+",",v[0],v[1],v[2]];let t=v.join(" ");if(sentenceType==="question")t="Oare "+t[0].toLowerCase()+t.slice(1);else t=t[0].toUpperCase()+t.slice(1);return t+({statement:".",question:"?",exclamation:"!"}[sentenceType])}
+function sentence(){if(values.some(x=>!x))return "Completează casetele pentru a vedea propoziția.";let v=[...values];if(frontTime&&v.length===4)v=[v[3].charAt(0).toUpperCase()+v[3].slice(1)+",",v[0],v[1],v[2]];let t=v.join(" ");if(sentenceType==="question")t="Oare "+(frontTime?v[0].charAt(0).toLowerCase()+v[0].slice(1):t[0].toLowerCase()+t.slice(1))+(frontTime?" "+v.slice(1).join(" "):"");else t=t[0].toUpperCase()+t.slice(1);return t+({statement:".",question:"?",exclamation:"!"}[sentenceType])}
 function refreshSentence(){$("sentencePreview").textContent=sentence();}
 function setPunctuation(t){sentenceType=t;document.querySelectorAll("[data-type]").forEach(b=>{let on=b.dataset.type===t;b.classList.toggle("active",on);b.setAttribute("aria-pressed",String(on))});refreshSentence()}
 document.querySelectorAll("[data-type]").forEach(b=>b.onclick=()=>{setPunctuation(b.dataset.type);success=false;$("next").hidden=true});
