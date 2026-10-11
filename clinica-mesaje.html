@@ -17,7 +17,7 @@ button:focus-visible,textarea:focus-visible{outline:3px solid orange;outline-off
 .keyboard .key:hover{background:#e3f2ff}.keyboard .row{margin:9px 0}
 .assist{background:#e8f4fa;border-left:4px solid #2984bd;padding:10px 12px;border-radius:9px;line-height:1.6}
 </style></head><body><main>
-<section class="panel"><h1>💬 Clinica de mesaje</h1><p class="muted">Repară mesajele lui Robo-Cip: corect, clar și respectuos.</p><div class="row" id="ages">
+<section class="panel"><h1>💬 Clinica de mesaje</h1><p class="muted">Repară mesajele lui ROBO-CIP: corect, clar și respectuos.</p><div class="row" id="ages">
 <button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button>
 <button class="age" data-age="8-9" aria-pressed="false">8–9 ani · Construiesc</button>
 <button class="age" data-age="9-10" aria-pressed="false">9–10 ani · Investighez</button></div></section>
@@ -34,15 +34,15 @@ button:focus-visible,textarea:focus-visible{outline:3px solid orange;outline-off
     <button type="button" class="key" data-letter="î">î</button><button type="button" class="key" data-letter="ș">ș</button><button type="button" class="key" data-letter="ț">ț</button>
     <button type="button" class="btn alt" id="caseToggle" aria-pressed="false">MAJUSCULE</button>
   </div>
-  <div class="row"><button type="button" class="btn alt" id="roboExplain">🔊 Robo-Cip explică</button><button type="button" class="btn alt" id="roboStop">Oprește vocea</button></div>
-  <p class="assist" id="roboWritten">🤖 Robo-Cip: În română folosim cinci litere cu semne speciale: ă, â, î, ș și ț. Apasă pe literă când vrei să o scrii. Verifică și majuscula de la începutul propoziției și semnul de punctuație de la final.</p>
+  <div class="row"><button type="button" class="btn alt" id="roboExplain">🔊 ROBO-CIP explică</button><button type="button" class="btn alt" id="roboStop">Oprește vocea</button></div>
+  <p class="assist" id="roboWritten">🤖 ROBO-CIP: În română folosim cinci litere cu semne speciale: ă, â, î, ș și ț. Apasă pe literă când vrei să o scrii. Verifică și majuscula de la începutul propoziției și semnul de punctuație de la final.</p>
   <small id="voiceStatus" role="status" aria-live="polite"></small>
 </div>
 <p><b>Verifică înainte de a salva:</b></p>
 <label class="check"><input type="checkbox" id="spelling"> Am verificat majusculele, diacriticele și semnele de punctuație.</label>
 <label class="check"><input type="checkbox" id="clarity"> Mesajul meu este clar și are sens.</label>
 <label class="check"><input type="checkbox" id="kindness"> Mesajul meu respectă persoana căreia i se adresează.</label>
-<div class="row"><button class="btn alt" id="save">Salvează pe acest dispozitiv</button><span id="saved" role="status"></span></div><p class="muted">Robo-Cip verifică automat doar răspunsurile cu variante date. Textul creat de tine se verifică prin această listă și, la nevoie, împreună cu profesorul.</p></section>
+<div class="row"><button class="btn alt" id="save">Salvează pe acest dispozitiv</button><span id="saved" role="status"></span></div><p class="muted">ROBO-CIP verifică automat doar răspunsurile cu variante date. Textul creat de tine se verifică prin această listă și, la nevoie, împreună cu profesorul.</p></section>
 <p><a href="/modules.html">← Înapoi la module</a></p></main>
 <script>
 (function(){"use strict";
@@ -50,7 +50,7 @@ const LEVELS={
 "7-8":{title:"Descopăr mesaje clare și politicoase",instruction:"Alege mesajul scris corect și formulat cu respect.",creative:"Scrie un mesaj politicos prin care îi ceri unui coleg să îți împrumute un creion.",tasks:[
 {msg:"dam cartea",prompt:"Cum ceri o carte?",options:["Dă-mi cartea, te rog.","dam cartea","Dami cartea te rog"],correct:0,why:"Folosim majusculă la început, cratimă în «Dă-mi», virgulă înainte de «te rog» și punct la final."},
 {msg:"nu te juca cu mine esti rau",prompt:"Cum poți spune că te-a deranjat ceva, fără să jignești?",options:["Ești rău!","M-a supărat ce s-a întâmplat. Putem vorbi?","Nu te juca cu mine esti rau."],correct:1,why:"Spunem ce ne-a deranjat, fără etichete jignitoare. Folosim punctul și semnul întrebării corect."},
-{msg:"robo cip vino aici",prompt:"Cum îl chemăm pe Robo-Cip politicos?",options:["Robo cip vino aici","Robo-Cip, vino aici, te rog!","robo-cip vino aici te rog"],correct:1,why:"Numele Robo-Cip se scrie cu majuscule și cratimă, iar adresarea directă este separată prin virgulă."}]},
+{msg:"robo cip vino aici",prompt:"Cum îl chemăm pe ROBO-CIP politicos?",options:["Robo cip vino aici","ROBO-CIP, vino aici, te rog!","robo-cip vino aici te rog"],correct:1,why:"Numele ROBO-CIP se scrie cu majuscule și cratimă, iar adresarea directă este separată prin virgulă."}]},
 "8-9":{title:"Construiesc mesaje potrivite situației",instruction:"Compară mesajele și alege varianta care exprimă cel mai bine ideea, cu ortografie și punctuație corecte.",creative:"Reformulează un mesaj supărat într-un mesaj asertiv și politicos. Explică în ce constă schimbarea.",tasks:[
 {msg:"nu mi ai trimis tema esti neserios",prompt:"Cum ceri lămuriri fără acuzații?",options:["Nu mi-ai trimis tema. Poți verifica, te rog, dacă ai reușit să o trimiți?","Nu mi ai trimis tema esti neserios","Ești neserios, trimite tema!"],correct:0,why:"Mesajul cere o verificare, evită etichetele negative și folosește corect «mi-ai»."},
 {msg:"vreau si eu sa vorbesc",prompt:"Ce variantă exprimă o solicitare respectuoasă?",options:["Tăceți, vorbesc eu!","Vreau si eu sa vorbesc","Aș dori să spun și eu ceva. Pot să intervin?"],correct:2,why:"Formularea este clară, politicoasă și folosește corect întrebarea."},
@@ -77,9 +77,9 @@ document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>selectAge(b.dat
 const field=document.getElementById("answer"),keyArea=document.getElementById("diacriticKeys");
 const voiceStatus=document.getElementById("voiceStatus");
 const explanations={
-"7-8":"Bună! Sunt Robo-Cip. În limba română folosim literele ă, â, î, ș și ț. Atinge litera potrivită ca să o scrii. O propoziție începe cu literă mare și se încheie cu un semn de punctuație.",
-"8-9":"Salut! Robo-Cip te ajută să scrii corect. Literele ă, â, î, ș și ț nu se înlocuiesc la întâmplare. De exemplu, țară se scrie cu ț, iar școală se scrie cu ș. Verifică și cratima, diacriticele și punctuația.",
-"9-10":"Salut! Sunt Robo-Cip. Scrie cu diacritice corecte, verifică acordul și semnele de punctuație. Atenție: â și î reprezintă același sunet, dar au reguli ortografice diferite. De obicei, î se folosește la începutul și sfârșitul cuvintelor, iar â în interior, cu excepțiile prevăzute de normele ortografice."
+"7-8":"Bună! Sunt ROBO-CIP. În limba română folosim literele ă, â, î, ș și ț. Atinge litera potrivită ca să o scrii. O propoziție începe cu literă mare și se încheie cu un semn de punctuație.",
+"8-9":"Salut! ROBO-CIP te ajută să scrii corect. Literele ă, â, î, ș și ț nu se înlocuiesc la întâmplare. De exemplu, țară se scrie cu ț, iar școală se scrie cu ș. Verifică și cratima, diacriticele și punctuația.",
+"9-10":"Salut! Sunt ROBO-CIP. Scrie cu diacritice corecte, verifică acordul și semnele de punctuație. Atenție: â și î reprezintă același sunet, dar au reguli ortografice diferite. De obicei, î se folosește la începutul și sfârșitul cuvintelor, iar â în interior, cu excepțiile prevăzute de normele ortografice."
 };
 let upper=false;
 document.getElementById("caseToggle").addEventListener("click",function(){
@@ -96,14 +96,14 @@ field.setRangeText(letter,a,c,"end");field.focus();field.dispatchEvent(new Event
 document.getElementById("roboExplain").addEventListener("click",()=>{
 const age=new URLSearchParams(location.search).get("age")||localStorage.getItem("roboCip:ageTrack")||"7-8";
 const message=explanations[age]||explanations["7-8"];
-document.getElementById("roboWritten").textContent="🤖 Robo-Cip: "+message;
+document.getElementById("roboWritten").textContent="🤖 ROBO-CIP: "+message;
 if(!("speechSynthesis" in window)){voiceStatus.textContent="Vocea nu este disponibilă în acest browser; explicația rămâne afișată.";return}
 const voices=speechSynthesis.getVoices();
 const ro=voices.find(v=>v.lang.toLowerCase()==="ro-ro")||voices.find(v=>v.lang.toLowerCase().startsWith("ro"));
 if(!ro){voiceStatus.textContent="Nu este instalată o voce românească. Citește explicația afișată.";return}
 speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(message);u.lang="ro-RO";u.voice=ro;u.rate=.85;u.pitch=1.04;
 u.onerror=()=>{voiceStatus.textContent="Redarea audio nu a reușit. Explicația poate fi citită mai sus."};
-voiceStatus.textContent="Robo-Cip explică în limba română.";speechSynthesis.speak(u);
+voiceStatus.textContent="ROBO-CIP explică în limba română.";speechSynthesis.speak(u);
 });
 document.getElementById("roboStop").addEventListener("click",()=>{if("speechSynthesis" in window)speechSynthesis.cancel();voiceStatus.textContent="Vocea a fost oprită."});
 })();
