@@ -1604,3 +1604,9 @@ body.theme-programare .module-hero-banner {
 .module-page #resources-grid.module-grid {
   padding: 0 16px;
 }
+
+/* Doar Orașe și Poduri 3D: cinci carduri sus, Mașina de transformări centrată dedesubt. */
+@media (min-width: 1321px) {
+ .module-page #resources-grid.module-grid:has(> .last-centered-3d) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+ .module-page #resources-grid.module-grid > .last-centered-3d { grid-column: 3; }
+}
