@@ -31,7 +31,7 @@
     btn.id = "roboMenuBtn";
     btn.href = "/menu-robo.html";
     btn.className = "robo-menu-btn";
-    btn.textContent = "Meniu Robo-Cip · Profesor";
+    btn.textContent = "Meniu ROBO-CIP · Profesor";
     wrap.appendChild(btn);
     const content = document.querySelector("main, .page") || document.body;
     content.insertBefore(wrap,content.firstChild);
