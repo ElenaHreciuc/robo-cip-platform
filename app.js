@@ -3,6 +3,8 @@ const fs = require("fs");
 const crypto = require("crypto");
 const express = require("express");
 const app = express();
+const database = require("./db");
+if(process.env.DATABASE_URL){database.initialize().catch(err=>console.error("[db] Initial schema setup failed:",err.message));}
 const ROOT = __dirname;
 const PORT = process.env.PORT || 3000;
 app.set("trust proxy",1);
