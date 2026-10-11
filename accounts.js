@@ -29,4 +29,52 @@ router.post("/conectare",throttle,ready,async(req,res)=>{const login=normalize(r
 router.post("/iesire",(req,res)=>{const t=(req.headers.cookie||"").split(";").map(s=>s.trim()).find(s=>s.startsWith(COOKIE+"="))?.split("=")[1];if(t)SESSIONS.delete(t);res.clearCookie(COOKIE,{path:"/cont"});res.redirect(303,"/cont/conectare")});
 router.get("/panou",ready,gate(["teacher","parent","student"]),async(req,res)=>{const a=req.account;let body='<p>Cont activ: '+html(a.nickname||a.email)+' · '+html(a.role)+'</p>';if(a.role==="parent"){const r=await db.pool.query("SELECT lp.id,ac.nickname,lp.age_band FROM family_links fl JOIN learner_profiles lp ON lp.id=fl.learner_id JOIN accounts ac ON ac.id=lp.account_id WHERE fl.parent_id=$1 ORDER BY ac.nickname",[a.id]);body+='<h2>Copiii mei</h2>'+r.rows.map(x=>'<div class="list">'+html(x.nickname)+' · '+html(x.age_band||"")+'</div>').join("");body+='<h2>Adaugă un profil</h2><form action="/cont/copil" method="post"><label>Nickname unic<input name="nickname" minlength="4" maxlength="30" pattern="[A-Za-z0-9_]+" required></label><label>Vârstă<select name="age"><option>7-8</option><option>8-9</option><option>9-10</option></select></label><label>Parolă pentru copil (minimum 12 caractere)<input type="password" name="password" minlength="12" maxlength="128" required></label><button>Adaugă copilul</button></form>'}else if(a.role==="teacher")body+='<p>Gestionarea claselor și asocierea elevilor vor fi activate într-o etapă separată, după verificarea autorizării instituționale.</p>';else body+='<p>Profilul tău este activ. Activitățile și portofoliul vor fi conectate în etapa următoare.</p>';body+='<form method="post" action="/cont/iesire"><button>Deconectare</button></form>';res.send(shell("Panoul meu",body))});
 router.post("/copil",ready,gate(["parent"]),throttle,async(req,res)=>{const nickname=normalize(req.body.nickname),pass=String(req.body.password||""),age=req.body.age;if(!/^[A-Za-z0-9_]{4,30}$/.test(nickname)||pass.length<12||pass.length>128||!["7-8","8-9","9-10"].includes(age))return res.status(400).send("Date invalide.");const client=await db.pool.connect();try{await client.query("BEGIN");const r=await client.query("INSERT INTO accounts(nickname,password_hash,role,status) VALUES($1,$2,'student','active') RETURNING id",[nickname,hash(pass)]);const l=await client.query("INSERT INTO learner_profiles(account_id,age_band) VALUES($1,$2) RETURNING id",[r.rows[0].id,age]);await client.query("INSERT INTO family_links(parent_id,learner_id) VALUES($1,$2)",[req.account.id,l.rows[0].id]);await client.query("COMMIT");res.redirect(303,"/cont/panou")}catch(e){await client.query("ROLLBACK");console.error("[account] learner",e.message);res.status(400).send(shell("Profil necreat","Nickname indisponibil sau eroare de salvare."))}finally{client.release()}});
+
+function teacherOnly(req,res,next){return gate(["teacher"])(req,res,next)}
+function safePost(req,res,next){const origin=req.get("origin");if(origin){try{if(new URL(origin).host!==req.get("host"))return res.sendStatus(403)}catch{return res.sendStatus(403)}}next()}
+function newPassword(){return crypto.randomBytes(18).toString("base64url")}
+function newNickname(){return "invent"+crypto.randomBytes(6).toString("hex")}
+router.get("/clasa-mea",ready,teacherOnly,async(req,res)=>{
+ try{
+ const result=await db.pool.query("SELECT c.id,c.name,c.school_year,count(ce.learner_id)::int AS pupils FROM classes c LEFT JOIN class_enrollments ce ON ce.class_id=c.id WHERE c.owner_teacher_id=$1 GROUP BY c.id ORDER BY c.created_at DESC",[req.account.id]);
+ const classes=result.rows.map(c=>'<div class="list"><strong>'+html(c.name)+'</strong> · '+html(c.school_year)+' · '+c.pupils+' elevi <a href="/cont/clasa-mea/'+c.id+'">Deschide clasa</a></div>').join("");
+ res.set("Cache-Control","no-store");
+ res.send(shell("Clasa mea",'<p>Fiecare clasă este accesibilă numai din contul profesorului care a creat-o. Pentru protecția copiilor, folosim nickname-uri; nu solicităm numele reale.</p><h2>Clasele mele</h2>'+(classes||'<p>Nu ai creat încă o clasă.</p>')+'<h2>Creează clasă</h2><form method="post" action="/cont/clasa-mea"><label>Numele clasei<input name="name" required maxlength="80" placeholder="Ex.: Exploratorii STEAM"></label><label>An școlar<input name="school_year" required maxlength="20" placeholder="2026–2027"></label><button>Creează clasa</button></form><p class="muted">Accesul la registrul școlar și asocierea cu o instituție verificată sunt funcționalități separate.</p>'));
+ }catch(e){console.error("[class] list",e.message);res.status(503).send(shell("Clasa mea","Nu putem încărca clasele momentan."))}
+});
+router.post("/clasa-mea",safePost,throttle,ready,teacherOnly,async(req,res)=>{
+ const name=normalize(req.body.name),year=normalize(req.body.school_year);
+ if(name.length<2||name.length>80||!/^[0-9]{4}[–-][0-9]{4}$/.test(year))return res.status(400).send(shell("Date invalide","Introdu numele clasei și anul școlar în formatul 2026–2027."));
+ const client=await db.pool.connect();
+ try{await client.query("BEGIN");
+ const institution=await client.query("INSERT INTO institutions(name,country_code) VALUES($1,$2) RETURNING id",["Spațiu privat profesor "+req.account.id,"RO"]);
+ const c=await client.query("INSERT INTO classes(institution_id,owner_teacher_id,name,school_year) VALUES($1,$2,$3,$4) RETURNING id",[institution.rows[0].id,req.account.id,name,year]);
+ await client.query("COMMIT");res.redirect(303,"/cont/clasa-mea/"+c.rows[0].id);
+ }catch(e){await client.query("ROLLBACK");console.error("[class] create",e.message);res.status(500).send("Clasa nu a putut fi creată.")}finally{client.release()}
+});
+router.get("/clasa-mea/:id",ready,teacherOnly,async(req,res)=>{
+ if(!/^[a-f0-9-]{36}$/i.test(req.params.id))return res.sendStatus(404);
+ try{
+ const c=await db.pool.query("SELECT id,name,school_year FROM classes WHERE id=$1 AND owner_teacher_id=$2",[req.params.id,req.account.id]);if(!c.rowCount)return res.sendStatus(404);
+ const pupils=await db.pool.query("SELECT a.nickname,ce.joined_at FROM class_enrollments ce JOIN learner_profiles lp ON lp.id=ce.learner_id JOIN accounts a ON a.id=lp.account_id WHERE ce.class_id=$1 ORDER BY ce.joined_at DESC",[req.params.id]);
+ const list=pupils.rows.map(x=>'<div class="list">'+html(x.nickname)+'</div>').join("")||'<p>Nu există elevi în această clasă.</p>';
+ res.set("Cache-Control","no-store");res.send(shell("Clasa "+c.rows[0].name,'<p>An școlar: '+html(c.rows[0].school_year)+'</p><h2>Elevi ('+pupils.rowCount+')</h2>'+list+'<h2>Generează acces pentru elevi</h2><form action="/cont/clasa-mea/'+req.params.id+'/genereaza" method="post"><label>Număr de conturi<select name="count">'+[1,5,10,15,20,25,30].map(n=>'<option value="'+n+'">'+n+'</option>').join("")+'</select></label><button>Generează nickname-uri și parole</button></form><p class="warn">Parolele vor fi afișate o singură dată. Salvează-le într-un loc sigur și transmite fiecărui elev doar datele sale.</p><p><a href="/cont/clasa-mea">← Clasele mele</a></p>'));
+ }catch(e){console.error("[class] details",e.message);res.status(503).send("Momentan indisponibil.")}
+});
+router.post("/clasa-mea/:id/genereaza",safePost,throttle,ready,teacherOnly,async(req,res)=>{
+ const count=Number(req.body.count);
+ if(!/^[a-f0-9-]{36}$/i.test(req.params.id)||!Number.isInteger(count)||count<1||count>30)return res.status(400).send("Date invalide.");
+ const client=await db.pool.connect();
+ try{await client.query("BEGIN");const c=await client.query("SELECT id,name FROM classes WHERE id=$1 AND owner_teacher_id=$2 FOR UPDATE",[req.params.id,req.account.id]);if(!c.rowCount){await client.query("ROLLBACK");return res.sendStatus(404)}
+ const created=[];for(let i=0;i<count;i++){
+ const nickname=newNickname(),password=newPassword();
+ const a=await client.query("INSERT INTO accounts(nickname,password_hash,role,status) VALUES($1,$2,'student','active') RETURNING id",[nickname,hash(password)]);
+ const l=await client.query("INSERT INTO learner_profiles(account_id) VALUES($1) RETURNING id",[a.rows[0].id]);
+ await client.query("INSERT INTO class_enrollments(class_id,learner_id) VALUES($1,$2)",[req.params.id,l.rows[0].id]);
+ created.push({nickname,password});
+ }await client.query("COMMIT");
+ res.set("Cache-Control","no-store");res.set("Referrer-Policy","no-referrer");res.send(shell("Acces elevi – "+c.rows[0].name,'<p class="warn">Copiază datele acum: parolele nu pot fi recuperate din platformă.</p><table style="width:100%;border-collapse:collapse"><thead><tr><th>Nickname</th><th>Parolă temporară</th></tr></thead><tbody>'+created.map(x=>'<tr><td style="padding:9px;border-bottom:1px solid #ddd">'+html(x.nickname)+'</td><td style="padding:9px;border-bottom:1px solid #ddd"><code>'+html(x.password)+'</code></td></tr>').join("")+'</tbody></table><p><a href="/cont/clasa-mea/'+req.params.id+'">Înapoi la clasă</a></p>'));
+ }catch(e){await client.query("ROLLBACK");console.error("[class] generate",e.message);res.status(500).send("Nu am putut genera conturile.")}finally{client.release()}
+});
+
 module.exports=router;
