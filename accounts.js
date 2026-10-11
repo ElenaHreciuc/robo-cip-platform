@@ -33,7 +33,7 @@ router.post("/copil",ready,gate(["parent"]),throttle,async(req,res)=>{const nick
 function teacherOnly(req,res,next){return gate(["teacher"])(req,res,next)}
 function safePost(req,res,next){const origin=req.get("origin");if(origin){try{if(new URL(origin).host!==req.get("host"))return res.sendStatus(403)}catch{return res.sendStatus(403)}}next()}
 function newPassword(){return crypto.randomBytes(18).toString("base64url")}
-function newNickname(){return "invent"+crypto.randomBytes(6).toString("hex")}
+function newNickname(){return "elev"+String(crypto.randomInt(100000,1000000))}
 router.get("/clasa-mea",ready,teacherOnly,async(req,res)=>{
  try{
  const result=await db.pool.query("SELECT c.id,c.name,c.school_year,count(ce.learner_id)::int AS pupils FROM classes c LEFT JOIN class_enrollments ce ON ce.class_id=c.id WHERE c.owner_teacher_id=$1 GROUP BY c.id ORDER BY c.created_at DESC",[req.account.id]);
