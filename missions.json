@@ -8,7 +8,7 @@
     "gradeLevel": "I",
     "stepsShort": [
       "Alege obiecte și decide dacă sunt exemple bune sau neclare.",
-      "Pune obiectele în „cutia de exemple” a lui Robo-Cip.",
+      "Pune obiectele în „cutia de exemple” a lui ROBO-CIP.",
       "Testează robotul cu imagini noi și discută de ce a greșit sau a avut dreptate."
     ],
     "creativePrompt": "Inventeză un obiect nou pentru robot. Cum arată și în ce categorie crezi că l-ar pune?",
@@ -51,7 +51,7 @@
       "Așază acțiunile în ordine pe o „bandă de film”.",
       "Rulează povestea și corectează pașii care nu au sens."
     ],
-    "creativePrompt": "Creează o mică poveste despre Robo-Cip. Scrie pașii ca într-un program: mai întâi..., apoi..., la final...",
+    "creativePrompt": "Creează o mică poveste despre ROBO-CIP. Scrie pașii ca într-un program: mai întâi..., apoi..., la final...",
     "resources": [
       {
         "label": "Constructor de Povești",
@@ -71,7 +71,7 @@
       "Observă cum se schimbă sensul dacă muți piesele.",
       "Repară propozițiile care nu au structură clară."
     ],
-    "creativePrompt": "Inventeză o propoziție amuzantă pentru Robo-Cip, dar păstrează ordinea logică (cine – ce face – unde – când).",
+    "creativePrompt": "Inventeză o propoziție amuzantă pentru ROBO-CIP, dar păstrează ordinea logică (cine – ce face – unde – când).",
     "resources": [
       {
         "label": "Parser de propoziții",
@@ -87,7 +87,7 @@
     "ageRange": "7 ani",
     "gradeLevel": "I",
     "stepsShort": [
-      "Citește mesajul amestecat sau ciudat al lui Robo-Cip.",
+      "Citește mesajul amestecat sau ciudat al lui ROBO-CIP.",
       "Găsește tipul de eroare (ordine, lipsă, potrivire, sens).",
       "Rearanjează și corectează mesajul, apoi explică de ce e varianta mai bună."
     ],
@@ -127,11 +127,11 @@
     "ageRange": "7 ani",
     "gradeLevel": "I",
     "stepsShort": [
-      "Privește harta grilă 5×5 și află unde este Robo-Cip.",
+      "Privește harta grilă 5×5 și află unde este ROBO-CIP.",
       "Planifică pașii (sus, jos, stânga, dreapta) până la destinație.",
       "Rulează traseul și corectează pașii greșiți."
     ],
-    "creativePrompt": "Desenează o hartă simplă a clasei sau a camerei tale și scrie pașii pe care i-ar face Robo-Cip ca să ajungă la un obiect.",
+    "creativePrompt": "Desenează o hartă simplă a clasei sau a camerei tale și scrie pașii pe care i-ar face ROBO-CIP ca să ajungă la un obiect.",
     "resources": [
       {
         "label": "Harta Interactivă",
@@ -211,7 +211,7 @@
       "Construiește clădiri pe niveluri și verifică stabilitatea lor.",
       "Integrează clădirile într-un mic oraș 3D."
     ],
-    "creativePrompt": "Proiectează o clădire specială pentru Robo-Cip în orașul tău 3D. Ce rol are și de ce ai ales formele respective?",
+    "creativePrompt": "Proiectează o clădire specială pentru ROBO-CIP în orașul tău 3D. Ce rol are și de ce ai ales formele respective?",
     "resources": [
       {
         "label": "Atelierul de Arhitectură 3D",
@@ -271,7 +271,7 @@
       "Planifică un traseu care folosește atât mișcarea pe sol, cât și urcarea pe axa Z.",
       "Compară un traseu mai scurt cu unul mai lung și explică diferențele."
     ],
-    "creativePrompt": "Desenează o hartă a unei stații spațiale cu cel puțin două niveluri. Cum ar ajunge Robo-Cip dintr-un punct în altul?",
+    "creativePrompt": "Desenează o hartă a unei stații spațiale cu cel puțin două niveluri. Cum ar ajunge ROBO-CIP dintr-un punct în altul?",
     "resources": [
       {
         "label": "Navigatorul Spațial",
@@ -291,7 +291,7 @@
       "Testează robotul cu sunete mixte și decide dacă răspunsul e corect, aproape corect sau greșit.",
       "Compune un mic tipar sonor propriu și vezi cum încearcă robotul să îl clasifice."
     ],
-    "creativePrompt": "Compune o „semnătură sonoră” pentru Robo-Cip (o mică bucată de ritm). Descrie cu cuvinte cum sună.",
+    "creativePrompt": "Compune o „semnătură sonoră” pentru ROBO-CIP (o mică bucată de ritm). Descrie cu cuvinte cum sună.",
     "resources": [
       {
         "label": "Studioul de Sunete",
