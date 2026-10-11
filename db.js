@@ -18,6 +18,11 @@ CREATE TABLE IF NOT EXISTS accounts (
  created_at timestamptz NOT NULL DEFAULT now(),
  CHECK (email IS NOT NULL OR nickname IS NOT NULL)
 );
+CREATE TABLE IF NOT EXISTS email_verifications (
+ account_id uuid PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+ token_hash text UNIQUE NOT NULL,
+ expires_at timestamptz NOT NULL
+);
 CREATE TABLE IF NOT EXISTS school_memberships (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
  institution_id uuid NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
