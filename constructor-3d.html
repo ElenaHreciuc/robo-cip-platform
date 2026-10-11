@@ -119,7 +119,7 @@
     font-size: 12px;
     opacity: 0.8;
   }
-.agebar,.tools,.metrics{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.agebar button,.tools button{padding:10px 12px;border-radius:11px;background:#e0f4e8;color:#135f4c}.agebar button[aria-pressed=true],.tools button[aria-pressed=true]{background:#16836d;color:white}.tile{width:auto;aspect-ratio:1;height:auto;min-width:0}.grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.tile .block{inset:auto 20% 14%;height:var(--h);border-radius:2px;box-shadow:inset -8px 0 #0002,3px 4px 5px #0003;transition:height .2s}.tile .block:before{content:"";position:absolute;left:0;top:-9px;height:10px;width:100%;background:inherit;filter:brightness(1.2);transform:skewX(-30deg)}.levelmark{position:absolute;top:2px;right:3px;font-weight:700;background:white;border-radius:6px;padding:1px 5px;color:#174739;font-size:12px}.metrics span{background:#e5f5ed;border-radius:10px;padding:5px 9px}.status{background:#eef7ef;border-radius:12px;padding:12px;line-height:1.5}.status.warn{background:#fff0db}.status.good{background:#ddf4e1}.color{width:38px;height:38px}.intro{font-size:16px}.tile:focus-visible,button:focus-visible{outline:3px solid #f6a53c;outline-offset:2px}@media(max-width:700px){.layout{grid-template-columns:1fr}.grid{gap:5px}.page{max-width:100%}}</style>
+.agebar,.tools,.metrics{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.agebar button,.tools button{padding:10px 12px;border-radius:11px;background:#e0f4e8;color:#135f4c}.agebar button[aria-pressed=true],.tools button[aria-pressed=true]{background:#16836d;color:white}.tile{width:auto;aspect-ratio:1;height:auto;min-width:0}.grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.tile .block{inset:auto 20% 14%;height:var(--h);border-radius:2px;box-shadow:inset -8px 0 #0002,3px 4px 5px #0003;transition:height .2s}.tile .block:before{content:"";position:absolute;left:0;top:-9px;height:10px;width:100%;background:inherit;filter:brightness(1.2);transform:skewX(-30deg)}.levelmark{position:absolute;top:2px;right:3px;font-weight:700;background:white;border-radius:6px;padding:1px 5px;color:#174739;font-size:12px}.metrics span{background:#e5f5ed;border-radius:10px;padding:5px 9px}.status{background:#eef7ef;border-radius:12px;padding:12px;line-height:1.5}.status.warn{background:#fff0db}.status.good{background:#ddf4e1}.color{width:38px;height:38px}.intro{font-size:16px}.road-tile{background:#e1eaf0;border-color:#92aabd}.road-symbol{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(23px,4vw,42px);font-weight:900;color:#425c6d;text-shadow:0 1px #fff}.tile:focus-visible,button:focus-visible{outline:3px solid #f6a53c;outline-offset:2px}@media(max-width:700px){.layout{grid-template-columns:1fr}.grid{gap:5px}.page{max-width:100%}}</style>
 </head>
 
 <body>
@@ -128,7 +128,7 @@
 <h1>🧱 Constructor 3D Lite – Orașul lui Robo-Cip</h1>
 
 <div class="intro">
-  Construiește clădiri din cuburi complete, așezate unul peste altul.
+  Construiește clădiri 3D și conectează-le prin străzi drepte, cu viraje la 90° sau diagonale.
   <br />
   <span class="hint">
     Profesorul poate invita elevii să explice: „Cum ai decis forma construcției tale?”
@@ -138,11 +138,11 @@
 <div class="intro" style="margin-top:12px"><b>🎯 Alege nivelul:</b><div class="agebar"><button data-age="7-8">7–8 ani</button><button data-age="8-9">8–9 ani</button><button data-age="9-10">9–10 ani</button></div><h2 id="mission">Construiește orașul</h2><p id="goal"></p><p id="mathematics"></p><p id="algorithm"></p></div><div class="layout">
 
   <div class="scene">
-    <div class="grid" id="grid"></div><div class="metrics"><span id="countBlocks">Cuburi: 0</span><span id="countBuildings">Clădiri: 0</span><span id="highest">Înălțime maximă: 0</span></div>
+    <div class="grid" id="grid"></div><div class="metrics"><span id="countBlocks">Cuburi: 0</span><span id="countBuildings">Clădiri: 0</span><span id="highest">Înălțime maximă: 0</span><span id="countRoads">Celule de stradă: 0</span><span id="roadTypes">Tipuri de străzi: 0</span></div>
   </div>
 
   <div class="panel">
-    <b>Paletă de blocuri</b><p>Alege un instrument, apoi apasă pe celulele terenului. Fiecare apăsare adaugă sau elimină un nivel.</p><div class="tools"><button data-tool="add" aria-pressed="true">+ Adaugă nivel</button><button data-tool="remove" aria-pressed="false">− Elimină nivel</button><button data-tool="paint" aria-pressed="false">🎨 Colorează</button></div>
+    <b>Paletă de blocuri</b><p>Alege un instrument, apoi apasă pe celulele terenului. Folosește blocuri pentru clădiri sau alege un tip de stradă. Un drum ocupă o celulă și nu poate suprapune o clădire.</p><div class="tools"><button data-tool="add" aria-pressed="true">+ Adaugă nivel</button><button data-tool="remove" aria-pressed="false">− Elimină nivel</button><button data-tool="paint" aria-pressed="false">🎨 Colorează</button><button data-tool="road-h" aria-pressed="false">━ Stradă orizontală</button><button data-tool="road-v" aria-pressed="false">┃ Stradă verticală</button><button data-tool="road-corner" aria-pressed="false">┗ Viraj 90°</button><button data-tool="road-diag" aria-pressed="false">╱ Diagonală</button><button data-tool="road-erase" aria-pressed="false">✕ Șterge strada</button></div><p class="hint">Pentru străzile cu viraj și cele diagonale, apasă din nou aceeași celulă pentru a schimba orientarea.</p><div hidden></div>
 
     <div class="palette" id="palette"></div>
 
@@ -161,23 +161,50 @@
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id),colors=["#ff7043","#ffa726","#fff176","#81c784","#4db6ac","#64b5f6","#9575cd","#e57373"];let currentColor=colors[0],tool="add",age="7-8";
-let cells=Array.from({length:36},()=>({height:0,color:colors[0]}));let history=[];
+let cells=Array.from({length:36},()=>({height:0,color:colors[0],road:null,turn:0}));let history=[];
 const levels={
-"7-8":{mission:"Descopăr cuburile și nivelurile",goal:"Construiește 3 clădiri. Cel puțin una să aibă 2 niveluri.",math:"Numără cuburile. Ce se întâmplă când adaugi încă un nivel?",algorithm:"Algoritm: alege locul → adaugă cuburi → numără → verifică.",check:x=>x.buildings>=3&&x.max>=2},
-"8-9":{mission:"Construiesc un cartier colorat",goal:"Construiește 5 clădiri, folosind două culori. Una dintre clădiri trebuie să aibă 3 niveluri.",math:"Compară înălțimile a două clădiri. Câte niveluri le despart?",algorithm:"Algoritm: planifică zonele → construiește → compară → corectează.",check:x=>x.buildings>=5&&x.max>=3&&x.colors>=2},
-"9-10":{mission:"Proiectez un oraș inteligent",goal:"Construiește 7 clădiri din minimum 15 cuburi, cu 3 culori și o clădire de 4 niveluri.",math:"Numărul total de cuburi este suma nivelurilor. Compară două moduri de organizare.",algorithm:"Algoritm: definește condițiile → construiește → măsoară → optimizează.",check:x=>x.buildings>=7&&x.blocks>=15&&x.colors>=3&&x.max>=4}};
-function totals(){const active=cells.filter(c=>c.height>0);return {blocks:active.reduce((n,c)=>n+c.height,0),buildings:active.length,max:Math.max(0,...active.map(c=>c.height)),colors:new Set(active.map(c=>c.color)).size}}
+"7-8":{mission:"Clădiri și străzi drepte",goal:"Construiește minimum 2 clădiri, una cu 2 niveluri, și o stradă dreaptă din cel puțin 3 celule conectate.",math:"Numără clădirile, cuburile și lungimea străzii în celule.",algorithm:"Aleg locurile clădirilor → trasez o stradă dreaptă → verific dacă segmentele se leagă.",check:x=>x.buildings>=2&&x.max>=2&&x.longestStraight>=3},
+"8-9":{mission:"Un cartier cu intersecții și viraje",goal:"Construiește minimum 3 clădiri în două culori, o clădire de 3 niveluri și un drum conectat de minimum 4 celule cu cel puțin un viraj de 90°.",math:"Numără celulele traseului și compară înălțimile clădirilor.",algorithm:"Planifică traseul → folosesc segmente drepte și un viraj → verific continuitatea.",check:x=>x.buildings>=3&&x.max>=3&&x.colors>=2&&x.longestRoad>=4&&x.connectedCorner},
+"9-10":{mission:"Rețeaua unui oraș inteligent",goal:"Construiește minimum 4 clădiri, 10 cuburi și 3 culori. Realizează o rețea conectată de minimum 5 celule care include un viraj de 90° și un segment diagonal.",math:"Compară rutele și numără celulele de stradă necesare.",algorithm:"Definește condițiile → proiectează segmentele → verifică conexiunile și corectează.",check:x=>x.buildings>=4&&x.blocks>=10&&x.colors>=3&&x.longestRoad>=5&&x.connectedCorner&&x.connectedDiagonal}};
+const PORTS={h:[1,3],v:[0,2],corner:[0,1],diag:[4,6]};
+// Direcții: N,E,S,V,NE,SE,SV,NV. Porturile opuse trebuie să coincidă.
+const STEPS=[[-1,0],[0,1],[1,0],[0,-1],[-1,1],[1,1],[1,-1],[-1,-1]];
+const roadPorts=c=>!c.road?[]:c.road==='h'?PORTS.h:c.road==='v'?PORTS.v:c.road==='corner'?[[0,1],[1,2],[2,3],[3,0]][(c.turn||0)%4]:[[4,6],[5,7]][(c.turn||0)%2];
+const opposite=[2,3,0,1,6,7,4,5];
+function roadLinks(i){const p=roadPorts(cells[i]),r=Math.floor(i/6),col=i%6,out=[];
+ for(const d of p){const [dr,dc]=STEPS[d],nr=r+dr,nc=col+dc;if(nr<0||nr>5||nc<0||nc>5)continue;const j=nr*6+nc;if(roadPorts(cells[j]).includes(opposite[d]))out.push(j)}return out}
+function roadData(){const seen=new Set();let longestRoad=0,connectedCorner=false,connectedDiagonal=false,longestStraight=0;let roads=0;const types=new Set();
+ for(let i=0;i<36;i++){const c=cells[i];if(!c.road)continue;roads++;types.add(c.road);
+  if(c.road==='h'||c.road==='v'){for(const d of [c.road==='h'?1:2]){let run=1,cur=i;const [dr,dc]=STEPS[d];while(true){const r=Math.floor(cur/6)+dr,col=cur%6+dc;if(r<0||r>5||col<0||col>5)break;const j=r*6+col;if(cells[j].road!==c.road||!roadLinks(cur).includes(j))break;run++;cur=j}longestStraight=Math.max(longestStraight,run)}} 
+  if(seen.has(i))continue;const stack=[i],group=[];seen.add(i);while(stack.length){const k=stack.pop();group.push(k);for(const j of roadLinks(k))if(!seen.has(j)){seen.add(j);stack.push(j)}}longestRoad=Math.max(longestRoad,group.length);if(group.length>1){if(group.some(k=>cells[k].road==='corner'&&roadLinks(k).length>=2))connectedCorner=true;if(group.some(k=>cells[k].road==='diag'&&roadLinks(k).length))connectedDiagonal=true}
+ }
+ return {roads,roadTypes:types.size,longestStraight,longestRoad,connectedCorner,connectedDiagonal}}
+function totals(){const active=cells.filter(c=>c.height>0);return {...roadData(),blocks:active.reduce((n,c)=>n+c.height,0),buildings:active.length,max:Math.max(0,...active.map(c=>c.height)),colors:new Set(active.map(c=>c.color)).size}}
 function status(txt,kind){$('status').textContent=txt;$('status').className="status "+(kind||"")}
-function render(){const grid=$('grid');grid.replaceChildren();cells.forEach((c,i)=>{const t=document.createElement("button");t.className="tile";t.type="button";t.setAttribute("aria-label","Rând "+(Math.floor(i/6)+1)+", coloană "+(i%6+1)+", "+c.height+" niveluri");if(c.height){const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("viewBox","0 0 90 115");svg.setAttribute("aria-hidden","true");svg.style.cssText="position:absolute;inset:0;width:100%;height:100%;overflow:visible";const poly=(pts,fill)=>{const p=document.createElementNS("http://www.w3.org/2000/svg","polygon");p.setAttribute("points",pts);p.setAttribute("fill",fill);p.setAttribute("stroke","#24536b");p.setAttribute("stroke-width","0.75");svg.appendChild(p)};for(let z=0;z<c.height;z++){const y=99-z*18;poly("23,"+(y-15)+" 43,"+(y-23)+" 66,"+(y-15)+" 46,"+(y-7),c.color);poly("23,"+(y-15)+" 46,"+(y-7)+" 46,"+(y+8)+" 23,"+y,c.color);poly("46,"+(y-7)+" 66,"+(y-15)+" 66,"+y+" 46,"+(y+8),"#527c9a");}t.appendChild(svg);const l=document.createElement("span");l.className="levelmark";l.textContent=c.height;t.appendChild(l)}t.onclick=()=>edit(i);grid.appendChild(t)});const n=totals();$('countBlocks').textContent="Cuburi: "+n.blocks;$('countBuildings').textContent="Clădiri: "+n.buildings;$('highest').textContent="Înălțime maximă: "+n.max}
-function edit(i){const c=cells[i];if(tool==="add"&&c.height>=5){status("Maximum 5 niveluri pe celulă.","warn");return}if(tool==="paint"&&!c.height){status("Adaugă un nivel înainte să colorezi.","warn");return}if(tool==="remove"&&!c.height)return;history.push(cells.map(x=>({...x})));if(tool==="add"){if(!c.height)c.color=currentColor;c.height++}else if(tool==="remove")c.height--;else c.color=currentColor;render();status("Orașul a fost actualizat.")}
+function render(){const grid=$('grid');grid.replaceChildren();cells.forEach((c,i)=>{const t=document.createElement("button");t.className="tile";t.type="button";t.setAttribute("aria-label","Rând "+(Math.floor(i/6)+1)+", coloană "+(i%6+1)+", "+c.height+" niveluri");if(c.road){const mark=document.createElement("span");mark.className="road-symbol";mark.textContent=c.road==="h"?"━":c.road==="v"?"┃":c.road==="corner"?["┗","┏","┓","┛"][c.turn%4]:["╱","╲"][c.turn%2];t.classList.add("road-tile");t.appendChild(mark)}if(c.height){const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("viewBox","0 0 90 115");svg.setAttribute("aria-hidden","true");svg.style.cssText="position:absolute;inset:0;width:100%;height:100%;overflow:visible";const poly=(pts,fill)=>{const p=document.createElementNS("http://www.w3.org/2000/svg","polygon");p.setAttribute("points",pts);p.setAttribute("fill",fill);p.setAttribute("stroke","#24536b");p.setAttribute("stroke-width","0.75");svg.appendChild(p)};for(let z=0;z<c.height;z++){const y=99-z*18;poly("23,"+(y-15)+" 43,"+(y-23)+" 66,"+(y-15)+" 46,"+(y-7),c.color);poly("23,"+(y-15)+" 46,"+(y-7)+" 46,"+(y+8)+" 23,"+y,c.color);poly("46,"+(y-7)+" 66,"+(y-15)+" 66,"+y+" 46,"+(y+8),"#527c9a");}t.appendChild(svg);const l=document.createElement("span");l.className="levelmark";l.textContent=c.height;t.appendChild(l)}t.onclick=()=>edit(i);grid.appendChild(t)});const n=totals();$("countRoads").textContent="Celule de stradă: "+n.roads;$("roadTypes").textContent="Tipuri de străzi: "+n.roadTypes;$('countBlocks').textContent="Cuburi: "+n.blocks;$('countBuildings').textContent="Clădiri: "+n.buildings;$('highest').textContent="Înălțime maximă: "+n.max}
+function edit(i){const c=cells[i],roadMap={"road-h":"h","road-v":"v","road-corner":"corner","road-diag":"diag"};
+ if(tool==="add"&&c.height>=5){status("Maximum 5 niveluri pe celulă.","warn");return}
+ if(tool==="paint"&&!c.height){status("Adaugă un nivel înainte să colorezi.","warn");return}
+ if(tool==="remove"&&!c.height)return;
+ if(tool==="road-erase"&&!c.road)return;
+ if(roadMap[tool]&&c.height){status("Nu poți construi strada peste o clădire. Alege altă celulă.","warn");return}
+ if(tool==="add"&&c.road){status("Întâi șterge strada pentru a construi o clădire.","warn");return}
+ history.push(cells.map(x=>({...x})));
+ if(tool==="add"){if(!c.height)c.color=currentColor;c.height++}
+ else if(tool==="remove")c.height--;
+ else if(tool==="paint")c.color=currentColor;
+ else if(tool==="road-erase"){c.road=null;c.turn=0}
+ else if(roadMap[tool]){const kind=roadMap[tool];c.turn=c.road===kind?(c.turn+1)%(kind==="corner"?4:kind==="diag"?2:1):0;c.road=kind}
+ render();status("Orașul a fost actualizat.")}
+
 colors.forEach((color,i)=>{const b=document.createElement("button");b.className="color";b.type="button";b.style.background=color;b.setAttribute("aria-label","Culoarea "+(i+1));b.setAttribute("aria-pressed",String(i===0));b.onclick=()=>{currentColor=color;document.querySelectorAll(".color").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))};$('palette').appendChild(b)});
 document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll("[data-tool]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
 function select(a){age=levels[a]?a:"7-8";try{localStorage.setItem("roboCip:ageTrack",age)}catch(e){}document.querySelectorAll("[data-age]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.age===age)));const v=levels[age];$('mission').textContent=v.mission;$('goal').textContent=v.goal;$('mathematics').textContent="Matematică: "+v.math;$('algorithm').textContent="Gândire algoritmică: "+v.algorithm;status("Poți continua construcția sau poți începe una nouă.")}
 document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>select(b.dataset.age));
 $('undoBtn').onclick=()=>{if(history.length){cells=history.pop();render();status("Ultima operație a fost anulată.")}};
-$('clearBtn').onclick=()=>{history.push(cells.map(x=>({...x})));cells.forEach(x=>x.height=0);render();status("Scena a fost curățată.")};
-$('verifyBtn').onclick=()=>{let n=totals(),ok=levels[age].check(n);status(ok?"Felicitări! Ai îndeplinit misiunea.":"Mai ai de lucru: "+n.buildings+" clădiri, "+n.blocks+" cuburi, "+n.colors+" culori și înălțime maximă "+n.max+".",ok?"good":"warn")};
-$('saveBtn').onclick=()=>{const n=totals();if(!n.blocks){status("Construiește înainte să salvezi.","warn");return}try{let saved=JSON.parse(localStorage.getItem("roboCity")||"[]");if(!Array.isArray(saved))throw Error("format");saved.push({layout:cells.map(x=>x.height?x.color:null),heights:cells.map(x=>x.height),gridSize:6,age,date:new Date().toLocaleString("ro-RO")});localStorage.setItem("roboCity",JSON.stringify(saved));status("Orașul a fost salvat în portofoliul local.","good")}catch(e){status("Salvarea nu a reușit.","warn")}};
+$('clearBtn').onclick=()=>{history.push(cells.map(x=>({...x})));cells.forEach(x=>{x.height=0;x.road=null;x.turn=0});render();status("Scena a fost curățată.")};
+$('verifyBtn').onclick=()=>{let n=totals(),ok=levels[age].check(n);status(ok?"Felicitări! Ai îndeplinit misiunea.":"Mai ai de lucru: "+n.buildings+" clădiri, "+n.blocks+" cuburi, "+n.colors+" culori, "+n.roads+" celule de stradă; cea mai mare rețea conectată are "+n.longestRoad+" celule și înălțimea maximă este "+n.max+".",ok?"good":"warn")};
+$('saveBtn').onclick=()=>{const n=totals();if(!n.blocks){status("Construiește înainte să salvezi.","warn");return}try{let saved=JSON.parse(localStorage.getItem("roboCity")||"[]");if(!Array.isArray(saved))throw Error("format");saved.push({layout:cells.map(x=>x.height?x.color:null),heights:cells.map(x=>x.height),gridSize:6,roads:cells.map(x=>x.road?{kind:x.road,turn:x.turn}:null),age,date:new Date().toLocaleString("ro-RO")});localStorage.setItem("roboCity",JSON.stringify(saved));status("Orașul a fost salvat în portofoliul local.","good")}catch(e){status("Salvarea nu a reușit.","warn")}};
 let stored="";try{stored=localStorage.getItem("roboCip:ageTrack")||""}catch(e){}select(new URLSearchParams(location.search).get("age")||stored);render();
 })();</script>
 
