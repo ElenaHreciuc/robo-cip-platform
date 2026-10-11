@@ -11,6 +11,7 @@ app.set("trust proxy",1);
 app.disable("x-powered-by");
 app.use(express.json({limit:"64kb"}));
 app.use(express.urlencoded({extended:false,limit:"8kb"}));
+app.use("/cont",require("./accounts"));
 const TEACHER_FILES=new Set(["teacher-notes.html","teacher-dashboard.html","teacher-guide.html","menu-robo.html"]);
 const COOKIE="robo_teacher_session";
 const SESSION_SECONDS=8*60*60;
