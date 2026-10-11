@@ -63,4 +63,4 @@ res.sendFile(path.join(ROOT,name),err=>{if(err&&!res.headersSent)next()})
 });
 app.get("/resources/:name",(req,res)=>{const file=req.params.name;if(!/^[a-z0-9_-]+\.(html|js|css)$/i.test(file))return res.sendStatus(404);if(TEACHER_FILES.has(file))return teacherGuard(req,res,()=>res.sendFile(path.join(ROOT,file)));res.sendFile(path.join(ROOT,file))});
 app.get("/module",(_,res)=>res.sendFile(path.join(ROOT,"learner.html")));
-app.listen(PORT,"0.0.0.0",()=>console.log("Robo-Cip running on "+PORT));
+app.listen(PORT,"0.0.0.0",()=>console.log("ROBO-CIP running on "+PORT));
