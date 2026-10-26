@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "test": "node --test test/student-journey.test.cjs"
   },
   "keywords": [],
   "author": "",
@@ -18,3 +19,4 @@
     "nodemon": "^3.0.0"
   }
 }
+
