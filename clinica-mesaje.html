@@ -71,7 +71,7 @@ $("next").onclick=()=>{if(complete&&idx<LEVELS[age].tasks.length-1){idx++;load()
 $("save").onclick=()=>{if(!$("answer").value.trim()){$("saved").textContent="Scrie mai întâi mesajul tău.";return}if(!["spelling","clarity","kindness"].every(id=>$(id).checked)){$("saved").textContent="Bifează cele trei verificări înainte de salvare.";return}try{localStorage.setItem("roboCip:clinica:"+age,$("answer").value);$("saved").textContent="Mesajul a fost salvat în acest browser."}catch(e){$("saved").textContent="Salvarea nu este disponibilă. Copiază mesajul."}};
 document.querySelectorAll("[data-age]").forEach(b=>b.onclick=()=>selectAge(b.dataset.age));let stored=null;try{stored=localStorage.getItem("roboCip:ageTrack")}catch(e){}const requested=new URLSearchParams(location.search).get("age");selectAge(LEVELS[requested]?requested:stored);
 })();
-</script><script>
+</script><script src="/robo-voice.js"></script><script>
 (function(){
 "use strict";
 const field=document.getElementById("answer"),keyArea=document.getElementById("diacriticKeys");
@@ -94,18 +94,20 @@ const a=field.selectionStart??field.value.length,c=field.selectionEnd??a;
 field.setRangeText(letter,a,c,"end");field.focus();field.dispatchEvent(new Event("input",{bubbles:true}));
 });
 document.getElementById("roboExplain").addEventListener("click",()=>{
-const age=new URLSearchParams(location.search).get("age")||localStorage.getItem("roboCip:ageTrack")||"7-8";
+const age=document.querySelector("[data-age][aria-pressed=true]")?.dataset.age||"7-8";
 const message=explanations[age]||explanations["7-8"];
 document.getElementById("roboWritten").textContent="🤖 ROBO-CIP: "+message;
-if(!("speechSynthesis" in window)){voiceStatus.textContent="Vocea nu este disponibilă în acest browser; explicația rămâne afișată.";return}
+if(!window.RoboVoice?.supported()){voiceStatus.textContent="Vocea nu este disponibilă în acest browser; explicația rămâne afișată.";return}
 const voices=speechSynthesis.getVoices();
 const ro=voices.find(v=>v.lang.toLowerCase()==="ro-ro")||voices.find(v=>v.lang.toLowerCase().startsWith("ro"));
 if(!ro){voiceStatus.textContent="Nu este instalată o voce românească. Citește explicația afișată.";return}
-speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(message);u.lang="ro-RO";u.voice=ro;u.rate=.85;u.pitch=1.04;
+const u=new SpeechSynthesisUtterance(message);u.lang="ro-RO";u.voice=ro;u.rate=.85;u.pitch=1.04;
 u.onerror=()=>{voiceStatus.textContent="Redarea audio nu a reușit. Explicația poate fi citită mai sus."};
-voiceStatus.textContent="ROBO-CIP explică în limba română.";speechSynthesis.speak(u);
+voiceStatus.textContent="ROBO-CIP explică în limba română.";
+try{if(!window.RoboVoice.speak("clinica-mesaje",u,()=>{voiceStatus.textContent="Redarea explicației a fost întreruptă."}))voiceStatus.textContent="O altă explicație audio este în curs. Citește explicația afișată."}
+catch(e){voiceStatus.textContent="Redarea audio nu a reușit. Explicația rămâne afișată."}
 });
-document.getElementById("roboStop").addEventListener("click",()=>{if("speechSynthesis" in window)speechSynthesis.cancel();voiceStatus.textContent="Vocea a fost oprită."});
+document.getElementById("roboStop").addEventListener("click",()=>{window.RoboVoice?.stop("clinica-mesaje");voiceStatus.textContent="Vocea a fost oprită."});
 })();
 </script>
 <script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script><script>if(typeof roboLogActivity==="function")roboLogActivity({title:"Clinica de mesaje",module:"Algoritmi lingvistici",type:"Empatie, ortografie și claritate"});</script>

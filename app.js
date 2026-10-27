@@ -54,6 +54,25 @@ app.get("/inventopia/profesor",(_,res)=>res.send(inventopiaPage("Profesor","<sty
 app.get("/inventopia/clasa-demo",(_,res)=>res.send(inventopiaPage("Clasa mea","<style>body{background:linear-gradient(145deg,#e0f4e8 0%,#effaf2 55%,#d5eadc 100%)}main{background:transparent;box-shadow:none;padding:0;max-width:760px}.brand-card,.teacher-card{background:#f3faf5;border:1px solid #b9dcc5;border-radius:25px;box-shadow:0 12px 28px #2d6e4320;padding:26px 22px;margin:0 auto 18px;text-align:center}.brand-heading{margin:0}.inventopia-teacher-logo{display:block;width:min(100%,520px);height:auto;margin:0 auto 8px;object-fit:contain}.subtitle{color:#23764c;font-style:italic;margin:0;font-size:23px}.teacher-preview-logo{display:block;width:110px;height:110px;object-fit:contain;margin:0 auto 12px}.teacher-title{color:#23764c;font-size:26px;margin:0}.links .link{background:linear-gradient(145deg,#319765,#20784e);box-shadow:0 5px 12px #247b4a25;border:1px solid #267d50}.links .link:hover{background:linear-gradient(145deg,#278658,#196b44)}.links .link:focus-visible{outline:3px solid #23764c;outline-offset:3px}.note{background:#e8f5ec;border:1px solid #bfdcc8;color:#355d42}.back{color:#23764c}@media(max-width:580px){.brand-card,.teacher-card{padding:22px 16px}}</style><section class=\"brand-card\"><h1 class=\"brand-heading\"><img src=\"/inventopia-logo.png\" alt=\"INVENTOPIA\" class=\"inventopia-teacher-logo\"></h1><p class=\"subtitle\">Aventura STEAM</p></section><section class=\"teacher-card\"><img src=\"/academic-robo.png\" class=\"teacher-preview-logo\" alt=\"ROBO-CIP profesor\"><h2 class=\"teacher-title\">Clasa mea (demo)</h2></section><p>În varianta cu cont individual, profesorul va crea clasa și va genera nickname-uri și parole pentru elevi.</p><p class=\"note\">Nu se creează conturi reale în acest mod public de test.</p><a class=\"back\" href=\"/inventopia/profesor\">← Spațiul profesorului</a>")));
 app.get("/inventopia/parinte",(_,res)=>res.send(inventopiaPage("Părinte",'<h1>INVENTOPIA</h1><p class="subtitle">Aventura STEAM</p><h2>Spațiul părintelui · previzualizare</h2><p>De aici părinții vor gestiona profilurile copiilor și vor consulta progresul educațional.</p><p class="note">Mod public de test: nu afișăm informații sau portofolii personale.</p><nav class="links"><a class="link" href="/">Explorează activitățile</a><a class="link" href="/inventopia">Pagina de acces</a><a class="link" href="/cont/conectare">Conectare cont</a></nav>')));
 
+// The standalone mentor permits only its pinned 3D module and same-origin assets.
+const MENTOR_CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'wasm-unsafe-eval' https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'"
+].join("; ");
+app.get(["/robo-mentor-demo.html","/resources/robo-mentor-demo.html"],(_,res)=>{
+  res.set("Content-Security-Policy",MENTOR_CSP);
+  res.set("X-Content-Type-Options","nosniff");
+  res.set("Referrer-Policy","no-referrer");
+  res.sendFile(path.join(ROOT,"robo-mentor-demo.html"));
+});
+
 app.get("/",(_,res)=>res.sendFile(path.join(ROOT,"index.html")));
 app.get(new RegExp("^/[a-z0-9_-]+[.](html|js|css|png|jpg|jpeg|webp|gif|glb|mp4)$","i"),(req,res,next)=>{
 const name=req.path.slice(1);

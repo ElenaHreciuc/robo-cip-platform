@@ -149,6 +149,7 @@
       .imgbox.pop img { animation: none; transform: none; }
     }
   </style>
+  <script src="/robo-voice.js"></script>
 </head>
 
 <body>
@@ -267,7 +268,7 @@
 
     function speakRoboCip() {
 
-      if (!("speechSynthesis" in window)) return false;
+      if (!window.RoboVoice?.supported()) return false;
 
 
 
@@ -295,11 +296,7 @@
 
       try {
 
-        speechSynthesis.cancel();
-
-        speechSynthesis.speak(u);
-
-        return true;
+        return window.RoboVoice.speak("home", u, () => enableVoiceBtn.classList.add("show"));
 
       } catch (e) {
 
@@ -349,7 +346,7 @@
 
     // Pregătim încărcarea vocilor (important pe unele browsere)
 
-    window.speechSynthesis.onvoiceschanged = () => {};
+    if ("speechSynthesis" in window) window.speechSynthesis.addEventListener("voiceschanged", () => {});
 
 
 

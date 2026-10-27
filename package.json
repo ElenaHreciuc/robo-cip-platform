@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "node --test test/student-journey.test.cjs"
+    "test": "node --test test/*.test.cjs",
+    "test:mentor:browser": "node --test test/robo-mentor.browser.cjs"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,7 @@
     "nodemailer": "^6.10.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.0"
+    "nodemon": "^3.0.0",
+    "playwright": "1.62.1"
   }
 }
-
