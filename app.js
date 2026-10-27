@@ -1,43 +1,85 @@
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 const express = require("express");
 const app = express();
+const database = require("./db");
+if(process.env.DATABASE_URL){database.initialize().catch(err=>console.error("[db] Initial schema setup failed:",err.message));}
 const ROOT = __dirname;
 const PORT = process.env.PORT || 3000;
+app.set("trust proxy",1);
+app.disable("x-powered-by");
 app.use(express.json({limit:"64kb"}));
-const staticAliases = {
-  "/css/styles.css":"styles.css",
-  "/js/robo-menu-button.js":"robo-menu-button.js",
-  "/js/learner.js":"learner.js",
-  "/js/home.js":"home.js",
-  "/js/activity-log.js":"activity-log.js"
+app.use(express.urlencoded({extended:false,limit:"8kb"}));
+app.use("/cont",require("./accounts"));
+const TEACHER_FILES=new Set(["teacher-notes.html","teacher-dashboard.html","teacher-guide.html","menu-robo.html"]);
+const COOKIE="robo_teacher_session";
+const SESSION_SECONDS=8*60*60;
+const attempts=new Map();
+function configurationReady(){return /^[0-9a-f]{32}:[0-9a-f]{64}$/i.test(process.env.TEACHER_PASSWORD_SCRYPT||"") && (process.env.TEACHER_SESSION_SECRET||"").length>=32}
+function timingEqual(a,b){const x=Buffer.from(a),y=Buffer.from(b);return x.length===y.length&&crypto.timingSafeEqual(x,y)}
+function verifyPassword(password){if(!configurationReady()||typeof password!=="string"||password.length>1024)return false;const [salt,hash]=process.env.TEACHER_PASSWORD_SCRYPT.split(":");try{return timingEqual(crypto.scryptSync(password,Buffer.from(salt,"hex"),32).toString("hex"),hash)}catch{return false}}
+function sessionToken(){const expires=Date.now()+SESSION_SECONDS*1000;const val=String(expires);const sig=crypto.createHmac("sha256",process.env.TEACHER_SESSION_SECRET).update(val).digest("hex");return val+"."+sig}
+function isAuthenticated(req){if(!configurationReady())return false;const cookie=(req.headers.cookie||"").split(";").map(x=>x.trim()).find(x=>x.startsWith(COOKIE+"="));if(!cookie)return false;const raw=cookie.substring(COOKIE.length+1);const parts=raw.split(".");if(parts.length!==2||!/^\d{13}$/.test(parts[0])||Number(parts[0])<Date.now()||! /^[0-9a-f]{64}$/.test(parts[1]))return false;const expected=crypto.createHmac("sha256",process.env.TEACHER_SESSION_SECRET).update(parts[0]).digest("hex");return timingEqual(expected,parts[1])}
+function teacherGuard(req,res,next){res.set("Cache-Control","no-store");res.set("X-Content-Type-Options","nosniff");if(!isAuthenticated(req))return res.redirect(303,"/teacher");next()}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderTeacherPage(auth,error){return `<!DOCTYPE html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spațiul profesorului | Inventopia</title><style>body{font:16px system-ui,sans-serif;color:#19495a;background:linear-gradient(135deg,#e5f8fb,#f5fcfd 55%,#eaf4fb);margin:0;padding:20px}.card{max-width:1200px;margin:4vh auto 0;padding:32px;border-radius:24px;background:linear-gradient(145deg,#ffffff,#f4fcfd);border:1px solid #d7f0f3;box-shadow:0 10px 30px #1455681c}h1{font-size:28px;color:#15576b;margin:0 0 8px}.teacher-heading{display:flex;align-items:center;gap:12px}.teacher-heading svg{flex:none;color:#8498ad}input{display:block;width:100%;box-sizing:border-box;font:inherit;padding:12px;border:1px solid #a4d3dc;border-radius:12px;margin:12px 0}button,.link{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;border:1px solid #9adce5;border-radius:13px;background:linear-gradient(135deg,#1ba2b4,#13849d);color:#fff;padding:12px 14px;min-height:48px;text-decoration:none;font:600 15px system-ui,sans-serif;cursor:pointer;text-align:center}button:hover,.link:hover{background:linear-gradient(135deg,#168fa5,#106d86)}button:focus-visible,.link:focus-visible,a:focus-visible{outline:3px solid #78dce9;outline-offset:3px}.teacher-actions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:20px 0}.teacher-actions .link{min-width:0;padding:12px 8px;white-space:nowrap}.teacher-actions form{margin:0;display:flex;min-width:0}.teacher-actions form button{width:100%}.note{padding:14px 17px;border-radius:13px;background:#e8f8fa;color:#22576a;line-height:1.5;border:1px solid #d3eef1}.error{color:#9a351c}.teacher-return-outside{display:flex;justify-content:center;margin:24px auto 12px;padding:0 12px}.back-link{display:inline-flex;align-items:center;justify-content:center;gap:9px;color:#167c92;background:#e8f8fa;border:1px solid #b7e4ec;border-radius:999px;padding:10px 16px;text-decoration:none;font-size:14px;font-weight:600}.back-link svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}.back-link:hover{text-decoration:underline}@media(max-width:1000px){.teacher-actions{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:760px){.teacher-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:22px}}@media(max-width:460px){.teacher-actions{grid-template-columns:1fr}.card{padding:18px}} .teacher-brand{text-align:center;margin:0 auto 24px;padding-bottom:16px;border-bottom:1px solid #d7f0f3}.teacher-brand img{display:block;width:min(100%,460px);height:auto;margin:auto}.teacher-brand p{font-style:italic;color:#176b91;font-size:22px;margin:5px 0 0}</style></head><body><main class="card"><header class="teacher-brand"><img src="/inventopia-logo.png" alt="INVENTOPIA"><p>Aventura STEAM</p></header><h1 class="teacher-heading"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V7a4 4 0 0 1 8 0v3"/><rect x="6" y="10" width="12" height="10" rx="2"/></svg><span>Spațiul profesorului</span></h1><p>Inventopia · Resurse destinate cadrelor didactice</p>${auth?'<p class="note">Autentificare activă. Selectați resursa dorită.</p><div class="teacher-actions"><a class="link" href="/teacher-notes.html">Jurnalul profesorului</a><a class="link" href="/teacher-guide.html">Ghid pedagogic</a><a class="link" href="/teacher-dashboard.html">Tabloul de bord</a><a class="link" href="/cont/clasa-mea">Clasa mea</a><form action="/teacher/logout" method="post"><button type="submit">Deconectare</button></form></div>':`<p class="note">Introdu parola profesorului pentru acces la resursele protejate.</p>${error?'<p class="error" role="alert">'+escapeHTML(error)+'</p>':''}<form action="/teacher/login" method="post"><label for="password">Parola profesorului</label><input id="password" name="password" type="password" autocomplete="current-password" required maxlength="1024"><button type="submit">Autentificare</button></form>`}</main><nav class="teacher-return-outside" aria-label="Înapoi la activitățile elevilor"><a class="back-link" href="/modules.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg><span>Înapoi la activitățile elevilor</span></a></nav></body></html>`}
+app.get("/teacher",(req,res)=>{res.set("Cache-Control","no-store");res.send(renderTeacherPage(isAuthenticated(req),configurationReady()?"":"Autentificarea este în curs de configurare."))});
+app.post("/teacher/login",(req,res)=>{
+res.set("Cache-Control","no-store");if(!configurationReady())return res.status(503).send(renderTeacherPage(false,"Accesul profesorului nu este încă configurat."));
+const key=req.ip||"unknown",now=Date.now();const r=attempts.get(key)||{count:0,until:0};
+if(r.until>now)return res.status(429).send(renderTeacherPage(false,"Prea multe încercări. Reîncearcă în 15 minute."));
+if(verifyPassword(req.body?.password)){attempts.delete(key);res.cookie(COOKIE,sessionToken(),{httpOnly:true,secure:process.env.NODE_ENV==="production"||req.secure,sameSite:"strict",maxAge:SESSION_SECONDS*1000,path:"/"});return res.redirect(303,"/teacher")}
+r.count++;if(r.count>=5){r.until=now+15*60*1000;r.count=0}attempts.set(key,r);if(attempts.size>4000)attempts.clear();return res.status(401).send(renderTeacherPage(false,"Parolă incorectă."))
+});
+app.post("/teacher/logout",(req,res)=>{res.clearCookie(COOKIE,{path:"/",sameSite:"strict",secure:process.env.NODE_ENV==="production"||req.secure});res.redirect(303,"/teacher")});
+const staticAliases={
+"/css/styles.css":"styles.css",
+"/js/robo-menu-button.js":"robo-menu-button.js",
+"/js/learner.js":"learner.js",
+"/js/home.js":"home.js",
+"/js/activity-log.js":"activity-log.js"
 };
-for (const [url,file] of Object.entries(staticAliases)) {
-  app.get(url, (_,res) => res.sendFile(path.join(ROOT,file)));
-}
-app.get("/assets/img/:file", (req,res) => {
-  if (!/^[\w-]+\.(png|jpg|jpeg|webp|gif)$/i.test(req.params.file)) return res.sendStatus(404);
-  res.sendFile(path.join(ROOT,req.params.file));
+for(const [url,file] of Object.entries(staticAliases))app.get(url,(_,res)=>res.sendFile(path.join(ROOT,file)));
+app.get("/assets/img/:file",(req,res)=>{if(!/^[\w-]+\.(png|jpg|jpeg|webp|gif)$/i.test(req.params.file))return res.sendStatus(404);res.sendFile(path.join(ROOT,req.params.file))});
+app.get("/api/learner/missions",(req,res)=>{try{const missions=JSON.parse(fs.readFileSync(path.join(ROOT,"missions.json"),"utf8"));res.json(req.query.moduleId?missions.filter(m=>m.moduleId===req.query.moduleId):missions)}catch(err){console.error(err);res.status(500).json({error:"Nu pot încărca misiunile"})}});
+app.get("/favicon.ico",(_,res)=>res.sendFile(path.join(ROOT,"robo_hero.png")));
+app.get("/portfolio.html",(_,res)=>res.redirect(302,"/portofolio.html"));
+
+// Inventopia: public test navigation. Demo panels never read or modify real accounts.
+function inventopiaPage(title,body){return '<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+' | Inventopia</title><style>body{margin:0;min-height:100vh;font:17px system-ui,sans-serif;color:#183d55;background:linear-gradient(145deg,#dbf4fc,#f6fcff 58%,#e9f6f0);display:grid;place-items:center;padding:20px;box-sizing:border-box}main{width:min(760px,100%);background:#fff;border-radius:25px;box-shadow:0 18px 45px #1c648022;padding:35px;box-sizing:border-box;text-align:center}h1{font-size:clamp(30px,6vw,48px);letter-spacing:.08em;color:#176b91;margin:0}h2{color:#215773}.subtitle{font-size:23px;font-style:italic;margin:5px 0 10px}.tagline{color:#426577;margin:0 0 25px}.links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:25px 0}.link{display:block;text-decoration:none;background:linear-gradient(145deg,#218bc0,#17739a);color:white;border-radius:16px;padding:20px 9px;font-weight:700;box-shadow:0 5px 12px #176b9126}.link:hover{filter:brightness(.94)}.note{background:#fff7e6;padding:12px;border-radius:12px;color:#694e16}.back{color:#176b91}ul{text-align:left;line-height:1.8}@media(max-width:580px){main{padding:23px}.links{grid-template-columns:1fr}}</style></head><body><main>'+body+'</main></body></html>'}
+app.get("/inventopia-logo.webp",(_,res)=>{res.type("image/webp");res.set("Cache-Control","public,max-age=3600");res.send(Buffer.from(fs.readFileSync(path.join(ROOT,"inventopia-logo.webp.base64"),"utf8"),"base64"))});
+app.get("/inventopia",(_,res)=>res.send(inventopiaPage("Inventopia","<style>body{background:radial-gradient(1000px 600px at 20% -10%,#1e88e5 0%,transparent 55%),radial-gradient(800px 500px at 85% 15%,#0d47a1 0%,transparent 60%),linear-gradient(180deg,#061a33 0%,#0b2a4a 45%,#1e5fa3 100%)!important;background-attachment:fixed!important;padding:clamp(16px,4vw,50px)!important}main{width:min(1040px,100%)!important;background:transparent!important;box-shadow:none!important;padding:0!important}.hero{background:#eaf1f8;border:1px solid #9dbbd4;border-radius:25px;padding:40px 20px;box-shadow:0 8px 28px #283f5b0c}.hero h1{color:#1e5fa3!important;margin:0}.inventopia-logo{display:block;width:min(100%,520px);height:auto;margin:0 auto 8px;object-fit:contain;mix-blend-mode:multiply}.hero .subtitle,.hero .subtitle em{color:#1e5fa3!important;font-weight:400}.hero .tagline{color:#1e5fa3!important;font-weight:400}.hero .tagline{margin:0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}.role{border-radius:22px;padding:28px 14px;min-height:155px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-decoration:none;color:#192c40;border:1px solid var(--edge);background:var(--fill);box-shadow:0 7px 19px #1b365016;transition:transform .2s,box-shadow .2s}.role:hover{transform:translateY(-4px);box-shadow:0 15px 28px #1b365024}.role:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.role-robo-wrap{width:116px;height:92px;margin:0 auto;display:flex;align-items:center;justify-content:center;flex:none}.role .teacher-robo-icon,.role .student-robo-icon,.role .parent-robo-icon{display:block;object-fit:contain;flex:none}.role .teacher-robo-icon{width:78px;height:78px}.role .student-robo-icon{width:88px;height:88px}.role .parent-robo-icon{width:112px;height:112px}.role svg{width:34px;height:34px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.role strong{font-size:21px}.role small{font-size:14px;color:#4a5b6c}.teacher{--fill:#e9f5ee;--edge:#8bc5a2;--accent:#238650}.student{--fill:#e8f2fd;--edge:#8eb7e9;--accent:#2477cf}.parent{--fill:#f3edfb;--edge:#bda0e5;--accent:#8b5cda}@media(max-width:640px){.cards{grid-template-columns:1fr;gap:13px}.role{min-height:115px;padding:17px}}@media(prefers-reduced-motion:reduce){.role{transition:none}.role:hover{transform:none}}</style><header class=\"hero\"><h1><img class=\"inventopia-logo\" src=\"/inventopia-logo.png\" width=\"488\" height=\"117\" alt=\"INVENTOPIA\"></h1><p class=\"subtitle\"><em>Aventura STEAM</em></p><p class=\"tagline\">Descoperă. Construiește. Investighează.</p></header><nav class=\"cards\" aria-label=\"Acces Inventopia\"><a class=\"role teacher\" href=\"/inventopia/profesor\"><span class=\"role-robo-wrap\"><img class=\"teacher-robo-icon\" src=\"/academic-robo.png\" alt=\"Robo-CIP profesor\" loading=\"eager\"></span><strong>Profesor</strong><small>Resurse pedagogice și Clasa mea</small></a><a class=\"role student\" href=\"/\"><span class=\"role-robo-wrap\"><img class=\"student-robo-icon\" src=\"/student-robo.png\" alt=\"Robo-CIP elev\" loading=\"eager\"></span><strong>Elev</strong><small>Robo-CIP și selecția vârstei</small></a><a class=\"role parent\" href=\"/inventopia/parinte\"><span class=\"role-robo-wrap\"><img class=\"parent-robo-icon\" src=\"/parent-robo.png\" alt=\"Robo-CIP familie\" loading=\"eager\"></span><strong>Părinte</strong><small>Profiluri familiale și progres</small></a></nav>")));
+app.get("/inventopia/profesor",(_,res)=>res.send(inventopiaPage("Profesor","<style>body{background:linear-gradient(145deg,#e0f4e8 0%,#effaf2 55%,#d5eadc 100%)}main{background:transparent;box-shadow:none;padding:0;max-width:760px}.brand-card,.teacher-card{background:#f3faf5;border:1px solid #b9dcc5;border-radius:25px;box-shadow:0 12px 28px #2d6e4320;padding:26px 22px;margin:0 auto 18px;text-align:center}.brand-heading{margin:0}.inventopia-teacher-logo{display:block;width:min(100%,520px);height:auto;margin:0 auto 8px;object-fit:contain}.subtitle{color:#23764c;font-style:italic;margin:0;font-size:23px}.teacher-preview-logo{display:block;width:110px;height:110px;object-fit:contain;margin:0 auto 12px}.teacher-title{color:#23764c;font-size:26px;margin:0}.links .link{background:linear-gradient(145deg,#319765,#20784e);box-shadow:0 5px 12px #247b4a25;border:1px solid #267d50}.links .link:hover{background:linear-gradient(145deg,#278658,#196b44)}.links .link:focus-visible{outline:3px solid #23764c;outline-offset:3px}.note{background:#e8f5ec;border:1px solid #bfdcc8;color:#355d42}.back{color:#23764c}@media(max-width:580px){.brand-card,.teacher-card{padding:22px 16px}}</style><section class=\"brand-card\"><h1 class=\"brand-heading\"><img src=\"/inventopia-logo.png\" alt=\"INVENTOPIA\" class=\"inventopia-teacher-logo\"></h1><p class=\"subtitle\">Aventura STEAM</p></section><section class=\"teacher-card\"><img src=\"/academic-robo.png\" class=\"teacher-preview-logo\" alt=\"ROBO-CIP profesor\"><h2 class=\"teacher-title\">Profesor</h2></section><p class=\"note\">Testare fără autentificare. Aceasta este o previzualizare fără acces la clasele sau parolele reale.</p><nav class=\"links\"><a class=\"link\" href=\"/teacher\">Spațiul profesorului</a><a class=\"link\" href=\"/inventopia/clasa-demo\">Clasa mea (demo)</a><a class=\"link\" href=\"/inventopia\">Pagina de acces</a></nav>")));
+app.get("/inventopia/clasa-demo",(_,res)=>res.send(inventopiaPage("Clasa mea","<style>body{background:linear-gradient(145deg,#e0f4e8 0%,#effaf2 55%,#d5eadc 100%)}main{background:transparent;box-shadow:none;padding:0;max-width:760px}.brand-card,.teacher-card{background:#f3faf5;border:1px solid #b9dcc5;border-radius:25px;box-shadow:0 12px 28px #2d6e4320;padding:26px 22px;margin:0 auto 18px;text-align:center}.brand-heading{margin:0}.inventopia-teacher-logo{display:block;width:min(100%,520px);height:auto;margin:0 auto 8px;object-fit:contain}.subtitle{color:#23764c;font-style:italic;margin:0;font-size:23px}.teacher-preview-logo{display:block;width:110px;height:110px;object-fit:contain;margin:0 auto 12px}.teacher-title{color:#23764c;font-size:26px;margin:0}.links .link{background:linear-gradient(145deg,#319765,#20784e);box-shadow:0 5px 12px #247b4a25;border:1px solid #267d50}.links .link:hover{background:linear-gradient(145deg,#278658,#196b44)}.links .link:focus-visible{outline:3px solid #23764c;outline-offset:3px}.note{background:#e8f5ec;border:1px solid #bfdcc8;color:#355d42}.back{color:#23764c}@media(max-width:580px){.brand-card,.teacher-card{padding:22px 16px}}</style><section class=\"brand-card\"><h1 class=\"brand-heading\"><img src=\"/inventopia-logo.png\" alt=\"INVENTOPIA\" class=\"inventopia-teacher-logo\"></h1><p class=\"subtitle\">Aventura STEAM</p></section><section class=\"teacher-card\"><img src=\"/academic-robo.png\" class=\"teacher-preview-logo\" alt=\"ROBO-CIP profesor\"><h2 class=\"teacher-title\">Clasa mea (demo)</h2></section><p>În varianta cu cont individual, profesorul va crea clasa și va genera nickname-uri și parole pentru elevi.</p><p class=\"note\">Nu se creează conturi reale în acest mod public de test.</p><a class=\"back\" href=\"/inventopia/profesor\">← Spațiul profesorului</a>")));
+app.get("/inventopia/parinte",(_,res)=>res.send(inventopiaPage("Părinte",'<h1>INVENTOPIA</h1><p class="subtitle">Aventura STEAM</p><h2>Spațiul părintelui · previzualizare</h2><p>De aici părinții vor gestiona profilurile copiilor și vor consulta progresul educațional.</p><p class="note">Mod public de test: nu afișăm informații sau portofolii personale.</p><nav class="links"><a class="link" href="/">Explorează activitățile</a><a class="link" href="/inventopia">Pagina de acces</a><a class="link" href="/cont/conectare">Conectare cont</a></nav>')));
+
+// The standalone mentor permits only its pinned 3D module and same-origin assets.
+const MENTOR_CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'wasm-unsafe-eval' https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'"
+].join("; ");
+app.get(["/robo-mentor-demo.html","/resources/robo-mentor-demo.html"],(_,res)=>{
+  res.set("Content-Security-Policy",MENTOR_CSP);
+  res.set("X-Content-Type-Options","nosniff");
+  res.set("Referrer-Policy","no-referrer");
+  res.sendFile(path.join(ROOT,"robo-mentor-demo.html"));
 });
-app.get("/api/learner/missions", (req,res) => {
-  try {
-    const missions = JSON.parse(fs.readFileSync(path.join(ROOT,"missions.json"),"utf8"));
-    res.json(req.query.moduleId ? missions.filter(m=>m.moduleId===req.query.moduleId):missions);
-  } catch (err) { console.error(err); res.status(500).json({error:"Nu pot încărca misiunile"}); }
+
+app.get("/",(_,res)=>res.sendFile(path.join(ROOT,"index.html")));
+app.get(new RegExp("^/[a-z0-9_-]+[.](html|js|css|png|jpg|jpeg|webp|gif|glb|mp4)$","i"),(req,res,next)=>{
+const name=req.path.slice(1);
+if(["app.js","learnerController.js","learnerRoutes.js"].includes(name))return res.sendStatus(404);
+if(TEACHER_FILES.has(name))return teacherGuard(req,res,()=>res.sendFile(path.join(ROOT,name)));
+res.sendFile(path.join(ROOT,name),err=>{if(err&&!res.headersSent)next()})
 });
-// Serve only public assets; keep source, metadata and teaching data off static URLs.
-app.get("/favicon.ico", (_,res) => res.sendFile(path.join(ROOT,"robo_hero.png")));
-app.get("/portfolio.html", (_,res) => res.redirect(302,"/portofolio.html"));
-app.get("/", (_,res) => res.sendFile(path.join(ROOT,"index.html")));
-app.get(new RegExp("^/[a-z0-9_-]+[.](html|js|css|png|jpg|jpeg|webp|gif|glb|mp4)$","i"), (req,res,next) => {
-  const name = req.path.slice(1);
-  if (["app.js","learnerController.js","learnerRoutes.js"].includes(name)) return res.sendStatus(404);
-  res.sendFile(path.join(ROOT,name), err => { if(err && !res.headersSent) next(); });
-});
-app.get("/resources/:name", (req,res) => {
-  const file = req.params.name;
-  if (!/^[a-z0-9_-]+\.(html|js|css)$/i.test(file)) return res.sendStatus(404);
-  res.sendFile(path.join(ROOT,file));
-});
+app.get("/resources/:name",(req,res)=>{const file=req.params.name;if(!/^[a-z0-9_-]+\.(html|js|css)$/i.test(file))return res.sendStatus(404);if(TEACHER_FILES.has(file))return teacherGuard(req,res,()=>res.sendFile(path.join(ROOT,file)));res.sendFile(path.join(ROOT,file))});
 app.get("/module",(_,res)=>res.sendFile(path.join(ROOT,"learner.html")));
-app.listen(PORT,"0.0.0.0",()=>console.log("Robo-Cip running on "+PORT));
+app.listen(PORT,"0.0.0.0",()=>console.log("ROBO-CIP running on "+PORT));

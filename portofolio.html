@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8" />
-<title>Portofoliu elev – Robo-Cip</title>
+<title>Portofoliu elev | Inventopia</title>
 
 <style>
   body {
@@ -63,16 +63,54 @@
     opacity: 0.8;
     font-size: 12px;
   }
+
+  .portfolio-intro-panel {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    padding:25px 20px;
+    text-align:center;
+    background:linear-gradient(145deg,#f4f0ff,#fcfbff);
+    border:1px solid #e9e1fc;
+    border-radius:22px;
+    box-shadow:0 7px 20px rgba(83,62,132,.10);
+  }
+  .portfolio-results-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:fit-content;
+    max-width:100%;
+    padding:12px 19px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#a68adb,#8e72cd);
+    color:#fff;
+    text-align:center;
+    text-decoration:none;
+    font-weight:700;
+    font-size:16px;
+    line-height:1.4;
+    box-shadow:0 5px 13px rgba(111,84,177,.17);
+  }
+  .portfolio-results-btn:hover {background:linear-gradient(135deg,#9c80d1,#8266c0)}
+  .portfolio-results-btn:focus-visible {outline:3px solid #6d51ad;outline-offset:3px}
+  .portfolio-intro-panel p {max-width:720px;margin:0;color:#38465c;line-height:1.5}
 </style>
 </head>
 
 <body>
 <div class="page">
 
-<h1>🧾 Portofoliu elev – Robo-Cip</h1>
+<h1>🧾 Portofoliu elev – Inventopia</h1>
+<div class="section portfolio-intro-panel">
+  <a class="portfolio-results-btn" href="/rezultate-portofolii.html">Vezi toate rezultatele și portofoliile mele →</a>
+  <p>Noua pagină centralizează creațiile și observațiile salvate din toate misiunile compatibile.</p>
+</div>
 
 <div class="section">
-  <h2>🧱 Construcții salvate din „Orașul lui Robo-Cip”</h2>
+  <h2>🧱 Construcții salvate din „Orașul lui ROBO-CIP”</h2>
 
   <div id="cityList" class="grid"></div>
 </div>
@@ -159,7 +197,7 @@
 renderReflections();
 </script>
 
-<!-- Buton global Meniu Robo-Cip -->
+<!-- Buton global Meniu ROBO-CIP -->
 <script src="/js/robo-menu-button.js"></script>
 </body>
 </html>

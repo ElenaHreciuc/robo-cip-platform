@@ -1604,3 +1604,19 @@ body.theme-programare .module-hero-banner {
 .module-page #resources-grid.module-grid {
   padding: 0 16px;
 }
+
+/* Doar Orașe și Poduri 3D: cinci carduri sus, Mașina de transformări centrată dedesubt. */
+@media (min-width: 1321px) {
+ .module-page #resources-grid.module-grid:has(> .last-centered-3d) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+ .module-page #resources-grid.module-grid > .last-centered-3d { grid-column: 3; }
+}
+
+/* Sunete și Animații: Scratch centrat sub celelalte cinci activități, numai pe desktop. */
+@media (min-width: 1321px) {
+ .module-page #resources-grid.module-grid:has(> .last-centered-sunete) {grid-template-columns:repeat(5,minmax(0,1fr));}
+ .module-page #resources-grid.module-grid > .last-centered-sunete {grid-column:3;}
+}
+
+/* Înapoi: paginile elevilor au săgeată fină și buton albastru. */
+.module-page .module-back-link{display:inline-flex;align-items:center;padding:10px 16px;border:1px solid #a8d8f4;border-radius:999px;background:#e8f5ff;color:#176aab;text-decoration:none;font-weight:600;gap:7px;box-shadow:0 2px 8px #25689a16}
+.module-page .module-back-link:focus-visible{outline:3px solid #5daee7;outline-offset:3px}

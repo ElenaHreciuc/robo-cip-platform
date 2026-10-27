@@ -2,4 +2,4 @@
 // - numărul de misiuni pe modul
 // - procent de progres pe fiecare modul
 
-console.log("Pagina de start Robo-Cip încărcată.");
+console.log("Pagina de start ROBO-CIP încărcată.");

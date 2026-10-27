@@ -1,62 +1,30 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8">
-<title>Laboratorul Emoțiilor – Robo-Cip</title>
-<style>
-body{font-family:system-ui,sans-serif;background:#f2fcff;padding:16px}
-.page{max-width:900px;margin:0 auto}
-.card{background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.faces{display:flex;gap:10px;flex-wrap:wrap}
-.face{font-size:28px;border:1px solid #cde2ff;border-radius:14px;
-padding:8px 12px;cursor:pointer}
-.result{margin-top:8px;font-size:13px}
-</style>
-</head>
-
-<body>
-<div class="page">
-
-<h1>😊 Laboratorul Emoțiilor</h1>
-
-<div class="card">
-  Alege expresia — spune dacă robotul poate greși și explică de ce.
-</div>
-
-<div class="card">
-  <div class="faces">
-    <div class="face" data-e="fericit">🙂</div>
-    <div class="face" data-e="trist">🙁</div>
-    <div class="face" data-e="surprins">😮</div>
-    <div class="face" data-e="confuz">😕</div>
-  </div>
-
-  <div id="out" class="result">
-    Selectează o expresie.
-  </div>
-</div>
-
-</div>
-
+<!DOCTYPE html><html lang="ro"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laboratorul emoțiilor – ROBO-CIP</title><style>
+*{box-sizing:border-box}body{margin:0;padding:18px;font:16px system-ui,Arial,sans-serif;color:#193951;background:linear-gradient(145deg,#e9f7ff,#fff5f2)}main{max-width:940px;margin:auto}.panel{background:white;padding:20px;border-radius:19px;margin:13px 0;box-shadow:0 4px 18px #2d55721b}h1{font-size:clamp(25px,4vw,34px);margin:0 0 10px}h2{font-size:21px;margin:0 0 12px}.muted{color:#4b6278}.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}button{font:inherit;cursor:pointer;border-radius:12px;border:0;padding:11px 14px}button:focus-visible,textarea:focus-visible{outline:3px solid #ff9e38;outline-offset:2px}.age{border:2px solid #a9d1eb;background:#eaf6ff;color:#155888;font-weight:700}.age[aria-pressed=true]{background:#176daa;color:white}.choice{display:block;width:100%;text-align:left;margin:8px 0;border:2px solid #d1e3f1;background:#f7fbff;color:#203f56}.choice[aria-pressed=true]{border-color:#1676ba;background:#dcefff}.primary{background:#1872ad;color:white;font-weight:700}.secondary{background:#e9f4fb;color:#155a88}.scenario{padding:15px;border-left:5px solid #ff8b6c;border-radius:10px;background:#fff3ef;font-size:18px;line-height:1.5;margin:12px 0}.feedback{background:#edf6fc;padding:13px;border-radius:12px;min-height:50px;margin-top:13px;line-height:1.5}.feedback.good{background:#e1f4e9;color:#1d583b}.feedback.warn{background:#fff2dc;color:#704817}.small{font-size:14px}textarea{display:block;width:100%;min-height:110px;font:inherit;border:1px solid #bed3e5;border-radius:12px;padding:12px;margin:9px 0}@media(max-width:500px){.panel{padding:14px}}</style></head><body><main>
+<section class="panel"><h1>😊 Laboratorul emoțiilor</h1><p class="muted">Emoții, contexte și nuanțe – explorăm ce simțim, ce spunem și ce putem înțelege despre ceilalți.</p><div class="row" aria-label="Selectează nivelul de vârstă"><button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button><button class="age" data-age="8-9" aria-pressed="false">8–9 ani · Construiesc</button><button class="age" data-age="9-10" aria-pressed="false">9–10 ani · Investighez</button></div></section>
+<section class="panel"><h2 id="heading"></h2><p id="instruction"></p><div id="scenario" class="scenario"></div><p id="question"></p><div id="choices"></div><div class="row" style="margin-top:13px"><button class="primary" id="check">Verifică răspunsul</button><button class="secondary" id="next" hidden>Următoarea situație →</button></div><div id="feedback" class="feedback" role="status" aria-live="polite">Citește situația și alege un răspuns.</div><p id="progress" class="muted small"></p></section>
+<section class="panel"><h2>🎨 Atelierul de empatie</h2><p id="creative"></p><label for="reflection"><b>Răspunsul meu:</b></label><textarea id="reflection" placeholder="Scrie cum ai putea ajuta sau cum ai explica alegerea ta."></textarea><div class="row"><button class="secondary" id="save">Salvează reflecția pe acest dispozitiv</button><span id="saveState" role="status"></span></div><p class="muted small">Nu există emoții „greșite”. Întrebăm persoana ce simte, în loc să presupunem că știm doar din expresia feței. Răspunsurile personale nu sunt evaluate automat.</p></section><p><a href="/modules.html">← Înapoi la module</a></p></main>
 <script>
-document.querySelectorAll(".face").forEach(f=>{
-  f.onclick=()=>{
-    out.textContent=
-      "Întrebare: De unde știm dacă emoția este corect interpretată? Poate robotul să greșească?";
-  };
-});
-</script>
-
-<script src="/js/robo-menu-button.js"></script>
-<script src="/js/activity-log.js"></script>
-<script>
-roboLogActivity({
-  title:"Laboratorul emoțiilor",
-  module:"Algoritmi lingvistici",
-  type:"ML & empatie"
-});
-</script>
-
-</body>
-</html>
+(function(){'use strict';
+const LEVELS={
+'7-8':{heading:'Descopăr emoțiile în situații cotidiene',instruction:'Observă situația, apoi alege un răspuns atent și respectuos.',creative:'Imaginează-ți că un coleg este trist. Scrie două propoziții prin care îi arăți că îți pasă.',tasks:[
+{scene:'😊 Maria zâmbește când primește o felicitare.',q:'Ce putem spune despre emoția Mariei?',options:['Este posibil să fie bucuroasă, dar o putem întreba cum se simte.','Știm sigur că este bucuroasă doar pentru că zâmbește.','Nu are nicio emoție.'],correct:0,why:'Zâmbetul poate exprima bucurie, dar nu dovedește întotdeauna ce simte cineva.'},
+{scene:'🙁 Un coleg stă singur în pauză și privește în jos.',q:'Cum poți reacționa cu empatie?',options:['Îi spui că nu are voie să fie trist.','Îl întrebi cu blândețe dacă dorește să vorbească sau să se joace.','Râzi de expresia lui.'],correct:1,why:'Este mai bine să întrebăm și să oferim sprijin, fără să presupunem ce simte.'},
+{scene:'😮 Robo deschide ochii mari când aude un sunet puternic.',q:'Ce poate însemna această expresie?',options:['Cu siguranță este fericit.','Cu siguranță este supărat.','Poate sugera surpriză sau teamă; contextul ne ajută să înțelegem.'],correct:2,why:'Aceeași expresie poate avea semnificații diferite. Robo simulează expresii, nu trăiește emoții omenești.'}]},
+'8-9':{heading:'Construiesc explicații folosind contextul',instruction:'Compară contexte și descoperă cum se schimbă sensul cuvintelor și al expresiilor.',creative:'Scrie același mesaj în două feluri: unul care poate supăra și unul care sprijină. Explică diferența.',tasks:[
+{scene:'Context A: „Ce surpriză!” spune Ana când primește un cadou. Context B: „Ce surpriză!” spune Ana când află că excursia s-a anulat.',q:'De ce poate avea aceeași replică sensuri emoționale diferite?',options:['Pentru că situația și tonul pot schimba felul în care înțelegem replica.','Pentru că fiecare cuvânt exprimă mereu o singură emoție.','Pentru că semnul exclamării înseamnă doar bucurie.'],correct:0,why:'Cuvintele nu sunt suficiente: tonul, situația și intenția oferă indicii suplimentare.'},
+{scene:'Doi copii tac. Unul ascultă atent o poveste. Celălalt tocmai a pierdut un joc.',q:'Ce concluzie este justificată?',options:['Amândoi sunt triști.','Tăcerea nu indică singură o emoție; întrebăm și observăm contextul.','Amândoi sunt furioși.'],correct:1,why:'Același comportament poate avea cauze diferite.'},
+{scene:'Un coleg spune: „Lasă-mă în pace!” după o zi dificilă.',q:'Ce răspuns arată respectarea limitelor personale?',options:['„Nu ai dreptul să spui asta!”','„Spune imediat ce ai!”','„Înțeleg că vrei puțin timp. Sunt aici dacă dorești să vorbim.”'],correct:2,why:'Respectăm spațiul personal, fără să judecăm sau să forțăm persoana să vorbească.'}]},
+'9-10':{heading:'Investighez nuanțele și limitele interpretării',instruction:'Analizează mesaje ambigue, intenții posibile și felul în care un sistem automat poate greși.',creative:'Imaginează o regulă simplă folosită de un robot pentru a identifica emoțiile din mesaje. Oferă un exemplu în care regula greșește și explică de ce.',tasks:[
+{scene:'Mesaj: „Minunat, iar s-a stricat calculatorul!” scris după o defecțiune repetată.',q:'Cum ar trebui interpretat mesajul?',options:['Cuvântul „minunat” arată întotdeauna bucurie.','Poate exprima ironie sau frustrare; este important contextul.','Autorul nu poate simți nicio emoție.'],correct:1,why:'Un sistem care caută doar cuvinte pozitive poate interpreta greșit ironia.'},
+{scene:'Un elev zâmbește înaintea unei prezentări, dar spune: „Am emoții și mă tem să nu greșesc.”',q:'Ce informație este mai relevantă?',options:['Zâmbetul dovedește că nu este neliniștit.','Nu trebuie să luăm în seamă cuvintele lui.','Luăm în serios ceea ce spune despre propria stare, chiar dacă zâmbește.'],correct:2,why:'Expresia feței nu anulează ceea ce persoana comunică despre propriile emoții.'},
+{scene:'Un program clasifică toate mesajele cu „!” drept mesaje furioase.',q:'De ce această regulă poate produce erori?',options:['Semnul exclamării poate apărea în mesaje de bucurie, teamă, surpriză sau furie.','Toate mesajele cu semnul exclamării exprimă furie.','Emoțiile se identifică perfect doar după punctuație.'],correct:0,why:'Interpretarea necesită mai multe indicii; nici acestea nu garantează cunoașterea emoției reale.'}]}
+};const $=id=>document.getElementById(id);let age='7-8',index=0,selected=-1,solved=false;
+function note(t,type=''){$('feedback').textContent=t;$('feedback').className='feedback'+(type?' '+type:'')}
+function chooseAge(a){age=LEVELS[a]?a:'7-8';try{localStorage.setItem('roboCip:ageTrack',age)}catch(e){}document.querySelectorAll('[data-age]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.age===age)));$('heading').textContent=LEVELS[age].heading;$('instruction').textContent=LEVELS[age].instruction;$('creative').textContent=LEVELS[age].creative;index=0;try{$('reflection').value=localStorage.getItem('roboCip:emotions:'+age)||''}catch(e){$('reflection').value=''}showTask()}
+function showTask(){selected=-1;solved=false;const t=LEVELS[age].tasks[index];$('scenario').textContent=t.scene;$('question').textContent=t.q;$('progress').textContent='Provocarea '+(index+1)+' din '+LEVELS[age].tasks.length;$('next').hidden=true;$('choices').replaceChildren();t.options.forEach((option,i)=>{const b=document.createElement('button');b.className='choice';b.textContent=option;b.type='button';b.setAttribute('aria-pressed','false');b.onclick=()=>{selected=i;[...$('choices').children].forEach((other,j)=>other.setAttribute('aria-pressed',String(i===j)));note('Ai ales un răspuns. Apasă „Verifică răspunsul”.')};$('choices').appendChild(b)});note('Citește situația și alege un răspuns.')}
+$('check').onclick=()=>{if(selected===-1){note('Alege mai întâi un răspuns.','warn');return}const t=LEVELS[age].tasks[index];if(selected===t.correct){solved=true;note('Corect! '+t.why,'good');if(index<LEVELS[age].tasks.length-1)$('next').hidden=false;else note('Ai rezolvat toate cele trei provocări! '+t.why+' Continuă cu atelierul de empatie.','good')}else{solved=false;$('next').hidden=true;note('Mai încearcă. Gândește-te ce putem ști din context și ce ar trebui să întrebăm.','warn')}};
+$('next').onclick=()=>{if(solved&&index<LEVELS[age].tasks.length-1){index++;showTask()}};
+$('save').onclick=()=>{const text=$('reflection').value.trim();if(!text){$('saveState').textContent='Scrie mai întâi răspunsul tău.';return}try{localStorage.setItem('roboCip:emotions:'+age,text);$('saveState').textContent='Reflecția a fost salvată în acest browser.'}catch(e){$('saveState').textContent='Salvarea nu este disponibilă. Copiază răspunsul înainte de a ieși.'}};
+document.querySelectorAll('[data-age]').forEach(b=>b.onclick=()=>chooseAge(b.dataset.age));let stored='';try{stored=localStorage.getItem('roboCip:ageTrack')||''}catch(e){}chooseAge(new URLSearchParams(location.search).get('age')||stored);
+})();
+</script><script src="/js/robo-menu-button.js"></script><script src="/js/activity-log.js"></script><script>if(typeof roboLogActivity==='function')roboLogActivity({title:'Laboratorul emoțiilor',module:'Algoritmi lingvistici',type:'Empatie, context și interpretare critică'});</script></body></html>

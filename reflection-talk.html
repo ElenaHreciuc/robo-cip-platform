@@ -1,121 +1,26 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8" />
-<title>Reflecție după activitate – Robo-Cip</title>
-
-<style>
-body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
-  padding: 16px;
-  background: radial-gradient(circle at top, #fff7eb, #ffffff);
-}
-
-.page {
-  max-width: 860px;
-  margin: 0 auto;
-}
-
-.section {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 12px 14px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.1);
-}
-
-.question {
-  padding: 10px;
-  border-radius: 14px;
-  background: #fff2d6;
-  border: 1px solid #f6c67a;
-  margin-top: 6px;
-  font-size: 14px;
-}
-
-textarea {
-  width: 100%;
-  min-height: 80px;
-  margin-top: 6px;
-  font-size: 14px;
-}
-
-button {
-  border-radius: 999px;
-  border: none;
-  padding: 8px 14px;
-  font-size: 14px;
-  background: #e67e22;
-  color: white;
-  cursor: pointer;
-}
-</style>
-</head>
-
-<body>
-<div class="page">
-
-<h1>🗣️ Reflecție după activitate</h1>
-
-<div class="section">
-  <div id="activityBox"><i>Ultima activitate din jurnal este selectată automat.</i></div>
-</div>
-
-<div class="section">
-  <b>Întrebare 1</b>
-  <div class="question">Ce ai făcut mai întâi și de ce?</div>
-  <textarea id="q1"></textarea>
-</div>
-
-<div class="section">
-  <b>Întrebare 2</b>
-  <div class="question">Ce a fost cel mai greu și cum ai găsit soluția?</div>
-  <textarea id="q2"></textarea>
-</div>
-
-<div class="section">
-  <b>Întrebare 3</b>
-  <div class="question">Ce ai face altfel data viitoare?</div>
-  <textarea id="q3"></textarea>
-</div>
-
-<button id="saveBtn">Salvează reflecția</button>
-
-</div>
-
+<!DOCTYPE html><html lang="ro"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reflection Talk – ROBO-CIP</title><style>
+*{box-sizing:border-box}body{font:16px system-ui,Arial,sans-serif;margin:0;padding:16px;background:linear-gradient(140deg,#fff3e7,#edf7ff);color:#273849}main{max-width:900px;margin:auto}.section{background:#fff;border-radius:18px;padding:18px;margin:13px 0;box-shadow:0 3px 14px #263e5620}h1{font-size:clamp(25px,4vw,33px);margin:0 0 8px}h2{font-size:21px;margin:0 0 12px}.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.age{border:2px solid #a9cde8;background:#eaf5ff;color:#185581;font-weight:700}.age[aria-pressed=true]{background:#176fa9;color:white}button{border:0;border-radius:12px;padding:11px 14px;font:inherit;cursor:pointer}button:focus-visible,textarea:focus-visible{outline:3px solid #ed972b;outline-offset:2px}.primary{background:#176fa9;color:white;font-weight:700}.secondary{background:#e8f3fb;color:#155783}.question{background:#fff4dd;border:1px solid #efd098;border-radius:12px;padding:12px;margin:9px 0;line-height:1.45}textarea{width:100%;min-height:88px;border:1px solid #b6cde0;border-radius:12px;padding:11px;font:inherit;resize:vertical}.help{background:#edf7fc;border-radius:12px;padding:11px;margin:8px 0}.muted{color:#526678}.feedback{margin-top:11px;padding:13px;background:#eaf4fb;border-radius:12px;min-height:46px}.good{background:#e4f4e8;color:#1b5b36}.warn{background:#fff2da;color:#765011}.key{font-weight:700;min-width:46px;background:#eff7ff;border:1px solid #a9cfe9;color:#15567e}.small{font-size:14px}</style></head><body><main>
+<section class="section"><h1>🗣️ Reflection Talk – Reflectez și explic</h1><p class="muted">Gândește-te la ce ai învățat, explică un exemplu și stabilește ce vei face mai bine data viitoare.</p><div class="row" id="ages"><button class="age" data-age="7-8" aria-pressed="false">7–8 ani · Descopăr</button><button class="age" data-age="8-9" aria-pressed="false">8–9 ani · Construiesc</button><button class="age" data-age="9-10" aria-pressed="false">9–10 ani · Investighez</button></div></section>
+<section class="section"><h2>📘 Activitatea despre care reflectez</h2><div id="activityBox">Se verifică jurnalul activităților…</div></section>
+<section class="section"><h2 id="levelHeading"></h2><p id="instruction"></p><div class="help" id="example"></div></section>
+<section class="section"><h2>✍️ Jurnalul meu de învățare</h2><div id="questions"></div><div class="help"><b>⌨️ Diacritice:</b> apasă o literă pentru a o introduce în răspunsul selectat.<div class="row" id="keys" style="margin-top:9px"></div><p class="muted small">Poți folosi și tastatura fizică. Literele vor apărea în câmpul în care ai scris ultima dată.</p></div><div class="row"><button class="secondary" id="check">Verifică dacă am completat</button><button class="primary" id="save">Salvează reflecția</button></div><div id="feedback" class="feedback" role="status" aria-live="polite">Răspunde cu propriile cuvinte. ROBO-CIP nu notează emoțiile sau opiniile personale.</div></section>
+<section class="section"><h2>🌱 Misiunea mea pentru data viitoare</h2><p id="creative"></p><p class="muted small">Folosește un exemplu real și descrie o acțiune pe care o poți încerca. Nu există un singur răspuns corect.</p></section><p><a href="/modules.html">← Înapoi la module</a></p></main>
 <script>
-  const activities = JSON.parse(localStorage.getItem("roboModuleLog") || "[]");
-  const box = document.getElementById("activityBox");
-
-  if (activities.length > 0) {
-    const last = activities[activities.length - 1];
-    box.innerHTML =
-      `<b>Activitate:</b> ${last.title}<br>
-       <b>Modul:</b> ${last.module}<br>
-       <b>Data:</b> ${last.date}`;
-  } else {
-    box.innerHTML = "<i>Nu există activități în jurnal încă.</i>";
-  }
-
-  document.getElementById("saveBtn").addEventListener("click", () => {
-
-    const notes = JSON.parse(localStorage.getItem("reflectionNotes") || "[]");
-
-    notes.push({
-      q1: q1.value,
-      q2: q2.value,
-      q3: q3.value,
-      activity: activities.at(-1)?.title || "Nespecificat",
-      date: new Date().toLocaleString("ro-RO")
-    });
-
-    localStorage.setItem("reflectionNotes", JSON.stringify(notes));
-
-    alert("Reflecția a fost salvată în portofoliu.");
-  });
-</script>
-
-<script src="/js/robo-menu-button.js"></script>
-</body>
-</html>
+(()=>{'use strict';const $=id=>document.getElementById(id);
+const tracks={
+'7-8':{title:'Descopăr ce am învățat',instruction:'Răspunde pe scurt. Poți folosi începuturile de propoziții.',example:'Exemplu: „Am grupat obiectele după culoare. La început a fost greu, dar am observat regula.”',q:[['Ce ai învățat astăzi?','Am învățat că…'],['Ce ți-a fost ușor și ce ți-a fost greu?','Mi-a fost ușor să… Mi-a fost greu să…'],['Pe cine ai putea ajuta cu ce ai învățat?','I-aș explica unui coleg că…']],creative:'Desenează sau descrie un lucru nou pe care ai vrea să-l încerci la următoarea activitate.'},
+'8-9':{title:'Construiesc explicații și exemple',instruction:'Descrie pașii, dă un exemplu și compară o încercare cu o reușită.',example:'Exemplu: „Am ales criteriul după care clasific obiectele. Când am greșit, am verificat proprietățile fiecărui obiect.”',q:[['Ce strategie ai folosit și de ce?','Mai întâi am… pentru că…'],['Descrie o greșeală sau o dificultate și cum ai rezolvat-o.','La început… Apoi am schimbat…'],['Dă un exemplu de regulă și o situație în care ai aplicat-o.','Regula mea este… Un exemplu este…']],creative:'Alege o dificultate întâlnită și scrie ce strategie vei încerca data viitoare.'},
+'9-10':{title:'Investighez cum gândesc și învăț',instruction:'Argumentează, caută o limită a regulii și formulează un plan de îmbunătățire.',example:'Exemplu: „Regula funcționează pentru exemplele testate, dar poate produce erori când lipsesc informații. Aș verifica și contextul.”',q:[['Ce metodă ai folosit? Ce dovezi arată că a funcționat?','Am ales metoda… Știu că a funcționat deoarece…'],['Identifică o excepție sau o situație în care explicația ta nu este suficientă.','O limită a regulii este…'],['Cum ai îmbunătăți soluția? Explică un pas concret și cum îl vei verifica.','Data viitoare voi… Voi verifica prin…']],creative:'Propune o schimbare a modului tău de lucru și descrie cum vei observa dacă te ajută.'}
+};let activities=[];try{const raw=JSON.parse(localStorage.getItem('roboModuleLog')||'[]');if(Array.isArray(raw))activities=raw}catch(e){}
+const last=activities.length?activities[activities.length-1]:null;
+if(last){const p=document.createElement('p');p.textContent='Activitate: '+String(last.title||'Nespecificată');$('activityBox').appendChild(p);const meta=document.createElement('p');meta.textContent='Modul: '+String(last.module||'Nespecificat')+' · Data: '+String(last.date||'neprecizată');$('activityBox').appendChild(meta);$('activityBox').firstChild?.nodeType===3&&($('activityBox').firstChild.textContent='')}else $('activityBox').textContent='Nu există încă activități în jurnal. Poți reflecta și asupra unei activități parcurse fără înregistrare.';
+let age='7-8',active=null;function info(t,kind=''){$('feedback').textContent=t;$('feedback').className='feedback '+kind}
+function render(a){age=tracks[a]?a:'7-8';try{localStorage.setItem('roboCip:ageTrack',age)}catch(e){}document.querySelectorAll('[data-age]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.age===age)));const t=tracks[age];$('levelHeading').textContent=t.title;$('instruction').textContent=t.instruction;$('example').textContent=t.example;$('creative').textContent=t.creative;$('questions').replaceChildren();t.q.forEach(([question,hint],i)=>{const wrap=document.createElement('div');wrap.style.marginBottom='16px';const label=document.createElement('label');label.setAttribute('for','q'+(i+1));label.textContent='Întrebarea '+(i+1);label.style.fontWeight='700';const q=document.createElement('div');q.className='question';q.textContent=question;const textarea=document.createElement('textarea');textarea.id='q'+(i+1);textarea.placeholder=hint;textarea.addEventListener('focus',()=>active=textarea);wrap.append(label,q,textarea);$('questions').appendChild(wrap)});active=$('q1');info('Răspunde cu propriile cuvinte. Folosește un exemplu concret.')}
+document.querySelectorAll('[data-age]').forEach(b=>b.onclick=()=>render(b.dataset.age));
+const keys=$('keys');let upper=false;for(const char of ['ă','â','î','ș','ț']){const b=document.createElement('button');b.className='key';b.type='button';b.dataset.char=char;b.textContent=char;b.addEventListener('pointerdown',e=>e.preventDefault());b.onclick=()=>{const t=active||$('q1'),pos=t.selectionStart??t.value.length,end=t.selectionEnd??pos;t.setRangeText(upper?char.toUpperCase():char,pos,end,'end');t.focus()};keys.appendChild(b)}const cap=document.createElement('button');cap.type='button';cap.className='secondary';cap.textContent='MAJUSCULE';cap.setAttribute('aria-pressed','false');cap.onclick=()=>{upper=!upper;cap.setAttribute('aria-pressed',String(upper));cap.textContent=upper?'minuscule':'MAJUSCULE';keys.querySelectorAll('[data-char]').forEach(b=>b.textContent=upper?b.dataset.char.toUpperCase():b.dataset.char)};keys.appendChild(cap);
+function answers(){return [1,2,3].map(i=>$('q'+i).value.trim())}
+$('check').onclick=()=>{const missing=answers().filter(x=>!x).length;info(missing?'Mai ai '+missing+' răspunsuri de completat.':'Ai completat cele trei răspunsuri. Recitește-le: ai inclus un exemplu și un plan pentru data viitoare? ',missing?'warn':'good')};
+$('save').onclick=()=>{const a=answers();if(a.some(x=>!x)){info('Completează toate cele trei răspunsuri înainte de salvare.','warn');return}try{const data=JSON.parse(localStorage.getItem('reflectionNotes')||'[]');const notes=Array.isArray(data)?data:[];notes.push({q1:a[0],q2:a[1],q3:a[2],activity:last?.title||'Nespecificat',date:new Date().toLocaleString('ro-RO'),ageTrack:age,questions:tracks[age].q.map(x=>x[0])});localStorage.setItem('reflectionNotes',JSON.stringify(notes));info('Reflecția a fost salvată în acest browser, în jurnalul portofoliului.','good')}catch(e){info('Nu s-a putut salva. Copiază răspunsurile înainte de a închide pagina.','warn')}};
+let stored='';try{stored=localStorage.getItem('roboCip:ageTrack')||''}catch(e){}render(new URLSearchParams(location.search).get('age')||stored);
+})();
+</script><script src="/js/robo-menu-button.js"></script></body></html>

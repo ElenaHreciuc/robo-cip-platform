@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alege modulul</title>
+  <title>Alege modulul | Inventopia</title>
 
   <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/robo-menu-button.js" defer></script>
@@ -22,25 +22,43 @@
       text-decoration: none;
       box-shadow: 0 2px 8px rgba(0,0,0,.25);
     }
+
+    /* Antet premium: o singură axă centrală, spațiere compactă */
+    .premium-entry{width:min(100%,640px);margin:16px auto 28px;padding:0 12px;display:flex;flex-direction:column;align-items:center;gap:16px}
+    .premium-teacher{display:flex;justify-content:center;width:100%;margin:0}
+    .premium-teacher-link{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:11px 24px;border-radius:999px;background:rgba(255,255,255,.96);color:#184a72;text-decoration:none;font:700 15px system-ui,sans-serif;border:1px solid #e4eaf0;box-shadow:0 5px 15px #14324c1b}
+    .premium-teacher-link svg{color:#8498ad;flex:none}
+    .premium-teacher-link:focus-visible{outline:3px solid #e9a84d;outline-offset:3px}
+    .premium-age{box-sizing:border-box;width:100%;max-width:610px;margin:0;padding:18px 22px 16px;background:#fff;border:1px solid #eff2f6;border-radius:23px;box-shadow:0 9px 24px #14324c18;text-align:center}
+    .premium-age-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+    .premium-age label{font-weight:750;font-size:18px;color:#123b63}
+    .premium-age select{min-width:225px;padding:12px 15px;border:1px solid #9dbfe2;border-radius:13px;background:#fff;color:#163b59;font:16px system-ui,sans-serif}
+    .premium-age p{margin:11px 0 0;color:#53687a;font-size:14px}
+    @media(max-width:550px){.premium-entry{margin:12px auto 22px;gap:13px}.premium-age{padding:17px 15px}.premium-age-row{gap:10px}.premium-age select{width:100%;min-width:0}}
   </style>
 </head>
 
 <body class="home-body">
   <main class="home-main">
-    <h2 class="modules-heading">Alege modulul în care lucrezi astăzi.</h2><br><br><br>
-
-    <section aria-label="Alege vârsta elevului" style="max-width:720px;margin:0 auto 24px;padding:14px 18px;background:#fff;border-radius:18px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.12);">
-      <label for="age-track" style="font-weight:700;color:#0b2a4a;">Câți ani ai?</label>
-      <select id="age-track" style="margin-left:10px;padding:10px;border-radius:10px;font:inherit;border:1px solid #91bde8;">
-        <option value="7-8">7–8 ani · Descopăr</option>
-        <option value="8-9">8–9 ani · Construiesc</option>
-        <option value="9-10">9–10 ani · Investighez</option>
-      </select>
-      <p style="margin:8px 0 0;color:#334155;font-size:14px;">Alege intervalul de vârstă, apoi modulul în care vrei să lucrezi.</p>
+    <section class="premium-entry" aria-label="Acces și alegerea vârstei">
+      <nav class="premium-teacher" aria-label="Acces cadre didactice">
+        <a href="/teacher" class="premium-teacher-link"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V7a4 4 0 0 1 8 0v3"/><rect x="6" y="10" width="12" height="10" rx="2"/></svg><span>Acces profesor</span></a>
+      </nav>
+      <section class="premium-age" aria-label="Alege vârsta elevului">
+        <div class="premium-age-row">
+          <label for="age-track">Câți ani ai?</label>
+          <select id="age-track">
+            <option value="7-8">7–8 ani · Descopăr</option>
+            <option value="8-9">8–9 ani · Construiesc</option>
+            <option value="9-10">9–10 ani · Investighez</option>
+          </select>
+        </div>
+        <p>Alege intervalul de vârstă și continuă cu un modul de activități.</p>
+      </section>
     </section>
     <section class="module-grid">
 
-      <!-- Modul Algoritmi & ML -->
+      <!-- Modul Algoritmi și ML -->
       <article class="module-card module-algoritmi-card">
         <div class="module-header-row">
           <span class="module-pill">Algoritmi și Emoții</span>
@@ -48,28 +66,28 @@
         </div>
 
         <div class="module-visual">
-          <img src="/assets/img/robo_algoritmi.png" alt="Robo-Cip lucrează cu cuvinte și emoții">
+          <img src="/assets/img/robo_algoritmi.png" alt="ROBO-CIP lucrează cu cuvinte și emoții">
         </div>
 
         <p class="module-tagline">
-          Vorbește cu Robo-Cip despre cuvinte, reguli, mesaje „buguite” și
+          Vorbește cu ROBO-CIP despre cuvinte, reguli, mesaje „buguite” și
           despre felul în care un model ML încearcă să ghicească emoții.
         </p>
 
         <ul class="module-bullets">
-          <li>Etichetare de lume & obiecte (ML simplificat).</li>
+          <li>Etichetare de lume și obiecte (ML simplificat).</li>
           <li>Reguli + excepții, mesaje de reparat.</li>
           <li>Robotul care „recunoaște” emoții cu responsabilitate.</li>
         </ul>
 
         <center>
           <a href="/learner.html?moduleId=algoritmi-lingvistici" class="module-link">
-            Intră în modul „Vorbește cu Robo-Cip”
+            Intră în modul „Vorbește cu ROBO-CIP”
           </a>
         </center>
       </article>
 
-      <!-- Modul Cartografie & Sateliți -->
+      <!-- Modul Cartografie și Sateliți -->
       <article class="module-card module-cartografie-card">
         <div class="module-header-row">
           <span class="module-pill">Hărți și Sateliți</span>
@@ -77,7 +95,7 @@
         </div>
 
         <div class="module-visual">
-          <img src="/assets/img/robo_cartografie.png" alt="Robo-Cip pe hartă digitală și cu un satelit">
+          <img src="/assets/img/robo_cartografie.png" alt="ROBO-CIP pe hartă digitală și cu un satelit">
         </div>
 
         <p class="module-tagline">
@@ -106,7 +124,7 @@
         </div>
 
         <div class="module-visual">
-          <img src="/assets/img/robo_3d.png" alt="Robo-Cip construiește orașe 3D">
+          <img src="/assets/img/robo_3d.png" alt="ROBO-CIP construiește orașe 3D">
         </div>
 
         <p class="module-tagline">
@@ -135,7 +153,7 @@
         </div>
 
         <div class="module-visual">
-          <img src="/assets/img/robo_programare.png" alt="Robo-Cip controlează sunete și animații">
+          <img src="/assets/img/robo_programare.png" alt="ROBO-CIP controlează sunete și animații">
         </div>
 
         <p class="module-tagline">
@@ -156,6 +174,11 @@
         </center>
       </article>
 
+    </section>
+    <section aria-label="Portofoliul elevului" style="max-width:430px;margin:28px auto 16px;padding:20px;background:linear-gradient(145deg,#f2edff,#ffffff);border-left:6px solid #9371d7;border-radius:19px;box-shadow:0 3px 13px #102d4425;text-align:center;color:#183c59;">
+      <h2 style="font-size:23px;margin:0 0 8px;">Portofoliul meu</h2>
+      <p style="font-size:15px;line-height:1.5;">Aici îți aduni lucrările și descoperirile din misiunile ROBO-CIP.</p>
+      <a href="/portofolio.html" class="module-link" style="display:inline-block;margin-top:6px;">Deschide portofoliul</a>
     </section>
   </main>
 

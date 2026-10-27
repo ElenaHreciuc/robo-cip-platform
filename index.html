@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Robo-Cip</title>
+  <title>Inventopia – Misiunile lui Robo-CIP</title>
   <style>
     :root {
       --blue-deep: #061a33;
@@ -68,7 +68,7 @@
       filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25));
       will-change: transform;
     }
-    /* ANIMAȚIA: Robo-Cip iese din imagine */
+    /* ANIMAȚIA: ROBO-CIP iese din imagine */
     .imgbox.pop img {
       animation: popOut 900ms cubic-bezier(.2,.8,.2,1) forwards;
     }
@@ -149,14 +149,15 @@
       .imgbox.pop img { animation: none; transform: none; }
     }
   </style>
+  <script src="/robo-voice.js"></script>
 </head>
 
 <body>
   <div class="stack">
     <!-- CARD 1 -->
-    <main class="card" aria-label="Pagina de start Robo-Cip">
+    <main class="card" aria-label="Pagina de start ROBO-CIP">
       <div class="imgbox" id="roboBox">
-        <img src="/assets/img/robo_hero.png" alt="Robo-Cip">
+        <img src="/assets/img/robo_hero.png" alt="ROBO-CIP">
       </div>
       <h1>Bun venit!</h1>
             <div style="margin:14px auto 2px;max-width:340px;text-align:left;">
@@ -175,6 +176,8 @@
     </main>
 
 
+
+    <nav aria-label="Acces cadre didactice" style="text-align:center;margin:2px 0 4px;"><a href="/teacher" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#ffffffed;color:#164d77;border:1px solid #a6cbeb;border-radius:999px;padding:11px 22px;font:700 15px system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 14px #071a3647;">🔒 Acces profesor</a></nav>
 
     <!-- CARD 2 -->
 
@@ -227,7 +230,7 @@
 
       Bine ai venit!
 
-      Eu sunt Robo-Cip!
+      Eu sunt ROBO-CIP!
 
   Împreună vom explora lumea roboțeilor, a hărților digitale, a orașelor 3D și a sunetelor inteligente. 
 
@@ -265,7 +268,7 @@
 
     function speakRoboCip() {
 
-      if (!("speechSynthesis" in window)) return false;
+      if (!window.RoboVoice?.supported()) return false;
 
 
 
@@ -293,11 +296,7 @@
 
       try {
 
-        speechSynthesis.cancel();
-
-        speechSynthesis.speak(u);
-
-        return true;
+        return window.RoboVoice.speak("home", u, () => enableVoiceBtn.classList.add("show"));
 
       } catch (e) {
 
@@ -311,7 +310,7 @@
 
     function startSequence() {
 
-      // 1) Robo-Cip iese din imagine
+      // 1) ROBO-CIP iese din imagine
 
       roboBox.classList.add("pop");
 
@@ -347,7 +346,7 @@
 
     // Pregătim încărcarea vocilor (important pe unele browsere)
 
-    window.speechSynthesis.onvoiceschanged = () => {};
+    if ("speechSynthesis" in window) window.speechSynthesis.addEventListener("voiceschanged", () => {});
 
 
 

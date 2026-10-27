@@ -68,17 +68,6 @@
           creative: "Provocare: explică în 30 secunde ce e o excepție.",
           pageHref: "/resources/reflection-talk.html",
           resources: []
-        },
-        {
-          missionId: "teacher-notes",
-          pill: "Teacher Notes",
-          miniLabel: "Ghid profesor",
-          image: "/assets/img/robo_algoritmi.png",
-          tagline: "Note pentru profesor: facilitare, întrebări, ritm.",
-          bullets: ["Deschide ghidul.", "Urmează pașii.", "Adaptează la clasă."],
-          creative: "",
-          pageHref: "/resources/teacher-notes.html",
-          resources: []
         }
       ]
     },
@@ -95,23 +84,57 @@
           pill: "Harta Grid 5×5",
           miniLabel: "Trasee · coordonate",
           image: "/assets/img/robo_cartografie.png",
-          tagline: "Robot navigator pe hartă grilă – planifici trasee și verifici reguli.",
-          bullets: ["Start și destinație.", "Scrii pași (sus/jos/stânga/dreapta).", "Corectezi traseul."],
-          creative: "Provocare: creează o hartă cu obstacole.",
+          tagline: "Ajută robotul să ajungă la țintă, pas cu pas.",
+          bullets: ["Găsește robotul și ținta.", "Apasă săgețile pentru traseu.", "Rulează și repară dacă ai greșit."],
+          creative: "Desenează și tu o hartă mică.",
           pageHref: "/resources/harta-grid.html",
           resources: []
         },
         {
-          missionId: "module-report",
-          pill: "Module Report",
-          miniLabel: "Raport progres",
+          missionId: "sateliti-pamant",
+          pill: "Sateliți și Pământul",
+          miniLabel: "Observații · imagini",
           image: "/assets/img/robo_cartografie.png",
-          tagline: "Completezi raportul modulului și sumarizezi progresul.",
-          bullets: ["Verifici activitățile.", "Notezi observații.", "Salvezi raportul."],
-          creative: "",
-          pageHref: "/resources/module-report.html",
+          tagline: "Privește orașul Suceava de sus și descoperă locuri cunoscute.",
+          bullets: ["Deschide imaginea orașului.","Găsește un parc sau un râu.","Spune ce ai observat."],
+          creative: "Spune ce ai descoperit în activitate.",
+          pageHref: "/resources/sateliti-pamant.html",
+          resources: []
+        },
+        {
+          missionId: "jurnal-meteo",
+          pill: "Vremea și observațiile",
+          miniLabel: "Meteo · măsurători",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Privește norii și spune cum este vremea.",
+          bullets: ["Privește harta norilor.","Compară două zone.","Scrie cum este vremea."],
+          creative: "Spune ce ai descoperit în activitate.",
+          pageHref: "/resources/jurnal-meteo.html",
+          resources: []
+        },
+        {
+          missionId: "reciclare-materiale",
+          pill: "Reciclare și materiale",
+          miniLabel: "Resurse · deșeuri",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Alege materialul și sortează corect deșeurile.",
+          bullets: ["Recunoaște materialul.","Alege containerul potrivit.","Verifică răspunsul."],
+          creative: "Spune ce ai descoperit în activitate.",
+          pageHref: "/resources/reciclare-materiale.html",
+          resources: []
+        },
+        {
+          missionId: "ecosisteme",
+          pill: "Ecosisteme și biodiversitate",
+          miniLabel: "Plante · viețuitoare",
+          image: "/assets/img/robo_cartografie.png",
+          tagline: "Recunoaște pădurile și câmpurile din imagini.",
+          bullets: ["Găsește o pădure și un câmp.","Compară culorile.","Spune ce este diferit."],
+          creative: "Spune ce ai descoperit în activitate.",
+          pageHref: "/resources/ecosisteme.html",
           resources: []
         }
+
       ]
     },
 
@@ -134,8 +157,52 @@
           resources: []
         },
         {
+          missionId: "pod-inteligent",
+          pill: "Podul Inteligent",
+          miniLabel: "Inginerie · structuri",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Proiectezi un pod, reglezi susținerile și compari solicitări într-un model educațional.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/pod-inteligent.html",
+          resources: []
+        },
+        {
+          missionId: "parghii-echilibru",
+          pill: "Pârghii și echilibru",
+          miniLabel: "Fizică · mecanică",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Experimentezi cu forțe, brațe și echilibru folosind un model de pârghie.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/parghii-echilibru.html",
+          resources: []
+        },
+        {
+          missionId: "lumina-umbre",
+          pill: "Lumina și umbrele",
+          miniLabel: "Optică · geometrie",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Modifici sursa și obiectul, apoi estimezi matematic lungimea umbrei.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/lumina-umbre.html",
+          resources: []
+        },
+        {
+          missionId: "corpuri-geometrice",
+          pill: "Atelierul corpurilor",
+          miniLabel: "Volum · arii",
+          image: "/assets/img/robo_3d.png",
+          tagline: "Construiești corpuri geometrice și calculezi volumul și aria totală.",
+          bullets: ["Ajustezi parametrii.", "Observi și calculezi.", "Verifici obiectivul."],
+          creative: "Provocare: explică și îmbunătățește soluția.",
+          pageHref: "/resources/corpuri-geometrice.html",
+          resources: []
+        },
+        {
           missionId: "masina-transformari",
-          pill: "Mașina transformări",
+          pill: "Mașina de transformări",
           miniLabel: "2D → 3D · forme",
           image: "/assets/img/robo_3d.png",
           tagline: "Transformi forme și înțelegi cum apar volumele.",
@@ -149,8 +216,8 @@
 
     "programare-vizuala": {
       title: "Sunete și Animații",
-      subtitle: "Tipare sonore, laborator de ritmuri și exerciții audio-vizuale.",
-      heroTag: "Tipare · muzică · vizual",
+      subtitle: "Sunete, animații și misiuni STEAM inspirate din viața reală.",
+      heroTag: "Tipare · STEAM · animații",
       heroImage: "/assets/img/robo_programare.png",
       cardClass: "module-programare-card",
       items: [
@@ -177,14 +244,47 @@
           resources: []
         },
         {
-          missionId: "portofolio",
-          pill: "Portofoliu",
-          miniLabel: "Colecție lucrări",
+          missionId: "semafor-sonor",
+          pill: "Semaforul sonor",
+          miniLabel: "Siguranță · algoritmi",
           image: "/assets/img/robo_programare.png",
-          tagline: "Organizezi produsele realizate (portofoliu).",
-          bullets: ["Adaugi un produs.", "Scrii descriere.", "Salvezi."],
-          creative: "",
-          pageHref: "/resources/portofolio.html",
+          tagline: "Programezi timpii unui semafor într-o situație de educație rutieră.",
+          bullets: ["Modifici valorile.", "Observi și calculezi.", "Construiești un mesaj STEAM."],
+          creative: "Provocare: explică regula și rezultatul colegilor.",
+          pageHref: "/resources/semafor-sonor.html",
+          resources: []
+        },
+        {
+          missionId: "alerta-meteo-steam",
+          pill: "Alerta meteo",
+          miniLabel: "Științe · date",
+          image: "/assets/img/robo_programare.png",
+          tagline: "Analizezi temperatura, ploaia și vântul într-o stație meteo virtuală.",
+          bullets: ["Modifici valorile.", "Observi și calculezi.", "Construiești un mesaj STEAM."],
+          creative: "Provocare: explică regula și rezultatul colegilor.",
+          pageHref: "/resources/alerta-meteo-steam.html",
+          resources: []
+        },
+        {
+          missionId: "economisim-apa",
+          pill: "Economisim apa",
+          miniLabel: "Mediu · matematică",
+          image: "/assets/img/robo_programare.png",
+          tagline: "Calculezi apa economisită și creezi un mesaj pentru comunitate.",
+          bullets: ["Modifici valorile.", "Observi și calculezi.", "Construiești un mesaj STEAM."],
+          creative: "Provocare: explică regula și rezultatul colegilor.",
+          pageHref: "/resources/economisim-apa.html",
+          resources: []
+        },
+        {
+          missionId: "scratchjr-steam",
+          pill: "Scratch online – Animații STEAM",
+          miniLabel: "Blocuri · animație · viața reală",
+          image: "/assets/img/robo_programare.png",
+          tagline: "Construiești animații în Scratch online, fără instalare, urmând algoritmi-model.",
+          bullets: ["Urmezi un algoritm ilustrat.", "Testezi pașii în ROBO-CIP.", "Recreezi animația în Scratch online."],
+          creative: "Provocare: o poveste animată despre siguranță, vreme sau economisirea apei.",
+          pageHref: "/resources/scratchjr-steam.html",
           resources: []
         }
       ]
@@ -284,7 +384,7 @@
 
     const img = $("module-hero-image");
     img.src = moduleDef.heroImage;
-    img.alt = `Robo-Cip în modulul: ${moduleDef.title}`;
+    img.alt = `ROBO-CIP în modulul: ${moduleDef.title}`;
     img.onerror = () => { img.onerror = null; img.src = "/assets/img/robo_hero.png"; };
   }
 
@@ -443,6 +543,8 @@
       const card = document.createElement("article");
       card.className = `module-card ${moduleDef.cardClass || ""}`;
       card.dataset.missionId = item.missionId;
+      if (moduleId === "programare-vizuala" && item.missionId === "scratchjr-steam") card.classList.add("last-centered-sunete");
+      if (moduleId === "proiectare-3d" && item.missionId === "masina-transformari") card.classList.add("last-centered-3d");
 
       card.innerHTML = `
         <div class="module-header-row">
